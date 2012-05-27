@@ -35,6 +35,11 @@ package Security.Openid is
 
    Service_Error     : exception;
 
+   type Parameters is limited interface;
+
+   function Get_Parameter (Params : in Parameters;
+                           Name   : in String) return String is abstract;
+
    --  ------------------------------
    --  OpenID provider
    --  ------------------------------
@@ -157,19 +162,19 @@ package Security.Openid is
    --  Verify the authentication result
    procedure Verify (Realm   : in out Manager;
                      Assoc   : in Association;
-                     Request : in Util.Http.Abstract_Request'Class;
+                     Request : in Parameters'Class;
                      Result  : out Authentication);
 
    --  Verify the authentication result
    procedure Verify_Discovered (Realm   : in out Manager;
                                 Assoc   : in Association;
-                                Request : in Util.Http.Abstract_Request'Class;
+                                Request : in Parameters'Class;
                                 Result  : out Authentication);
 
    --  Verify the signature part of the result
    procedure Verify_Signature (Realm   : in Manager;
                                Assoc   : in Association;
-                               Request : in Util.Http.Abstract_Request'Class;
+                               Request : in Parameters'Class;
                                Result  : in out Authentication);
 
    --  Read the XRDS document from the URI and initialize the OpenID provider end point.

@@ -34,7 +34,7 @@ package body Security.Openid is
    Log : constant Util.Log.Loggers.Logger := Loggers.Create ("Security.Openid");
 
    procedure Extract_Profile (Prefix  : in String;
-                              Request : in Util.Http.Abstract_Request'Class;
+                              Request : in Parameters'Class;
                               Result  : in out Authentication);
 
    function Extract (From      : String;
@@ -42,7 +42,7 @@ package body Security.Openid is
                      End_Tag   : String) return String;
 
    procedure Extract_Value (Into    : in out Unbounded_String;
-                            Request : in Util.Http.Abstract_Request'Class;
+                            Request : in Parameters'Class;
                             Name    : in String);
 
    procedure Set_Result (Result  : in out Authentication;
@@ -378,7 +378,7 @@ package body Security.Openid is
    end Set_Result;
 
    procedure Extract_Value (Into    : in out Unbounded_String;
-                            Request : in Util.Http.Abstract_Request'Class;
+                            Request : in Parameters'Class;
                             Name    : in String) is
    begin
       if Length (Into) = 0 then
@@ -387,7 +387,7 @@ package body Security.Openid is
    end Extract_Value;
 
    procedure Extract_Profile (Prefix  : in String;
-                              Request : in Util.Http.Abstract_Request'Class;
+                              Request : in Parameters'Class;
                               Result  : in out Authentication) is
    begin
       Extract_Value (Result.Email, Request, Prefix & ".email");
@@ -415,7 +415,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify (Realm   : in out Manager;
                      Assoc   : in Association;
-                     Request : in Util.Http.Abstract_Request'Class;
+                     Request : in Parameters'Class;
                      Result  : out Authentication) is
       Mode : constant String := Request.Get_Parameter ("openid.mode");
    begin
@@ -492,7 +492,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify_Signature (Realm   : in Manager;
                                Assoc   : in Association;
-                               Request : in Util.Http.Abstract_Request'Class;
+                               Request : in Parameters'Class;
                                Result  : in out Authentication) is
       pragma Unreferenced (Realm);
 
@@ -548,7 +548,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify_Discovered (Realm   : in out Manager;
                                 Assoc   : in Association;
-                                Request : in Util.Http.Abstract_Request'Class;
+                                Request : in Parameters'Class;
                                 Result  : out Authentication) is
       pragma Unreferenced (Realm, Assoc);
    begin
