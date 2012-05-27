@@ -6,7 +6,7 @@ with "@EL_DIR@el";
 project Security is
 
    Version := "@SECURITY_VERSION@";
-   Library_Dir := "@ASF_LIBDIR@";
+   Library_Dir := "@SECURITY_LIBDIR@";
    Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
    for Library_Name use "security";
