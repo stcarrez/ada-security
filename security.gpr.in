@@ -1,28 +1,19 @@
 with "config";
 with "@UTIL_DIR@util";
+with "@UTIL_DIR@util_http";
 with "@EL_DIR@el";
-@WITH_SERVER@
 
-project Asf is
+project Security is
 
-   Version := "@ASF_VERSION@";
+   Version := "@SECURITY_VERSION@";
    Library_Dir := "@ASF_LIBDIR@";
    Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
-   type Server_Type is ("none", "aws");
-   Server : Server_Type := external ("SERVER", "@ASF_SERVER@");
-
-   for Source_Dirs use ("src");
-   case Server is
-      when "aws" =>
-          for Source_Dirs use project'Source_Dirs & ("src/aws");
-
-      when others =>
-
-   end case;
-   for Library_Name use "asf";
+   for Library_Name use "security";
    for Library_Kind use Library_Type;
 
+   for Source_Dirs use ("src");
+   
    for Library_Dir use Library_Dir & "/asf/" & Project'Library_Kind;
    for Object_Dir use "./" & Config'Object_Dir & "/obj/asf/" & Project'Library_Kind;
    for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
@@ -32,4 +23,4 @@ project Asf is
    package Compiler renames Config.Compiler;
    package Ide      renames Config.Ide;
 
-end Asf;
+end Security;

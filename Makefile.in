@@ -13,11 +13,11 @@ INSTALL=@INSTALL@
 
 BUILDS_SHARED=@BUILDS_SHARED@
 
-version=@EL_VERSION@
+version=@SECURITY_VERSION@
 
-distdir=ada-el-@EL_VERSION@
+distdir=ada-security-@SECURITY_VERSION@
 
-DIST_FILE=ada-el-@EL_VERSION@.tar.gz
+DIST_FILE=ada-security-@SECURITY_VERSION@.tar.gz
 
 LN_S=@LN_S@
 MKDIR=mkdir
@@ -47,7 +47,7 @@ alidir=${libdir}/ada/adalib/
 
 MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=4
 
-GPRPATH=el.gpr
+GPRPATH=security.gpr
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
@@ -96,13 +96,13 @@ rebuild: clean build
 # Build and run the unit tests
 test:	build
 	$(GNATMAKE) -p -Ptests
-	bin/el_harness -xml el-aunit.xml
+	bin/security_harness -xml security-aunit.xml
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-el.gpr.in tests.gpr.in samples.gpr config.gpr.in \
-src samples regtests \
+security.gpr.in tests.gpr.in config.gpr.in \
+src regtests \
 bin obj lib doc distrib
 
 dist:
