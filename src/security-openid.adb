@@ -20,7 +20,7 @@ with Ada.Text_IO;
 
 --  with ASF.Clients;
 --  with ASF.Responses;
-
+with Util.Http.Clients;
 with Util.Strings;
 with Util.Encoders;
 with Util.Log.Loggers;
@@ -34,7 +34,7 @@ package body Security.Openid is
    Log : constant Util.Log.Loggers.Logger := Loggers.Create ("Security.Openid");
 
    procedure Extract_Profile (Prefix  : in String;
-                              Request : in ASF.Requests.Request'Class;
+                              Request : in Util.Http.Abstract_Request'Class;
                               Result  : in out Authentication);
 
    function Extract (From      : String;
@@ -42,7 +42,7 @@ package body Security.Openid is
                      End_Tag   : String) return String;
 
    procedure Extract_Value (Into    : in out Unbounded_String;
-                            Request : in ASF.Requests.Request'Class;
+                            Request : in Util.Http.Abstract_Request'Class;
                             Name    : in String);
 
    procedure Set_Result (Result  : in out Authentication;
@@ -193,15 +193,15 @@ package body Security.Openid is
    procedure Discover_XRDS (Realm  : in out Manager;
                             URI    : in String;
                             Result : out End_Point) is
-      Client : ASF.Clients.Client;
-      Reply  : ASF.Clients.Response;
+      Client : Util.Http.Clients.Client;
+      Reply  : Util.Http.Clients.Response;
    begin
       Log.Info ("Discover XRDS on {0}", URI);
 
       Client.Add_Header ("Accept", "application/xrds+xml");
-      Client.Do_Get (URL   => URI,
-                     Reply => Reply);
-      if Reply.Get_Status /= ASF.Responses.SC_OK then
+      Client.Get (URL   => URI,
+                  Reply => Reply);
+      if Reply.Get_Status /= Util.Http.SC_OK then
          Log.Error ("Received error {0} when discovering XRDS on {1}",
                     Util.Strings.Image (Reply.Get_Status), URI);
          raise Service_Error with "Discovering XRDS of OpenID provider failed.";
@@ -278,14 +278,14 @@ package body Security.Openid is
       Output : Unbounded_String;
       URI    : constant String := To_String (OP.URL);
       Params : constant String := Get_Association_Query;
-      Client : ASF.Clients.Client;
-      Reply  : ASF.Clients.Response;
+      Client : Util.Http.Clients.Client;
+      Reply  : Util.Http.Clients.Response;
       Pos, Last, N : Natural;
    begin
-      Client.Do_Post (URL   => URI,
-                      Data  => Params,
-                      Reply => Reply);
-      if Reply.Get_Status /= ASF.Responses.SC_OK then
+      Client.Post (URL   => URI,
+                   Data  => Params,
+                   Reply => Reply);
+      if Reply.Get_Status /= Util.Http.SC_OK then
          Log.Error ("Received error {0} when creating assoication with {1}",
                     Util.Strings.Image (Reply.Get_Status), URI);
          raise Service_Error with "Cannot create association with OpenID provider.";
@@ -378,7 +378,7 @@ package body Security.Openid is
    end Set_Result;
 
    procedure Extract_Value (Into    : in out Unbounded_String;
-                            Request : in ASF.Requests.Request'Class;
+                            Request : in Util.Http.Abstract_Request'Class;
                             Name    : in String) is
    begin
       if Length (Into) = 0 then
@@ -387,7 +387,7 @@ package body Security.Openid is
    end Extract_Value;
 
    procedure Extract_Profile (Prefix  : in String;
-                              Request : in ASF.Requests.Request'Class;
+                              Request : in Util.Http.Abstract_Request'Class;
                               Result  : in out Authentication) is
    begin
       Extract_Value (Result.Email, Request, Prefix & ".email");
@@ -415,7 +415,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify (Realm   : in out Manager;
                      Assoc   : in Association;
-                     Request : in ASF.Requests.Request'Class;
+                     Request : in Util.Http.Abstract_Request'Class;
                      Result  : out Authentication) is
       Mode : constant String := Request.Get_Parameter ("openid.mode");
    begin
@@ -492,7 +492,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify_Signature (Realm   : in Manager;
                                Assoc   : in Association;
-                               Request : in ASF.Requests.Request'Class;
+                               Request : in Util.Http.Abstract_Request'Class;
                                Result  : in out Authentication) is
       pragma Unreferenced (Realm);
 
@@ -548,7 +548,7 @@ package body Security.Openid is
    --  ------------------------------
    procedure Verify_Discovered (Realm   : in out Manager;
                                 Assoc   : in Association;
-                                Request : in ASF.Requests.Request'Class;
+                                Request : in Util.Http.Abstract_Request'Class;
                                 Result  : out Authentication) is
       pragma Unreferenced (Realm, Assoc);
    begin
