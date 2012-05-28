@@ -1,0 +1,17 @@
+Ada Security Library
+
+This Ada05 library provides some security frameworks needed by some Web applications.
+This includes:
+
+ o An OpenID client authentication
+
+To use Ada Security library, configure as follows:
+
+   ./configure
+   make
+
+Documentation
+
+   The Ada Security sources as well as a wiki documentation is provided on:
+
+   http://code.google.com/p/ada-security/
