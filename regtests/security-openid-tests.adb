@@ -18,8 +18,8 @@
 
 with Ada.Strings.Unbounded;
 
+with Util.Http.Mockups;
 with Util.Http.Clients.Mockups;
-with Util.Http.Clients.Files;
 
 with Util.Test_Caller;
 with Ada.Text_IO;
@@ -51,8 +51,8 @@ package body Security.Openid.Tests is
       Path   : constant String := Util.Tests.Get_Path (Dir);
       Result : End_Point;
    begin
-      ASF.Clients.Files.Register;
-      ASF.Clients.Files.Set_File (Path & Name & ".xrds");
+      Util.Http.Clients.Mockups.Register;
+      Util.Http.Clients.Mockups.Set_File (Path & Name & ".xrds");
       M.Discover (Name   => Name,
                   Result => Result);
       Ada.Text_IO.Put_Line ("Result: " & To_String (Result));
@@ -79,7 +79,7 @@ package body Security.Openid.Tests is
    --  ------------------------------
    procedure Test_Verify_Signature (T : in out Test) is
       Assoc  : Association;
-      Req    : ASF.Requests.Mockup.Request;
+      Req    : Util.Http.Mockups.Mockup_Request;
       M      : Manager;
       Result : Authentication;
    begin
