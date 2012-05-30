@@ -41,6 +41,24 @@ package body Security.Openid.Tests is
                        Test_Verify_Signature'Access);
    end Add_Tests;
 
+   overriding
+   function Get_Parameter (Params : in Test_Parameters;
+                           Name   : in String) return String is
+   begin
+      if Params.Params.Contains (Name) then
+         return Params.Params.Element (Name);
+      else
+         return "";
+      end if;
+   end Get_Parameter;
+
+   procedure Set_Parameter (Params : in out Test_Parameters;
+                            Name   : in String;
+                            Value  : in String) is
+   begin
+      Params.Params.Include (Name, Value);
+   end Set_Parameter;
+
    procedure Check_Discovery (T    : in out Test;
                               Name : in String;
                               URI  : in String) is
@@ -79,7 +97,7 @@ package body Security.Openid.Tests is
    --  ------------------------------
    procedure Test_Verify_Signature (T : in out Test) is
       Assoc  : Association;
-      Req    : Util.Http.Mockups.Mockup_Request;
+      Req    : Test_Parameters;
       M      : Manager;
       Result : Authentication;
    begin

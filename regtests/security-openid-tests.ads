@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid - Tests for OpenID
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+with Util.Strings.Maps;
 with Util.Tests;
 package Security.Openid.Tests is
 
@@ -28,5 +29,17 @@ package Security.Openid.Tests is
    procedure Test_Discovery (T : in out Test);
 
    procedure Test_Verify_Signature (T : in out Test);
+
+   type Test_Parameters is new Security.Openid.Parameters with record
+      Params : Util.Strings.Maps.Map;
+   end record;
+
+   overriding
+   function Get_Parameter (Params : in Test_Parameters;
+                           Name   : in String) return String;
+
+   procedure Set_Parameter (Params : in out Test_Parameters;
+                            Name   : in String;
+                            Value  : in String);
 
 end Security.Openid.Tests;
