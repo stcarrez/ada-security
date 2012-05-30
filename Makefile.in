@@ -136,26 +136,26 @@ install_shared:
 	$(MAKE) LIBRARY_TYPE=relocatable install_lib
 
 install_lib:
-	$(MKDIR) -p ${includedir}/el
+	$(MKDIR) -p ${includedir}/security
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/el/$(LIBRARY_TYPE)
-	${CP} -p src/*.ad[bs] ${includedir}/el
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/el.gpr > ${projectdir}/el.gpr
-	${CP} -p lib/$(LIBRARY_TYPE)/*.ali ${alidir}/el/$(LIBRARY_TYPE)/
+	${MKDIR} -p ${alidir}/security/$(LIBRARY_TYPE)
+	${CP} -p src/*.ad[bs] ${includedir}/security
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
+	${CP} -p lib/$(LIBRARY_TYPE)/*.ali ${alidir}/security/$(LIBRARY_TYPE)/
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/$(LIBRARY_TYPE)/libadael.a ${libdir}/
+	${CP} lib/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
 else
-	${CP} -p lib/$(LIBRARY_TYPE)/libadael.$(LIBVER) ${libdir}/
+	${CP} -p lib/$(LIBRARY_TYPE)/libada-security.$(LIBVER) ${libdir}/
 	cd ${libdir} && \
-	   rm -f libadael.$(LIBEXT) && \
-	   ${LN} libadael.$(LIBVER) libadael.$(LIBEXT)
+	   rm -f libada-security.$(LIBEXT) && \
+	   ${LN} libada-security.$(LIBVER) libada-security.$(LIBEXT)
 endif
 
 uninstall:
-	rm -rf ${includedir}/el
-	rm -f ${libdir}/libadael.a
-	rm -f ${libdir}/libadael.$(LIBEXT)
-	rm -f ${projectdir}/el.gpr
+	rm -rf ${includedir}/security
+	rm -f ${libdir}/libada-security.a
+	rm -f ${libdir}/libada-security.$(LIBEXT)
+	rm -f ${projectdir}/security.gpr
 
 # prepare before releasing a new version of the package
 # (collect information about changes and SVN repository)
