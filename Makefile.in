@@ -141,7 +141,7 @@ install_lib:
 	${MKDIR} -p ${alidir}/security/$(LIBRARY_TYPE)
 	${CP} -p src/*.ad[bs] ${includedir}/security
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
-	${CP} -p lib/$(LIBRARY_TYPE)/*.ali ${alidir}/security/$(LIBRARY_TYPE)/
+	${CP} -p lib/$(LIBRARY_TYPE)/security/*.ali ${alidir}/security/$(LIBRARY_TYPE)/
 ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
 else
