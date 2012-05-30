@@ -1,0 +1,11 @@
+<policy-rules>
+  <role-permission>
+    <name>admin</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+  <policy id='1'>
+    <permission>admin</permission>
+    <url-pattern>/admin/.*</url-pattern>
+  </policy>
+</policy-rules>

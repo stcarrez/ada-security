@@ -1,0 +1,45 @@
+<policy-rules>
+  <security-role>
+    <role-name>developer</role-name>
+  </security-role>
+  <security-role>
+    <role-name>manager</role-name>
+  </security-role>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+
+  <role-permission>
+    <name>developer</name>
+    <role>developer</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>manager</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>admin</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+
+  <policy>
+    <permission>admin</permission>
+    <url-pattern>/admin/.*</url-pattern>
+  </policy>
+
+  <policy>
+    <permission>developer</permission>
+    <url-pattern>/developer/.*</url-pattern>
+  </policy>
+
+  <policy>
+    <permission>manager</permission>
+    <url-pattern>/manager/.*</url-pattern>
+  </policy>
+
+</policy-rules>
