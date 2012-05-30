@@ -11,4 +11,4 @@ project Security is
    for Source_Dirs use ("INSTALL/share/ada/adainclude/security");
    for Library_ALI_Dir use "INSTALL/lib/ada/adalib/security/" & Project'Library_Kind;
    for Externally_Built use "true";
-end Asf;
+end Security;
