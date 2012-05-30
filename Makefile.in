@@ -143,9 +143,9 @@ install_lib:
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
 	${CP} -p lib/security/$(LIBRARY_TYPE)/*.ali ${alidir}/security/$(LIBRARY_TYPE)/
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
+	${CP} lib/security/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
 else
-	${CP} -p lib/$(LIBRARY_TYPE)/libada-security.$(LIBVER) ${libdir}/
+	${CP} -p lib/security/$(LIBRARY_TYPE)/libada-security.$(LIBVER) ${libdir}/
 	cd ${libdir} && \
 	   rm -f libada-security.$(LIBEXT) && \
 	   ${LN} libada-security.$(LIBVER) libada-security.$(LIBEXT)

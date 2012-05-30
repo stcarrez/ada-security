@@ -9,7 +9,7 @@ project Security is
    Library_Dir := "@SECURITY_LIBDIR@";
    Library_Type : Config.Library_Type_Type := external ("LIBRARY_TYPE", "static");
 
-   for Library_Name use "security";
+   for Library_Name use "ada-security";
    for Library_Kind use Library_Type;
 
    for Source_Dirs use ("src");

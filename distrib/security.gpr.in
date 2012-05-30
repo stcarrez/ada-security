@@ -4,7 +4,7 @@ with "el";
 project Security is
    Version := "@SECURITY_VERSION@";
 
-   for Library_Name use "security";
+   for Library_Name use "ada-security";
    for Library_Dir use "INSTALL/lib";
    for Library_Kind use "LIBRARY_TYPE";
 
