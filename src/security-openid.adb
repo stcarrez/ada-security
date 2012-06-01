@@ -162,6 +162,16 @@ package body Security.Openid is
    end Get_Authentication;
 
    --  ------------------------------
+   --  Create a principal with the given authentication results.
+   --  ------------------------------
+   function Create_Principal (Auth : in Authentication) return Principal_Access is
+      P : constant Openid.Principal_Access := new Openid.Principal;
+   begin
+      P.Auth := Auth;
+      return P;
+   end Create_Principal;
+
+   --  ------------------------------
    --  Initialize the OpenID realm.
    --  ------------------------------
    procedure Initialize (Realm     : in out Manager;

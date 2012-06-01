@@ -115,6 +115,9 @@ package Security.Openid is
    --  Get the authentication data.
    function Get_Authentication (From : in Principal) return Authentication;
 
+   --  Create a principal with the given authentication results.
+   function Create_Principal (Auth : in Authentication) return Principal_Access;
+
    --  ------------------------------
    --  OpenID Manager
    --  ------------------------------
