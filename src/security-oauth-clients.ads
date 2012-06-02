@@ -77,6 +77,12 @@ package Security.OAuth.Clients is
    function Get_State (App   : in Application;
                        Nonce : in String) return String;
 
+   --  Get the authenticate parameters to build the URI to redirect the user to
+   --  the OAuth authorization form.
+   function Get_Auth_Params (App : in Application;
+                             State : in String;
+                             Scope : in String := "") return String;
+
    --  OAuth 2.0 Section 4.1.2  Authorization Response
 
    --  Verify that the <b>State</b> opaque value was created by the <b>Get_State</b>

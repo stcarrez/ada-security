@@ -19,6 +19,7 @@ with Ada.Numerics.Discrete_Random;
 with Interfaces;
 with Ada.Streams;
 
+with Util.Http.Clients;
 with Util.Encoders.HMAC.SHA1;
 
 --  The <b>Security.OAuth.Clients</b> package implements the client OAuth 2.0 authorization.
@@ -145,6 +146,27 @@ package body Security.OAuth.Clients is
    end Get_State;
 
    --  ------------------------------
+   --  Get the authenticate parameters to build the URI to redirect the user to
+   --  the OAuth authorization form.
+   --  ------------------------------
+   function Get_Auth_Params (App : in Application;
+                             State : in String;
+                             Scope : in String := "") return String is
+   begin
+      return Security.OAuth.Client_Id
+        & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
+        & "&"
+        & Security.OAuth.Redirect_Uri
+        & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
+        & "&"
+        & Security.OAuth.Scope
+        & "=" & Scope
+        & "&"
+        & Security.OAuth.State
+        & "=" & State;
+   end Get_Auth_Params;
+
+   --  ------------------------------
    --  Verify that the <b>State</b> opaque value was created by the <b>Get_State</b>
    --  operation with the given client and redirect URL.
    --  ------------------------------
@@ -165,7 +187,23 @@ package body Security.OAuth.Clients is
    --  ------------------------------
    function Request_Access_Token (App  : in Application;
                                   Code : in String) return Access_Token_Access is
+      Client   : Util.Http.Clients.Client;
+      Response : Util.Http.Clients.Response;
+
+      Data : constant String
+        := Security.OAuth.Grant_Type & "=authorization_code"
+          & "&"
+        & Security.OAuth.Code & "=" & Code
+        & "&"
+        & Security.OAuth.Redirect_Uri & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
+        & "&"
+        & Security.OAuth.Client_Id & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
+        & "&"
+        & Security.OAuth.Client_Secret & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
    begin
+      Client.Post (URL   => Ada.Strings.Unbounded.To_String (App.Request_URI),
+                   Data  => Data,
+                   Reply => Response);
       return null;
    end Request_Access_Token;
 
@@ -176,6 +214,7 @@ package body Security.OAuth.Clients is
                                  Token   : in String;
                                  Expires : in Natural) return Access_Token_Access is
       pragma Unreferenced (App, Expires);
+
    begin
       return new Access_Token '(Len => Token'Length,
                                 Access_Id => Token);
