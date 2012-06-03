@@ -19,6 +19,8 @@ with Ada.Numerics.Discrete_Random;
 with Interfaces;
 with Ada.Streams;
 
+with Util.Log.Loggers;
+with Util.Strings;
 with Util.Http.Clients;
 with Util.Encoders.HMAC.SHA1;
 
@@ -26,6 +28,8 @@ with Util.Encoders.HMAC.SHA1;
 --
 --  Note: OAuth 1.0 could be implemented but since it's being deprecated it's not worth doing it.
 package body Security.OAuth.Clients is
+
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Clients");
 
    --  ------------------------------
    --  Access Token
@@ -140,9 +144,13 @@ package body Security.OAuth.Clients is
       use Ada.Strings.Unbounded;
 
       Data : constant String := Nonce & To_String (App.Protect);
+      Hmac : String := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Key),
+                                                            Data => Data,
+                                                            URL  => True);
    begin
-      return Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Key),
-                                                  Data => Data);
+      --  Avoid the '=' at end of HMAC since it could be replaced by %C20 which is annoying...
+      Hmac (Hmac'Last) := '.';
+      return Hmac;
    end Get_State;
 
    --  ------------------------------
@@ -173,11 +181,7 @@ package body Security.OAuth.Clients is
    function Is_Valid_State (App   : in Application;
                             Nonce : in String;
                             State : in String) return Boolean is
-      use Ada.Strings.Unbounded;
-
-      Data : constant String := Nonce & To_String (App.Protect);
-      Hmac : constant String := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Key),
-                                                                     Data => Data);
+      Hmac : constant String := Application'Class (App).Get_State (Nonce);
    begin
       return Hmac = State;
    end Is_Valid_State;
@@ -200,11 +204,62 @@ package body Security.OAuth.Clients is
         & Security.OAuth.Client_Id & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
         & "&"
         & Security.OAuth.Client_Secret & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
+      URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
    begin
-      Client.Post (URL   => Ada.Strings.Unbounded.To_String (App.Request_URI),
+      Log.Info ("Getting access token from {0}", URI);
+      Client.Post (URL   => URI,
                    Data  => Data,
                    Reply => Response);
-      return null;
+      if Response.Get_Status /= Util.Http.SC_OK then
+         Log.Warn ("Cannot get access token from {0}: status is {1}",
+                   URI, Natural'Image (Response.Get_Status));
+         return null;
+      end if;
+
+      --  Decode the response.
+      declare
+         Content      : constant String := Response.Get_Body;
+         Content_Type : constant String := Response.Get_Header ("Content-Type");
+         Pos          : Natural := Util.Strings.Index (Content_Type, ';');
+         Last         : Natural;
+         Expires      : Natural;
+      begin
+         if Pos = 0 then
+            Pos := Content_Type'Last;
+         end if;
+         Log.Debug ("Content type: {0}", Content_Type);
+         Log.Debug ("Data: {0}", Content);
+
+         --  Facebook sends the access token as a 'text/plain' content.
+         if Content_Type (Content_Type'First .. Pos) = "text/plain;" then
+            Pos := Util.Strings.Index (Content, '=');
+            if Pos = 0 then
+               Log.Error ("Invalid access token response: '{0}'", Content);
+               return null;
+            end if;
+            if Content (Content'First .. Pos) /= "access_token=" then
+               Log.Error ("The 'access_token' parameter is missing in response: '{0}'", Content);
+               return null;
+            end if;
+            Last := Util.Strings.Index (Content, '&', Pos + 1);
+            if Last = 0 then
+               Log.Error ("Invalid 'access_token' parameter: '{0}'", Content);
+               return null;
+            end if;
+            if Content (Last .. Last + 8) /= "&expires=" then
+               Log.Error ("Invalid 'expires' parameter: '{0}'", Content);
+               return null;
+            end if;
+            Expires := Natural'Value (Content (Last + 9 .. Content'Last));
+            return Application'Class (App).Create_Access_Token (Content (Pos + 1 .. Last - 1),
+                                                                Expires);
+
+         else
+            Log.Error ("Content type {0} not supported for access token response", Content_Type);
+            Log.Error ("Response: {0}", Content);
+            return null;
+         end if;
+      end;
    end Request_Access_Token;
 
    --  ------------------------------
