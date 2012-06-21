@@ -29,14 +29,13 @@ project Config is
       case Mode is
 
          when "distrib" =>
- 	    --  SCz 2012-05-28: disable the -gnatN switch because gcc fails to inline a Value function...
-            for Default_Switches ("ada") use ("");
+            for Default_Switches ("ada") use ("-gnatn");
 
          when "debug" =>
             for Default_Switches ("ada") use Warnings & ("-gnata", "-gnatVaMI", "-gnaty3abcefhiklmnprstxM99");
 
          when "optimize" =>
-            for Default_Switches ("ada") use Warnings & ("-gnatp", "-fdata-sections", "-ffunction-sections");
+            for Default_Switches ("ada") use Warnings & ("-gnatn", "-gnatp", "-fdata-sections", "-ffunction-sections");
 
          when "profile" =>
             for Default_Switches ("ada") use Warnings & ("-pg");
