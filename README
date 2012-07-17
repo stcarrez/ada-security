@@ -4,6 +4,7 @@ This Ada05 library provides some security frameworks needed by some Web applicat
 This includes:
 
  o An OpenID client authentication
+ o An OAuth 2.0 client authentication
 
 To use Ada Security library, configure as follows:
 

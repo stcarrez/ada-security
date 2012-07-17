@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-contexts -- Context to provide security information and verify permissions
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ with Ada.Finalization;
 with Util.Strings.Maps;
 with Security.Permissions;
 
+--  == Security Context ==
 --  The security context provides contextual information for a security controller to
 --  verify that a permission is granted.
 --  This security context is used as follows:

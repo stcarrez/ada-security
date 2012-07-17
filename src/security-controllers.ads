@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-controllers -- Controllers to verify a security permission
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 with Security.Contexts;
 
+--  == Security Controller ==
 --  The <b>Security.Controllers</b> package defines the security controller used to
 --  verify that a given permission is granted.  A security controller uses the security
 --  context and other controller specific and internal data to verify that the permission

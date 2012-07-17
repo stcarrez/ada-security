@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- Open ID 2.0 Support
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,6 @@ with Ada.Calendar;
 with Ada.Finalization;
 
 with Util.Http;
---  with ASF.Requests;
---  with ASF.Principals;
 with Security.Permissions;
 
 --  The <b>Security.Openid</b> package implements an authentication framework based
