@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == OAuth ==
 --  The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authorization
 --  framework as defined by the IETF working group.
 --  See http://tools.ietf.org/html/draft-ietf-oauth-v2-26
