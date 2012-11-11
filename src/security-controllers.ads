@@ -33,7 +33,7 @@ with Security.Contexts;
 --  </ul>
 --
 --  Security controller instances are created when the security policy rules are parsed.
---  These instances are shared accross possibly several concurrent requests.
+--  These instances are shared across possibly several concurrent requests.
 package Security.Controllers is
 
    Invalid_Controller : exception;
