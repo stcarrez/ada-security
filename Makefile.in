@@ -94,7 +94,7 @@ analyze:
 rebuild: clean build
 
 # Build and run the unit tests
-test:	build
+check test:	build
 	$(GNATMAKE) -p -Ptests
 	bin/security_harness -xml security-aunit.xml
 
