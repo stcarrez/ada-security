@@ -30,13 +30,21 @@ with Util.Serialize.IO.XML;
 
 with GNAT.Regexp;
 
---  with EL.Functions;
-
 limited with Security.Controllers;
 limited with Security.Contexts;
 
+--  == Permissions ==
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
+--
+--  === Principal ===
+--  The <tt>Principal</tt> is the entity that can be authenticated.  A principal is obtained
+--  after successful authentication of a user or of a system through an authorization process.
+--  The OpenID or OAuth authentication processes generate such security principal.
+--
+--  === Permission ===
+--  The <tt>Permission</tt> represents an access to a system or application resource.
+--
 package Security.Permissions is
 
    --  EL function name exposed by Set_Functions.
