@@ -19,9 +19,9 @@ with Ada.Strings.Unbounded;
 with Ada.Calendar;
 with Ada.Finalization;
 
-with Util.Http;
 with Security.Permissions;
 
+--  == OpenID ==
 --  The <b>Security.Openid</b> package implements an authentication framework based
 --  on OpenID 2.0.
 --
