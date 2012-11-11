@@ -20,6 +20,8 @@
 --  The <tt>Security</tt> package provides security frameworks that allows
 --  an application to use OpenID or OAuth security frameworks.  This security
 --  framework was first developed within the Ada Server Faces project.
+--  This package defines abstractions that are close or similar to Java
+--  security package.
 --
 --  @include security-permissions.ads
 --  @include security-openid.ads
