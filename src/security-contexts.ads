@@ -26,21 +26,28 @@ with Security.Permissions;
 --  verify that a permission is granted.
 --  This security context is used as follows:
 --
---   * An instance of the security context is declared within a function/procedure as
---   a local variable
---   * This instance will be associated with the current thread through a task attribute
---   * The security context is populated with information to identify the current user,
---   his roles, permissions and other information that could be used by security controllers
---   * To verify a permission, the current security context is retrieved and the
---   <b>Has_Permission</b> operation is called,
---   * The <b>Has_Permission<b> will first look in a small cache stored in the security context.
---   * When not present in the cache, it will use the security manager to find the
---   security controller associated with the permission to verify
---   * The security controller will be called with the security context to check the permission.
---   The whole job of checking the permission is done by the security controller.
---   The security controller retrieves information from the security context to decide
---   whether the permission is granted or not.
---   * The result produced by the security controller is then saved in the local cache.
+--    * An instance of the security context is declared within a function/procedure as
+--      a local variable
+--
+--    * This instance will be associated with the current thread through a task attribute
+--
+--    * The security context is populated with information to identify the current user,
+--      his roles, permissions and other information that could be used by security controllers
+--
+--    * To verify a permission, the current security context is retrieved and the
+--      <b>Has_Permission</b> operation is called,
+--
+--    * The <b>Has_Permission<b> will first look in a small cache stored in the security context.
+--
+--    * When not present in the cache, it will use the security manager to find the
+--      security controller associated with the permission to verify
+--
+--    * The security controller will be called with the security context to check the permission.
+--      The whole job of checking the permission is done by the security controller.
+--      The security controller retrieves information from the security context to decide
+--      whether the permission is granted or not.
+--
+--    * The result produced by the security controller is then saved in the local cache.
 --
 package Security.Contexts is
 
