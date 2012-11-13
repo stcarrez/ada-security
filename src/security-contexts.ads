@@ -37,7 +37,7 @@ with Security.Permissions;
 --    * To verify a permission, the current security context is retrieved and the
 --      <b>Has_Permission</b> operation is called,
 --
---    * The <b>Has_Permission<b> will first look in a small cache stored in the security context.
+--    * The <b>Has_Permission</b> will first look in a small cache stored in the security context.
 --
 --    * When not present in the cache, it will use the security manager to find the
 --      security controller associated with the permission to verify
