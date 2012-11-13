@@ -25,12 +25,11 @@ with Security.Contexts;
 --  is granted.
 --
 --  To implement a new security controller, one must:
---  <ul>
---    <li>Define a type that implements the <b>Controller</b> interface with the
---        <b>Has_Permission</b> operation
---    <li>Write a function to allocate instances of the given <b>Controller</b> type
---    <li>Register the function under a unique name by using <b>Register_Controller</b>
---  </ul>
+--
+--   * Define a type that implements the <b>Controller</b> interface with the
+--     <b>Has_Permission</b> operation
+--   * Write a function to allocate instances of the given <b>Controller</b> type
+--   * Register the function under a unique name by using <b>Register_Controller</b>
 --
 --  Security controller instances are created when the security policy rules are parsed.
 --  These instances are shared across possibly several concurrent requests.
