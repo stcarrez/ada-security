@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,8 @@ limited with Security.Contexts;
 --
 --  === Permission ===
 --  The <tt>Permission</tt> represents an access to a system or application resource.
+--  A permission is checked by using the security manager.  The security manager uses a
+--  security controller to enforce the permission.
 --
 package Security.Permissions is
 
