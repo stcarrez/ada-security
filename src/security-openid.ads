@@ -28,8 +28,7 @@ with Security.Permissions;
 --  See OpenID Authentication 2.0 - Final
 --  http://openid.net/specs/openid-authentication-2_0.html
 --
---  === Authentication process ==
---  The process is the following:
+--  The authentication process is the following:
 --
 --    * The <b>Initialize</b> procedure is called to configure the OpenID realm and set the
 --      OpenID return callback CB.
@@ -44,6 +43,42 @@ with Security.Permissions;
 --    * The association is decoded from the callback parameter.
 --    * The <b>Verify</b> procedure is called with the association to check the result and
 --      obtain the authentication results.
+--
+--  There are basically two steps that an application must implement.
+--
+--  == Step 1: creating the authentication URL ==
+--  The first step is to create an authentication URL to which the user must be redirected.
+--  In this step, we have to create an OpenId manager, discover the OpenID provider,
+--  associate with us and get an <b>End_Point</b>.
+--
+--    Mgr   : Openid.Manager;
+--    OP    : Openid.End_Point;
+--    Assoc : constant Association_Access := new Association;
+--
+--  The
+--
+--    Server.Initialize (Mgr);
+--    Mgr.Discover (Provider, OP);  --  Yadis discovery (get the XRDS file).
+--    Mgr.Associate (OP, Assoc.all);--  Associate and get an end-point with a key.
+--
+--  After this first step, you must manage to save the association in the HTTP session.
+--  Then you must redirect to the authentication URL that is obtained by using:
+--
+--    Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
+--
+--  == Step 2: verify the authentication in the callback URL ==
+--  The second step is done when the user has finished the authentication successfully or not.
+--
+--    Mgr     : Openid.Manager;
+--    Assoc   : Association_Access := ...;  --  Get the association saved in the session.
+--    Auth    : Openid.Authentication;
+--    Params  : Auth_Params;
+--
+--    Server.Initialize (Mgr);
+--    Mgr.Verify (Assoc.all, Params, Auth);
+--    if Openid.Get_Status (Auth) /= Openid.AUTHENTICATED then ...  -- Failure.
+--
+--
 --
 package Security.Openid is
 
