@@ -49,7 +49,7 @@ with Security.Permissions;
 --  == Step 1: creating the authentication URL ==
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenId manager, discover the OpenID provider,
---  associate with us and get an <b>End_Point</b>.
+--  do the association and get an <b>End_Point</b>.
 --
 --    Mgr   : Openid.Manager;
 --    OP    : Openid.End_Point;
@@ -68,11 +68,18 @@ with Security.Permissions;
 --
 --  == Step 2: verify the authentication in the callback URL ==
 --  The second step is done when the user has finished the authentication successfully or not.
+--  For this step, the application must get back the association that was saved in the session.
+--  It must also prepare a parameters object that allows the OpenID framework to get the
+--  URI parameters from the return callback.
 --
 --    Mgr     : Openid.Manager;
 --    Assoc   : Association_Access := ...;  --  Get the association saved in the session.
 --    Auth    : Openid.Authentication;
 --    Params  : Auth_Params;
+--
+--  The OpenID manager must be initialized and the <b>Verify</b> procedure is called with
+--  the association, parameters and the authentication result.  The <b>Get_Status</b> function
+--  must be used to check that the authentication succeeded.
 --
 --    Server.Initialize (Mgr);
 --    Mgr.Verify (Assoc.all, Params, Auth);
