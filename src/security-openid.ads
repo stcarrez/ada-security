@@ -27,6 +27,24 @@ with Security.Permissions;
 --
 --  See OpenID Authentication 2.0 - Final
 --  http://openid.net/specs/openid-authentication-2_0.html
+--
+--  === Authentication process ==
+--  The process is the following:
+--
+--    * The <b>Initialize</b> procedure is called to configure the OpenID realm and set the
+--      OpenID return callback CB.
+--    * The <b>Discover</b> procedure is called to retrieve from the OpenID provider the XRDS
+--      stream and identify the provider.  An <b>End_Point</b> is returned.
+--    * The <b>Associate</b> procedure is called to make the association with the <b>End_Point</b>.
+--      The <b>Association</b> record holds session, and authentication.
+--    * The <b>Get_Authentication_URL</b> builds the provider OpenID authentication
+--      URL for the association.
+--    * The application should redirected the user to the authentication URL.
+--    * The OpenID provider authenticate the user and redirects the user to the callback CB.
+--    * The association is decoded from the callback parameter.
+--    * The <b>Verify</b> procedure is called with the association to check the result and
+--      obtain the authentication results.
+--
 package Security.Openid is
 
    Invalid_End_Point : exception;
@@ -119,21 +137,7 @@ package Security.Openid is
    --  ------------------------------
    --  OpenID Manager
    --  ------------------------------
-   --  The process is the following:
-   --
-   --  o <b>Initialize</b> is called to configure the OpenID realm and set the
-   --    OpenID return callback CB.
-   --  o <b>Discover</b> is called to retrieve from the OpenID provider the XRDS
-   --    stream and identify the provider.  An <b>End_Point</b> is returned.
-   --  o <b>Associate</b> is called to make the association with the <b>End_Point</b>.
-   --    The <b>Association</b> record holds session, and authentication.
-   --  o <b>Get_Authentication_URL</b> builds the provider OpenID authentication
-   --    URL for the association.
-   --  o The user should be redirected to the authentication URL.
-   --  o The OpenID provider authenticate the user and redirects the user to the callback CB.
-   --  o The association is decoded from the callback parameter.
-   --  o <b>Verify</b> is called with the association to check the result and
-   --    obtain the authentication results.
+   --  The <b>Manager</b> provides the core operations for the OpenID process.
    type Manager is tagged limited private;
 
    --  Initialize the OpenID realm.
