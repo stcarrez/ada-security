@@ -46,6 +46,8 @@ with Security.Permissions;
 --
 --  There are basically two steps that an application must implement.
 --
+--  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
+--
 --  == Step 1: creating the authentication URL ==
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenId manager, discover the OpenID provider,
