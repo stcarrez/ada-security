@@ -35,10 +35,6 @@ package Security is
    --  ------------------------------
    type Principal is limited interface;
    type Principal_Access is access all Principal'Class;
---
---     --  Returns true if the given role is stored in the user principal.
---     function Has_Role (User : in Principal;
---                        Role : in Role_Type) return Boolean is abstract;
 
    --  Get the principal name.
    function Get_Name (From : in Principal) return String is abstract;
