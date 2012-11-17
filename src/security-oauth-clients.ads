@@ -29,12 +29,8 @@ package Security.OAuth.Clients is
    --  Access tokens are credentials used to access protected resources.
    --  The access token is represented as a <b>Principal</b>.  This is an opaque
    --  value for an application.
-   type Access_Token (Len : Natural) is new Security.Permissions.Principal with private;
+   type Access_Token (Len : Natural) is new Security.Principal with private;
    type Access_Token_Access is access all Access_Token'Class;
-
-   --  Returns true if the given role is stored in the user principal.
-   function Has_Role (User : in Access_Token;
-                      Role : in Permissions.Role_Type) return Boolean;
 
    --  Get the principal name.  This is the OAuth access token.
    function Get_Name (From : in Access_Token) return String;
@@ -106,7 +102,7 @@ package Security.OAuth.Clients is
 
 private
 
-   type Access_Token (Len : Natural) is new Security.Permissions.Principal with record
+   type Access_Token (Len : Natural) is new Security.Principal with record
       Access_Id : String (1 .. Len);
    end record;
 
