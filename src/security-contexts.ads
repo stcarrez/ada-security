@@ -58,7 +58,7 @@ package Security.Contexts is
 
    --  Get the application associated with the current service operation.
    function Get_User_Principal (Context : in Security_Context'Class)
-                                return Security.Permissions.Principal_Access;
+                                return Security.Principal_Access;
    pragma Inline_Always (Get_User_Principal);
 
    --  Get the permission manager.
@@ -95,7 +95,7 @@ package Security.Contexts is
    --  Set the current application and user context.
    procedure Set_Context (Context   : in out Security_Context;
                           Manager   : in Security.Permissions.Permission_Manager_Access;
-                          Principal : in Security.Permissions.Principal_Access);
+                          Principal : in Security.Principal_Access);
 
    --  Add a context information represented by <b>Value</b> under the name identified by
    --  <b>Name</b> in the security context <b>Context</b>.
@@ -138,7 +138,7 @@ private
    type Security_Context is new Ada.Finalization.Limited_Controlled with record
       Previous    : Security_Context_Access := null;
       Manager     : Security.Permissions.Permission_Manager_Access := null;
-      Principal   : Security.Permissions.Principal_Access := null;
+      Principal   : Security.Principal_Access := null;
       Context     : Util.Strings.Maps.Map;
    end record;
 
