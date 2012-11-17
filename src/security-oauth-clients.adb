@@ -71,16 +71,6 @@ package body Security.OAuth.Clients is
    end Random;
 
    --  ------------------------------
-   --  Returns true if the given role is stored in the user principal.
-   --  ------------------------------
-   function Has_Role (User : in Access_Token;
-                      Role : in Permissions.Role_Type) return Boolean is
-      pragma Unreferenced (User, Role);
-   begin
-      return False;
-   end Has_Role;
-
-   --  ------------------------------
    --  Get the principal name.  This is the OAuth access token.
    --  ------------------------------
    function Get_Name (From : in Access_Token) return String is
