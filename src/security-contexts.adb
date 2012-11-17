@@ -28,7 +28,7 @@ package body Security.Contexts is
    --  Get the application associated with the current service operation.
    --  ------------------------------
    function Get_User_Principal (Context : in Security_Context'Class)
-                                return Security.Permissions.Principal_Access is
+                                return Security.Principal_Access is
    begin
       return Context.Principal;
    end Get_User_Principal;
@@ -148,7 +148,7 @@ package body Security.Contexts is
    --  ------------------------------
    procedure Set_Context (Context   : in out Security_Context;
                           Manager   : in Security.Permissions.Permission_Manager_Access;
-                          Principal : in Security.Permissions.Principal_Access) is
+                          Principal : in Security.Principal_Access) is
    begin
       Context.Manager   := Manager;
       Context.Principal := Principal;
