@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded;
 with Ada.Calendar;
 with Ada.Finalization;
 
-with Security.Permissions;
+--  with Security.Permissions;
 
 --  == OpenID ==
 --  The <b>Security.Openid</b> package implements an authentication framework based
@@ -48,7 +48,7 @@ with Security.Permissions;
 --
 --  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
 --
---  == Step 1: creating the authentication URL ==
+--  == Discovery: creating the authentication URL ==
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenId manager, discover the OpenID provider,
 --  do the association and get an <b>End_Point</b>.
@@ -68,7 +68,7 @@ with Security.Permissions;
 --
 --    Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
 --
---  == Step 2: verify the authentication in the callback URL ==
+--  == Verify: acknowledge the authentication in the callback URL ==
 --  The second step is done when the user has finished the authentication successfully or not.
 --  For this step, the application must get back the association that was saved in the session.
 --  It must also prepare a parameters object that allows the OpenID framework to get the
@@ -159,12 +159,12 @@ package Security.Openid is
    --  ------------------------------
    --  OpenID Default principal
    --  ------------------------------
-   type Principal is new Security.Permissions.Principal with private;
+   type Principal is new Security.Principal with private;
    type Principal_Access is access all Principal'Class;
 
    --  Returns true if the given role is stored in the user principal.
-   function Has_Role (User : in Principal;
-                      Role : in Permissions.Role_Type) return Boolean;
+--     function Has_Role (User : in Principal;
+--                        Role : in Permissions.Role_Type) return Boolean;
 
    --  Get the principal name.
    function Get_Name (From : in Principal) return String;
@@ -277,7 +277,7 @@ private
       Return_To : Unbounded_String;
    end record;
 
-   type Principal is new Security.Permissions.Principal with record
+   type Principal is new Security.Principal with record
       Auth : Authentication;
    end record;
 
