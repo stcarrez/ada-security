@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
-with Security.Permissions;
 
 --  The <b>Security.OAuth.Clients</b> package implements the client OAuth 2.0 authorization.
 --
