@@ -26,15 +26,15 @@ package body Security.Controllers.Roles is
    function Has_Permission (Handler : in Role_Controller;
                             Context : in Security.Contexts.Security_Context'Class)
                             return Boolean is
-      use type Security.Permissions.Principal_Access;
+      use type Security.Principal_Access;
 
-      P : constant Security.Permissions.Principal_Access := Context.Get_User_Principal;
+      P : constant Security.Principal_Access := Context.Get_User_Principal;
    begin
       if P /= null then
          for I in Handler.Roles'Range loop
-            if P.Has_Role (Handler.Roles (I)) then
+--              if P.Has_Role (Handler.Roles (I)) then
                return True;
-            end if;
+--              end if;
          end loop;
       end if;
       return False;
