@@ -16,14 +16,18 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Finalization;
 with Ada.Strings.Unbounded;
 
+--  == Role Based Security Policy ==
+--  The <tt>Security.Policies.Roles</tt> package implements a role based security policy.
+--
+--  A role is represented by a name in security configuration files.
 package Security.Policies.Roles is
 
    --  Each role is represented by a <b>Role_Type</b> number to provide a fast
    --  and efficient role check.
    type Role_Type is new Natural range 0 .. 63;
+   for Role_Type'Size use 8;
 
    type Role_Type_Array is array (Positive range <>) of Role_Type;
 
@@ -33,7 +37,9 @@ package Security.Policies.Roles is
    type Role_Map is array (Role_Type'Range) of Boolean;
    pragma Pack (Role_Map);
 
-
+   --  ------------------------------
+   --  Role based policy
+   --  ------------------------------
    type Role_Policy is new Policy with private;
 
    Invalid_Name : exception;
@@ -82,5 +88,29 @@ private
       Names        : Role_Name_Array;
       Next_Role    : Role_Type := Role_Type'First;
    end record;
+
+   type Controller_Config is record
+      Name    : Util.Beans.Objects.Object;
+      Roles   : Permissions.Role_Type_Array (1 .. Integer (Permissions.Role_Type'Last));
+      Count   : Natural := 0;
+      Manager : Security.Permissions.Permission_Manager_Access;
+   end record;
+
+   --  Setup the XML parser to read the <b>role-permission</b> description.  For example:
+   --
+   --  <security-role>
+   --    <role-name>admin</role-name>
+   --  </security-role>
+   --  <role-permission>
+   --     <name>create-workspace</name>
+   --     <role>admin</role>
+   --     <role>manager</role>
+   --  </role-permission>
+   --
+   --  This defines a permission <b>create-workspace</b> that will be granted if the
+   --  user has either the <b>admin</b> or the <b>manager</b> role.
+   overriding
+   procedure Set_Reader_Config (Pol     : in out Policy;
+                                Reader  : in out Util.Serialize.IO.XML.Parser);
 
 end Security.Policies.Roles;
