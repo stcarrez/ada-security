@@ -41,6 +41,7 @@ package Security.Policies.Roles is
    --  Role based policy
    --  ------------------------------
    type Role_Policy is new Policy with private;
+   type Role_Policy_Access is access all Role_Policy'Class;
 
    Invalid_Name : exception;
 
@@ -69,23 +70,6 @@ package Security.Policies.Roles is
                             Name      : in String;
                             Result    : out Role_Type);
 
-private
-
-   type Role_Name_Array is
-     array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
-
-   type Role_Policy is new Policy with record
-      Names        : Role_Name_Array;
-      Next_Role    : Role_Type := Role_Type'First;
-   end record;
-
-   type Controller_Config is record
-      Name    : Util.Beans.Objects.Object;
-      Roles   : Permissions.Role_Type_Array (1 .. Integer (Permissions.Role_Type'Last));
-      Count   : Natural := 0;
-      Manager : Security.Permissions.Permission_Manager_Access;
-   end record;
-
    --  Setup the XML parser to read the <b>role-permission</b> description.  For example:
    --
    --  <security-role>
@@ -100,7 +84,24 @@ private
    --  This defines a permission <b>create-workspace</b> that will be granted if the
    --  user has either the <b>admin</b> or the <b>manager</b> role.
    overriding
-   procedure Set_Reader_Config (Pol     : in out Policy;
-                                Reader  : in out Util.Serialize.IO.XML.Parser);
+   procedure Set_Reader_Config (Policy : in out Role_Policy;
+                                Reader : in out Util.Serialize.IO.XML.Parser);
+
+private
+
+   type Role_Name_Array is
+     array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
+
+   type Role_Policy is new Policy with record
+      Names        : Role_Name_Array;
+      Next_Role    : Role_Type := Role_Type'First;
+   end record;
+
+   type Controller_Config is record
+      Name    : Util.Beans.Objects.Object;
+      Roles   : Permissions.Role_Type_Array (1 .. Integer (Permissions.Role_Type'Last));
+      Count   : Natural := 0;
+      Manager : Role_Policy_Access;
+   end record;
 
 end Security.Policies.Roles;
