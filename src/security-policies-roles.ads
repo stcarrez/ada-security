@@ -44,16 +44,6 @@ package Security.Policies.Roles is
 
    Invalid_Name : exception;
 
-   --  Each permission is represented by a <b>Permission_Type</b> number to provide a fast
-   --  and efficient permission check.
-   type Permission_Type is new Natural range 0 .. 63;
-
-   --  The <b>Permission_Map</b> represents a set of permissions which are granted to a user.
-   --  Each permission is represented by a boolean in the map.  The implementation is limited
-   --  to 64 permissions.
-   type Permission_Map is array (Permission_Type'Range) of Boolean;
-   pragma Pack (Permission_Map);
-
    --  ------------------------------
    --  Permission Manager
    --  ------------------------------
