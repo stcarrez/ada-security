@@ -47,7 +47,8 @@ package Security.Controllers is
    --  by the security context passed in <b>Context</b>.
    --  Returns true if such permission is granted.
    function Has_Permission (Handler : in Controller;
-                            Context : in Security.Contexts.Security_Context'Class)
+                            Context : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
                             return Boolean is abstract;
 
    type Controller_Factory is not null access function return Controller_Access;
