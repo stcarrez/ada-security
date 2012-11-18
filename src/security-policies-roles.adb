@@ -183,13 +183,13 @@ package body Security.Policies.Roles is
    --  user has either the <b>admin</b> or the <b>manager</b> role.
    --  ------------------------------
 
-   procedure Set_Reader_Config (Pol     : in Policy;
-                                Reader  : in out Util.Serialize.IO.XML.Parser) is
+   procedure Set_Reader_Config (Policy : in out Role_Policy;
+                                Reader : in out Util.Serialize.IO.XML.Parser) is
       Config : Controller_Config_Access := new Controller_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Mapper'Access);
       Reader.Add_Mapping ("module", Mapper'Access);
-      Config.Manager := Manager;
+      Config.Manager := Policy'Unchecked_Access;
       Config_Mapper.Set_Context (Reader, Config);
    end Set_Reader_Config;
 
