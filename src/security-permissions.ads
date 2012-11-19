@@ -77,7 +77,7 @@ package Security.Permissions is
 
 
    --  The permission root class.
-   type Abstract_Permission is abstract tagged limited null record;
+   type Permission is abstract tagged limited null record;
 
    --  Each role is represented by a <b>Role_Type</b> number to provide a fast
    --  and efficient role check.
@@ -107,13 +107,13 @@ package Security.Permissions is
    --  ------------------------------
 
    --  Represents a permission for a given role.
-   type Permission (Role : Permission_Type) is new Abstract_Permission with null record;
+--     type Permission (Role : Permission_Type) is new Abstract_Permission with null record;
 
    --  ------------------------------
    --  URI Permission
    --  ------------------------------
    --  Represents a permission to access a given URI.
-   type URI_Permission (Len : Natural) is new Abstract_Permission with record
+   type URI_Permission (Len : Natural) is new Permission with record
       URI : String (1 .. Len);
    end record;
 
@@ -125,7 +125,7 @@ package Security.Permissions is
 
    --  Represents a permission to access a given file.
    type File_Permission (Len  : Natural;
-                         Mode : File_Mode) is new Abstract_Permission with record
+                         Mode : File_Mode) is new Permission with record
       Path : String (1 .. Len);
    end record;
 
