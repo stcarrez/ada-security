@@ -152,7 +152,7 @@ package body Security.Policies.Roles is
          when FIELD_ROLE_NAME =>
             declare
                Name : constant String := Util.Beans.Objects.To_String (Value);
-               Role : Permissions.Role_Type;
+               Role : Role_Type;
             begin
                Into.Manager.Add_Role_Type (Name, Role);
             end;
