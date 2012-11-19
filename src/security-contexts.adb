@@ -63,7 +63,8 @@ package body Security.Contexts is
          if C = null then
             Result := False;
          else
-            Result := C.Has_Permission (Context);
+            --              Result := C.Has_Permission (Context);
+            Result := False;
          end if;
       end;
    end Has_Permission;
