@@ -21,6 +21,7 @@ with Security.Permissions;
 
 with Util.Beans.Objects;
 with Util.Serialize.IO.XML;
+with Security.Policies.Roles;
 
 package Security.Controllers.Roles is
 
@@ -30,7 +31,7 @@ package Security.Controllers.Roles is
    --  The <b>Role_Controller</b> implements a simple role based permissions check.
    --  The permission is granted if the user has the role defined by the controller.
    type Role_Controller (Count : Positive) is limited new Controller with record
-      Roles : Permissions.Role_Type_Array (1 .. Count);
+      Roles : Policies.Roles.Role_Type_Array (1 .. Count);
    end record;
    type Role_Controller_Access is access all Role_Controller'Class;
 
