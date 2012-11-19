@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 
 with Security.Contexts;
+with Security.Permissions;
 
 --  == Security Controller ==
 --  The <b>Security.Controllers</b> package defines the security controller used to
