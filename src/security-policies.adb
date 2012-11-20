@@ -130,6 +130,13 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
+      --  Prepare the reader to parse the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Set_Reader_Config (Reader);
+      end loop;
+
+      --  Read the configuration file.
       Reader.Parse (File);
 
    end Read_Policy;
