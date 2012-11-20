@@ -48,12 +48,26 @@ package body Security.Policies is
    --  Permission Manager
    --  ------------------------------
 
+   --  ------------------------------
    --  Add the policy to the policy manager.  After a policy is added in the manager,
    --  it can participate in the security policy.
+   --  Raises Policy_Error if the policy table is full.
+   --  ------------------------------
    procedure Add_Policy (Manager : in out Policy_Manager;
                          Policy  : in Policy_Access) is
+      Name : constant String := Policy.Get_Name;
    begin
-      null;
+      Log.Info ("Adding policy {0}", Name);
+
+      for I in Manager.Policies'Range loop
+         if Manager.Policies (I) = null then
+            Manager.Policies (I) := Policy;
+            return;
+         end if;
+      end loop;
+      Log.Error ("Policy table is full, increase policy manager table to {0} to add policy {1}",
+                 Positive'Image (Manager.Max_Policies + 1), Name);
+      raise Policy_Error;
    end Add_Policy;
 
    --  ------------------------------
