@@ -36,7 +36,13 @@ limited with Security.Contexts;
 
 package Security.Policies is
 
-   type Policy is new Ada.Finalization.Limited_Controlled with null record;
+   type Security_Context_Access is access all Contexts.Security_Context'Class;
+
+   type Controller_Access is access all Security.Controllers.Controller'Class;
+
+   type Controller_Access_Array is array (Permissions.Permission_Index range <>) of Controller_Access;
+
+   type Policy is new Ada.Finalization.Limited_Controlled with private;
    type Policy_Access is access all Policy'Class;
 
    procedure Set_Reader_Config (Pol     : in out Policy;
@@ -45,15 +51,15 @@ package Security.Policies is
    --  Get the policy name.
    function Get_Name (From : in Policy) return String;
 
+   --  Add a permission under the given permission name and associated with the controller.
+   --  To verify the permission, the controller will be called.
+   procedure Add_Permission (Manager    : in out Policy;
+                             Name       : in String;
+                             Permission : in Controller_Access);
+
    Invalid_Name : exception;
 
    Policy_Error : exception;
-
-   type Security_Context_Access is access all Contexts.Security_Context'Class;
-
-   type Controller_Access is access all Security.Controllers.Controller'Class;
-
-   type Controller_Access_Array is array (Permissions.Permission_Index range <>) of Controller_Access;
 
    --  Each permission is represented by a <b>Permission_Type</b> number to provide a fast
    --  and efficient permission check.
@@ -146,6 +152,10 @@ private
    type Controller_Access_Array_Access is access all Controller_Access_Array;
 
    type Policy_Access_Array is array (Positive range <>) of Policy_Access;
+
+   type Policy is new Ada.Finalization.Limited_Controlled with record
+      Manager : Policy_Manager_Access;
+   end record;
 
    type Policy_Manager (Max_Policies : Positive) is
      new Ada.Finalization.Limited_Controlled with record
