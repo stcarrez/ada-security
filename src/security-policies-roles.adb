@@ -30,6 +30,16 @@ package body Security.Policies.Roles is
    Log : constant Loggers.Logger := Loggers.Create ("Security.Policies.Roles");
 
    --  ------------------------------
+   --  Get the policy name.
+   --  ------------------------------
+   overriding
+   function Get_Name (From : in Role_Policy) return String is
+      pragma Unreferenced (From);
+   begin
+      return "role";
+   end Get_Name;
+
+   --  ------------------------------
    --  Get the role name.
    --  ------------------------------
    function Get_Role_Name (Manager : in Role_Policy;
@@ -164,21 +174,8 @@ package body Security.Policies.Roles is
    Mapper : aliased Config_Mapper.Mapper;
 
    --  ------------------------------
-   --  Setup the XML parser to read the <b>role-permission</b> description.  For example:
-   --
-   --  <security-role>
-   --    <role-name>admin</role-name>
-   --  </security-role>
-   --  <role-permission>
-   --     <name>create-workspace</name>
-   --     <role>admin</role>
-   --     <role>manager</role>
-   --  </role-permission>
-   --
-   --  This defines a permission <b>create-workspace</b> that will be granted if the
-   --  user has either the <b>admin</b> or the <b>manager</b> role.
+   --  Setup the XML parser to read the <b>role-permission</b> description.
    --  ------------------------------
-
    procedure Set_Reader_Config (Policy : in out Role_Policy;
                                 Reader : in out Util.Serialize.IO.XML.Parser) is
       Config : Controller_Config_Access := new Controller_Config;
