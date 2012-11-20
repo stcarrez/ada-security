@@ -56,11 +56,34 @@ package body Security.Policies is
       null;
    end Add_Policy;
 
+   --  ------------------------------
+   --  Add a permission under the given permission name and associated with the controller.
+   --  To verify the permission, the controller will be called.
+   --  ------------------------------
    procedure Add_Permission (Manager    : in out Policy_Manager;
                              Name       : in String;
                              Permission : in Controller_Access) is
+      use type Permissions.Permission_Index;
+
+      Index : Permission_Index;
    begin
-      null;
+      Log.Info ("Adding permission {0}", Name);
+
+      Permissions.Add_Permission (Name, Index);
+      if Index >= Manager.Last_Index then
+         declare
+            Count : constant Permission_Index := Index + 32;
+            Perms : constant Controller_Access_Array_Access
+              := new Controller_Access_Array (0 .. Count);
+         begin
+            if Manager.Permissions /= null then
+               Perms (Manager.Permissions'Range) := Manager.Permissions.all;
+            end if;
+            Manager.Permissions := Perms;
+            Manager.Last_Index := Count;
+         end;
+      end if;
+      Manager.Permissions (Index) := Permission;
    end Add_Permission;
 
    --  Get the security controller associated with the permission index <b>Index</b>.
@@ -86,10 +109,10 @@ package body Security.Policies is
 
       package Policy_Config is
         new Reader_Config (Reader, Manager'Unchecked_Access);
-      package Role_Config is
-        new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
+--        package Role_Config is
+--          new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
       pragma Warnings (Off, Policy_Config);
-      pragma Warnings (Off, Role_Config);
+--        pragma Warnings (Off, Role_Config);
    begin
       Log.Info ("Reading policy file {0}", File);
 
