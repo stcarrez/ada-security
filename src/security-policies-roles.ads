@@ -21,7 +21,25 @@ with Ada.Strings.Unbounded;
 --  == Role Based Security Policy ==
 --  The <tt>Security.Policies.Roles</tt> package implements a role based security policy.
 --
---  A role is represented by a name in security configuration files.
+--  A role is represented by a name in security configuration files.  A role based permission
+--  is associated with a list of roles.  The permission is granted if the user has one of these
+--  roles.
+--
+--    <security-role>
+--      <role-name>admin</role-name>
+--    </security-role>
+--    <security-role>
+--      <role-name>manager</role-name>
+--    </security-role>
+--    <role-permission>
+--      <name>create-workspace</name>
+--      <role>admin</role>
+--      <role>manager</role>
+--    </role-permission>
+--
+--  This definition declares two roles: <tt>admin</tt> and <tt>manager</tt>
+--  It defines a permission <b>create-workspace</b> that will be granted if the
+--  user has either the <b>admin</b> or the <b>manager</b> role.
 package Security.Policies.Roles is
 
    --  Each role is represented by a <b>Role_Type</b> number to provide a fast
@@ -99,7 +117,7 @@ private
 
    type Controller_Config is record
       Name    : Util.Beans.Objects.Object;
-      Roles   : Permissions.Role_Type_Array (1 .. Integer (Permissions.Role_Type'Last));
+      Roles   : Role_Type_Array (1 .. Integer (Role_Type'Last));
       Count   : Natural := 0;
       Manager : Role_Policy_Access;
    end record;
