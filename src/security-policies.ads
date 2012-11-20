@@ -17,18 +17,11 @@
 -----------------------------------------------------------------------
 
 with Ada.Finalization;
-with Ada.Strings.Unbounded;
 
-with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Vectors;
-
-with Util.Strings;
-with Util.Refs;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Vectors;
 with Util.Serialize.IO.XML;
-
-with GNAT.Regexp;
+with Util.Strings;
 
 with Security.Permissions;
 limited with Security.Controllers;
