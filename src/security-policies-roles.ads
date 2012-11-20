@@ -63,11 +63,9 @@ package Security.Policies.Roles is
 
    Invalid_Name : exception;
 
-   --  ------------------------------
-   --  Permission Manager
-   --  ------------------------------
-   --  The <b>Permission_Manager</b> verifies through some policy that a permission
-   --  is granted to a user.
+   --  Get the policy name.
+   overriding
+   function Get_Name (From : in Role_Policy) return String;
 
    --  Find the role type associated with the role name identified by <b>Name</b>.
    --  Raises <b>Invalid_Name</b> if there is no role type.
@@ -88,19 +86,7 @@ package Security.Policies.Roles is
                             Name      : in String;
                             Result    : out Role_Type);
 
-   --  Setup the XML parser to read the <b>role-permission</b> description.  For example:
-   --
-   --  <security-role>
-   --    <role-name>admin</role-name>
-   --  </security-role>
-   --  <role-permission>
-   --     <name>create-workspace</name>
-   --     <role>admin</role>
-   --     <role>manager</role>
-   --  </role-permission>
-   --
-   --  This defines a permission <b>create-workspace</b> that will be granted if the
-   --  user has either the <b>admin</b> or the <b>manager</b> role.
+   --  Setup the XML parser to read the <b>role-permission</b> description.
    overriding
    procedure Set_Reader_Config (Policy : in out Role_Policy;
                                 Reader : in out Util.Serialize.IO.XML.Parser);
