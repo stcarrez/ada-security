@@ -47,6 +47,8 @@ package Security.Policies is
 
    Invalid_Name : exception;
 
+   Policy_Error : exception;
+
    type Security_Context_Access is access all Contexts.Security_Context'Class;
 
    type Controller_Access is access all Security.Controllers.Controller'Class;
@@ -68,11 +70,13 @@ package Security.Policies is
    --  ------------------------------
    --  The <b>Permission_Manager</b> verifies through some policy that a permission
    --  is granted to a user.
-   type Policy_Manager is new Ada.Finalization.Limited_Controlled with private;
+   type Policy_Manager (Max_Policies : Positive) is
+     new Ada.Finalization.Limited_Controlled with private;
    type Policy_Manager_Access is access all Policy_Manager'Class;
 
    --  Add the policy to the policy manager.  After a policy is added in the manager,
    --  it can participate in the security policy.
+   --  Raises Policy_Error if the policy table is full.
    procedure Add_Policy (Manager : in out Policy_Manager;
                          Policy  : in Policy_Access);
 
@@ -141,11 +145,17 @@ private
 
    type Controller_Access_Array_Access is access all Controller_Access_Array;
 
-   type Policy_Manager is new Ada.Finalization.Limited_Controlled with record
+   type Policy_Access_Array is array (Positive range <>) of Policy_Access;
+
+   type Policy_Manager (Max_Policies : Positive) is
+     new Ada.Finalization.Limited_Controlled with record
 --        Cache        : Rules_Ref_Access;
 --        Policies     : Policy_Vector.Vector;
       Permissions  : Controller_Access_Array_Access;
       Last_Index   : Permission_Index := Permission_Index'First;
+
+      --  The security policies.
+      Policies     : Policy_Access_Array (1 .. Max_Policies);
    end record;
 
 end Security.Policies;
