@@ -45,6 +45,17 @@ package body Security.Policies is
    end Get_Name;
 
    --  ------------------------------
+   --  Add a permission under the given permission name and associated with the controller.
+   --  To verify the permission, the controller will be called.
+   --  ------------------------------
+   procedure Add_Permission (Manager    : in out Policy;
+                             Name       : in String;
+                             Permission : in Controller_Access) is
+   begin
+      Manager.Manager.Add_Permission (Name, Permission);
+   end Add_Permission;
+
+   --  ------------------------------
    --  Permission Manager
    --  ------------------------------
 
@@ -62,6 +73,7 @@ package body Security.Policies is
       for I in Manager.Policies'Range loop
          if Manager.Policies (I) = null then
             Manager.Policies (I) := Policy;
+            Policy.Manager := Manager'Unchecked_Access;
             return;
          end if;
       end loop;
