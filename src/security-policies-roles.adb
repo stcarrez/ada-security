@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  security-permissions -- Definition of permissions
+--  security-policies-roles -- Role based policies
 --  Copyright (C) 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -26,12 +26,8 @@ package body Security.Policies.Roles is
 
    use Util.Log;
 
-   --  ------------------------------
-   --  Permission Manager
-   --  ------------------------------
-
    --  The logger
-   Log : constant Loggers.Logger := Loggers.Create ("Security.Permissions");
+   Log : constant Loggers.Logger := Loggers.Create ("Security.Policies.Roles");
 
    --  ------------------------------
    --  Get the role name.
