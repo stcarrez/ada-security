@@ -76,6 +76,8 @@ package Security.Policies is
    procedure Add_Policy (Manager : in out Policy_Manager;
                          Policy  : in Policy_Access);
 
+   --  Add a permission under the given permission name and associated with the controller.
+   --  To verify the permission, the controller will be called.
    procedure Add_Permission (Manager    : in out Policy_Manager;
                              Name       : in String;
                              Permission : in Controller_Access);
