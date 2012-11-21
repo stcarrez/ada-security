@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  security-permissions -- Definition of permissions
+--  security-policies-urls -- URL security policy
 --  Copyright (C) 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,8 +20,6 @@ with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Vectors;
 
 with Util.Refs;
-with Util.Beans.Objects;
-with Util.Beans.Objects.Vectors;
 with Util.Serialize.IO.XML;
 
 with GNAT.Regexp;
