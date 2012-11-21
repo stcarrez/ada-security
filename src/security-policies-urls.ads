@@ -69,8 +69,14 @@ package Security.Policies.Urls is
 
    --  Setup the XML parser to read the <b>policy</b> description.
    overriding
-   procedure Set_Reader_Config (Policy : in out URL_Policy;
-                                Reader : in out Util.Serialize.IO.XML.Parser);
+   procedure Prepare_Config (Policy : in out URL_Policy;
+                             Reader : in out Util.Serialize.IO.XML.Parser);
+
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   overriding
+   procedure Finish_Config (Into    : in out URL_Policy;
+                            Reader  : in out Util.Serialize.IO.XML.Parser);
 
 private
 
