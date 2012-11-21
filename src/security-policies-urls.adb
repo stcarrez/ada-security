@@ -254,19 +254,31 @@ package body Security.Policies.Urls is
 
    Policy_Mapping        : aliased Policy_Mapper.Mapper;
 
+   --  ------------------------------
    --  Setup the XML parser to read the <b>policy</b> description.
+   --  ------------------------------
    overriding
-   procedure Set_Reader_Config (Policy : in out URL_Policy;
-                                Reader : in out Util.Serialize.IO.XML.Parser) is
+   procedure Prepare_Config (Policy : in out URL_Policy;
+                             Reader : in out Util.Serialize.IO.XML.Parser) is
 
---        Policy_Mapping        : aliased Policy_Mapper.Mapper;
       Config : Policy_Config_Access := new Policy_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
       Reader.Add_Mapping ("module", Policy_Mapping'Access);
       Config.Manager := Policy'Unchecked_Access;
       Policy_Mapper.Set_Context (Reader, Config);
-   end Set_Reader_Config;
+   end Prepare_Config;
+
+   --  ------------------------------
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   --  ------------------------------
+   overriding
+   procedure Finish_Config (Into    : in out URL_Policy;
+                            Reader  : in out Util.Serialize.IO.XML.Parser) is
+   begin
+      null;
+   end Finish_Config;
 
 begin
    Policy_Mapping.Add_Mapping ("policy", FIELD_POLICY);
