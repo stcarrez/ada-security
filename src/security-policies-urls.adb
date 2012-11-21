@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  security-permissions -- Definition of permissions
+--  security-policies-urls -- URL security policy
 --  Copyright (C) 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -16,15 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Vectors;
 with Ada.Unchecked_Deallocation;
 with Ada.Strings.Unbounded;
 
 with Util.Refs;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Vectors;
-with Util.Serialize.IO.XML;
 with Util.Serialize.Mappers;
 with Util.Serialize.Mappers.Record_Mapper;
 
@@ -37,9 +34,12 @@ package body Security.Policies.Urls is
    --  URL policy
    --  ------------------------------
 
+   --  ------------------------------
    --  Get the policy name.
+   --  ------------------------------
    overriding
    function Get_Name (From : in URL_Policy) return String is
+      pragma Unreferenced (From);
    begin
       return NAME;
    end Get_Name;
