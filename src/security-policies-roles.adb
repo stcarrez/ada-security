@@ -176,15 +176,15 @@ package body Security.Policies.Roles is
    --  ------------------------------
    --  Setup the XML parser to read the <b>role-permission</b> description.
    --  ------------------------------
-   procedure Set_Reader_Config (Policy : in out Role_Policy;
-                                Reader : in out Util.Serialize.IO.XML.Parser) is
+   procedure Prepare_Config (Policy : in out Role_Policy;
+                             Reader : in out Util.Serialize.IO.XML.Parser) is
       Config : Controller_Config_Access := new Controller_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Mapper'Access);
       Reader.Add_Mapping ("module", Mapper'Access);
       Config.Manager := Policy'Unchecked_Access;
       Config_Mapper.Set_Context (Reader, Config);
-   end Set_Reader_Config;
+   end Prepare_Config;
 
 begin
    Mapper.Add_Mapping ("role-permission", FIELD_ROLE_PERMISSION);
