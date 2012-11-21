@@ -145,11 +145,17 @@ package body Security.Policies is
       --  Prepare the reader to parse the policy configuration.
       for I in Manager.Policies'Range loop
          exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Set_Reader_Config (Reader);
+         Manager.Policies (I).Prepare_Config (Reader);
       end loop;
 
       --  Read the configuration file.
       Reader.Parse (File);
+
+      --  Finish the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Finish_Config (Reader);
+      end loop;
 
    end Read_Policy;
 
