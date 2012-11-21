@@ -35,14 +35,23 @@ package Security.Policies is
 
    type Controller_Access_Array is array (Permissions.Permission_Index range <>) of Controller_Access;
 
+   --  ------------------------------
+   --  Security policy
+   --  ------------------------------
    type Policy is new Ada.Finalization.Limited_Controlled with private;
    type Policy_Access is access all Policy'Class;
 
-   procedure Set_Reader_Config (Pol     : in out Policy;
-                                Reader  : in out Util.Serialize.IO.XML.Parser) is null;
-
    --  Get the policy name.
    function Get_Name (From : in Policy) return String;
+
+   --  Prepare the XML parser to read the policy configuration.
+   procedure Prepare_Config (Pol     : in out Policy;
+                             Reader  : in out Util.Serialize.IO.XML.Parser) is null;
+
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   procedure Finish_Config (Into    : in out Policy;
+                            Reader  : in out Util.Serialize.IO.XML.Parser) is null;
 
    --  Add a permission under the given permission name and associated with the controller.
    --  To verify the permission, the controller will be called.
