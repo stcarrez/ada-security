@@ -28,6 +28,8 @@ with GNAT.Regexp;
 
 package Security.Policies.Urls is
 
+   NAME : constant String := "URL-Policy";
+
    --  ------------------------------
    --  URI Permission
    --  ------------------------------
@@ -59,34 +61,18 @@ package Security.Policies.Urls is
                                    URI     : in String;
                                    To      : in String);
 
-   --  ------------------------------
-   --  Policy Configuration
-   --  ------------------------------
-   type Policy_Config is record
-      Id          : Natural := 0;
-      Permissions : Util.Beans.Objects.Vectors.Vector;
-      Patterns    : Util.Beans.Objects.Vectors.Vector;
-      Manager     : URL_Policy_Access;
-   end record;
-   type Policy_Config_Access is access all Policy_Config;
+   --  Initialize the permission manager.
+   overriding
+   procedure Initialize (Manager : in out URL_Policy);
 
-   --  Setup the XML parser to read the <b>policy</b> description.  For example:
-   --
-   --  <policy id='1'>
-   --     <permission>create-workspace</permission>
-   --     <permission>admin</permission>
-   --     <url-pattern>/workspace/create</url-pattern>
-   --     <url-pattern>/workspace/setup/*</url-pattern>
-   --  </policy>
-   --
-   --  This policy gives access to the URL that match one of the URL pattern if the
-   --  security context has the permission <b>create-workspace</b> or <b>admin</b>.
-   generic
-      Reader  : in out Util.Serialize.IO.XML.Parser;
-      Manager : in Security.Permissions.Permission_Manager_Access;
-   package Reader_Config is
-      Config : aliased Policy_Config;
-   end Reader_Config;
+   --  Finalize the permission manager.
+   overriding
+   procedure Finalize (Manager : in out URL_Policy);
+
+   --  Setup the XML parser to read the <b>policy</b> description.
+   overriding
+   procedure Set_Reader_Config (Policy : in out URL_Policy;
+                                Reader : in out Util.Serialize.IO.XML.Parser);
 
 private
 
