@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-controllers-roles -- Simple role base security
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,6 @@
 with Security.Contexts;
 with Security.Permissions;
 
-with Util.Beans.Objects;
-with Util.Serialize.IO.XML;
 with Security.Policies.Roles;
 
 package Security.Controllers.Roles is
@@ -41,32 +39,5 @@ package Security.Controllers.Roles is
                             Context    : in Security.Contexts.Security_Context'Class;
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean;
-
-   type Controller_Config is record
-      Name    : Util.Beans.Objects.Object;
-      Roles   : Permissions.Role_Type_Array (1 .. Integer (Permissions.Role_Type'Last));
-      Count   : Natural := 0;
-      Manager : Security.Permissions.Permission_Manager_Access;
-   end record;
-
-   --  Setup the XML parser to read the <b>role-permission</b> description.  For example:
-   --
-   --  <security-role>
-   --    <role-name>admin</role-name>
-   --  </security-role>
-   --  <role-permission>
-   --     <name>create-workspace</name>
-   --     <role>admin</role>
-   --     <role>manager</role>
-   --  </role-permission>
-   --
-   --  This defines a permission <b>create-workspace</b> that will be granted if the
-   --  user has either the <b>admin</b> or the <b>manager</b> role.
-   generic
-      Reader  : in out Util.Serialize.IO.XML.Parser;
-      Manager : in Security.Permissions.Permission_Manager_Access;
-   package Reader_Config is
-      Config : aliased Controller_Config;
-   end Reader_Config;
 
 end Security.Controllers.Roles;
