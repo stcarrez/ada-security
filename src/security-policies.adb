@@ -18,6 +18,7 @@
 
 with Ada.Finalization;
 with Ada.Strings.Unbounded;
+with Ada.Unchecked_Deallocation;
 
 with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Vectors;
@@ -32,6 +33,7 @@ with Util.Serialize.IO.XML;
 with GNAT.Regexp;
 
 with Security.Permissions;
+with Security.Controllers;
 
 package body Security.Policies is
 
@@ -169,8 +171,34 @@ package body Security.Policies is
    --  Finalize the permission manager.
    overriding
    procedure Finalize (Manager : in out Policy_Manager) is
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
+                                        Controller_Access);
+
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Controller_Access_Array,
+                                        Controller_Access_Array_Access);
+
    begin
-      null;
+      if Manager.Permissions /= null then
+         for I in Manager.Permissions.all'Range loop
+            exit when Manager.Permissions (I) = null;
+
+            --  SCz 2011-12-03: GNAT 2011 reports a compilation error:
+            --  'missing "with" clause on package "Security.Controllers"'
+            --  if we use the 'Security.Controller_Access' type, even if this "with" clause exist.
+            --  gcc 4.4.3 under Ubuntu does not have this issue.
+            --  We use the 'Security.Controllers.Controller_Access' type to avoid the compiler bug
+            --  but we have to use a temporary variable and do some type conversion...
+            declare
+               P : Controller_Access := Manager.Permissions (I).all'Access;
+            begin
+               Free (P);
+               Manager.Permissions (I) := null;
+            end;
+         end loop;
+         Free (Manager.Permissions);
+      end if;
    end Finalize;
 
 end Security.Policies;
