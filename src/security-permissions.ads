@@ -16,23 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Finalization;
-with Ada.Strings.Unbounded;
-
-with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Vectors;
-
-with Util.Strings;
-with Util.Refs;
-with Util.Beans.Objects;
-with Util.Beans.Objects.Vectors;
-with Util.Serialize.IO.XML;
-
-with GNAT.Regexp;
-
-limited with Security.Controllers;
-limited with Security.Contexts;
-
 --  == Permissions ==
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
@@ -51,13 +34,7 @@ package Security.Permissions is
 
    Invalid_Name : exception;
 
-   type Security_Context_Access is access all Contexts.Security_Context'Class;
-
    type Permission_Index is new Natural;
-
-   type Controller_Access is access all Security.Controllers.Controller'Class;
-
-   type Controller_Access_Array is array (Permission_Index range <>) of Controller_Access;
 
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
@@ -89,15 +66,5 @@ package Security.Permissions is
       function Permission return Permission_Index;
       pragma Inline_Always (Permission);
    end Permission_ACL;
-
-private
-
-   use Util.Strings;
-
-   type Permission_Type_Array is array (1 .. 10) of Permission_Type;
-
-   type Permission_Index_Array is array (Positive range <>) of Permission_Index;
-
-   type Controller_Access_Array_Access is access all Controller_Access_Array;
 
 end Security.Permissions;
