@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-contexts -- Context to provide security information and verify permissions
---  Copyright (C) 2011 Stephane Carrez
+--  Copyright (C) 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,7 @@ package body Security.Contexts is
    --  Get the permission manager.
    --  ------------------------------
    function Get_Permission_Manager (Context : in Security_Context'Class)
-                                    return Security.Permissions.Permission_Manager_Access is
+                                    return Security.Policies.Policy_Manager_Access is
    begin
       return Context.Manager;
    end Get_Permission_Manager;
@@ -50,15 +50,15 @@ package body Security.Contexts is
    procedure Has_Permission (Context    : in out Security_Context;
                              Permission : in Security.Permissions.Permission_Index;
                              Result     : out Boolean) is
-      use type Security.Permissions.Controller_Access;
-      use type Security.Permissions.Permission_Manager_Access;
+      use type Security.Policies.Controller_Access;
+      use type Security.Policies.Policy_Manager_Access;
    begin
       if Context.Manager = null then
          Result := False;
          return;
       end if;
       declare
-         C : constant Permissions.Controller_Access := Context.Manager.Get_Controller (Permission);
+         C : constant Policies.Controller_Access := Context.Manager.Get_Controller (Permission);
       begin
          if C = null then
             Result := False;
@@ -148,7 +148,7 @@ package body Security.Contexts is
    --  Set the current application and user context.
    --  ------------------------------
    procedure Set_Context (Context   : in out Security_Context;
-                          Manager   : in Security.Permissions.Permission_Manager_Access;
+                          Manager   : in Security.Policies.Policy_Manager_Access;
                           Principal : in Security.Principal_Access) is
    begin
       Context.Manager   := Manager;
