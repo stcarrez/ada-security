@@ -20,6 +20,7 @@ with Ada.Containers.Hashed_Maps;
 with Ada.Containers.Vectors;
 
 with Util.Refs;
+with Util.Strings;
 with Util.Serialize.IO.XML;
 
 with GNAT.Regexp;
@@ -79,6 +80,8 @@ package Security.Policies.Urls is
                             Reader  : in out Util.Serialize.IO.XML.Parser);
 
 private
+
+   use Util.Strings;
 
    --  The <b>Access_Rule</b> represents a list of permissions to verify to grant
    --  access to the resource.  To make it simple, the user must have one of the
