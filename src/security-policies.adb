@@ -16,23 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Finalization;
-with Ada.Strings.Unbounded;
 with Ada.Unchecked_Deallocation;
 
-with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Vectors;
-
 with Util.Log.Loggers;
-with Util.Strings;
-with Util.Refs;
-with Util.Beans.Objects;
-with Util.Beans.Objects.Vectors;
-with Util.Serialize.IO.XML;
 
-with GNAT.Regexp;
-
-with Security.Permissions;
 with Security.Controllers;
 
 package body Security.Policies is
@@ -114,8 +101,10 @@ package body Security.Policies is
       Manager.Permissions (Index) := Permission;
    end Add_Permission;
 
+   --  ------------------------------
    --  Get the security controller associated with the permission index <b>Index</b>.
    --  Returns null if there is no such controller.
+   --  ------------------------------
    function Get_Controller (Manager : in Policy_Manager'Class;
                             Index   : in Permissions.Permission_Index) return Controller_Access is
       use type Permissions.Permission_Index;
@@ -137,10 +126,7 @@ package body Security.Policies is
 
       package Policy_Config is
         new Reader_Config (Reader, Manager'Unchecked_Access);
---        package Role_Config is
---          new Security.Controllers.Roles.Reader_Config (Reader, Manager'Unchecked_Access);
       pragma Warnings (Off, Policy_Config);
---        pragma Warnings (Off, Role_Config);
    begin
       Log.Info ("Reading policy file {0}", File);
 
