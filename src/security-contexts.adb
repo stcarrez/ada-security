@@ -18,7 +18,6 @@
 
 with Ada.Task_Attributes;
 
-with Security.Controllers;
 package body Security.Contexts is
 
    package Task_Context is new Ada.Task_Attributes
