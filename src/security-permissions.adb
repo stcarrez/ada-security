@@ -16,16 +16,10 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Ada.Unchecked_Deallocation;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
 
 with Util.Log.Loggers;
-with Util.Serialize.Mappers.Record_Mapper;
-
-with Security.Contexts;
-with Security.Controllers;
-with Security.Controllers.Roles;
 
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
