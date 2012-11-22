@@ -186,6 +186,19 @@ package body Security.Policies.Roles is
       Config_Mapper.Set_Context (Reader, Config);
    end Prepare_Config;
 
+   --  ------------------------------
+   --  Finalize the policy manager.
+   --  ------------------------------
+   overriding
+   procedure Finalize (Policy : in out Role_Policy) is
+      use type Ada.Strings.Unbounded.String_Access;
+   begin
+      for I in Policy.Names'Range loop
+         exit when Policy.Names (I) = null;
+         Ada.Strings.Unbounded.Free (Policy.Names (I));
+      end loop;
+   end Finalize;
+
 begin
    Mapper.Add_Mapping ("role-permission", FIELD_ROLE_PERMISSION);
    Mapper.Add_Mapping ("role-permission/name", FIELD_NAME);
