@@ -98,48 +98,6 @@ private
 
    type Permission_Index_Array is array (Positive range <>) of Permission_Index;
 
-   --  The <b>Access_Rule</b> represents a list of permissions to verify to grant
-   --  access to the resource.  To make it simple, the user must have one of the
-   --  permission from the list.  Each permission will refer to a specific permission
-   --  controller.
-   type Access_Rule (Count : Natural) is new Util.Refs.Ref_Entity with record
-      Permissions : Permission_Index_Array (1 .. Count);
-   end record;
-   type Access_Rule_Access is access all Access_Rule;
-
-   package Access_Rule_Refs is
-     new Util.Refs.Indefinite_References (Element_Type   => Access_Rule,
-                                          Element_Access => Access_Rule_Access);
-   subtype Access_Rule_Ref is Access_Rule_Refs.Ref;
-
-   --  The <b>Policy</b> defines the access rules that are applied on a given
-   --  URL, set of URLs or files.
-   type Policy is record
-      Id      : Natural;
-      Pattern : GNAT.Regexp.Regexp;
-      Rule    : Access_Rule_Ref;
-   end record;
-
-   --  The <b>Policy_Vector</b> represents the whole permission policy.  The order of
-   --  policy in the list is important as policies can override each other.
-   package Policy_Vector is new Ada.Containers.Vectors (Index_Type   => Positive,
-                                                        Element_Type => Policy);
-
-   package Rules_Maps is new Ada.Containers.Hashed_Maps (Key_Type        => String_Ref,
-                                                         Element_Type    => Access_Rule_Ref,
-                                                         Hash            => Hash,
-                                                         Equivalent_Keys => Equivalent_Keys,
-                                                         "="             => Access_Rule_Refs."=");
-
-   type Rules is new Util.Refs.Ref_Entity with record
-      Map : Rules_Maps.Map;
-   end record;
-   type Rules_Access is access all Rules;
-
-   package Rules_Ref is new Util.Refs.References (Rules, Rules_Access);
-
-   type Rules_Ref_Access is access Rules_Ref.Atomic_Ref;
-
    type Controller_Access_Array_Access is access all Controller_Access_Array;
 
 end Security.Permissions;
