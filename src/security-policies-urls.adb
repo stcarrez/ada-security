@@ -159,13 +159,6 @@ package body Security.Policies.Urls is
       procedure Free is
         new Ada.Unchecked_Deallocation (Rules_Ref.Atomic_Ref,
                                         Rules_Ref_Access);
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
-                                        Security.Controllers.Controller_Access);
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Controller_Access_Array,
-                                        Controller_Access_Array_Access);
-
    begin
       Free (Manager.Cache);
 --        for I in Manager.Names'Range loop
