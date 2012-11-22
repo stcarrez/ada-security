@@ -91,6 +91,10 @@ package Security.Policies.Roles is
    procedure Prepare_Config (Policy : in out Role_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser);
 
+   --  Finalize the policy manager.
+   overriding
+   procedure Finalize (Policy : in out Role_Policy);
+
 private
 
    type Role_Name_Array is
