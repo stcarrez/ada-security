@@ -21,7 +21,6 @@ with Ada.Finalization;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Vectors;
 with Util.Serialize.IO.XML;
-with Util.Strings;
 
 with Security.Permissions;
 limited with Security.Controllers;
@@ -33,7 +32,8 @@ package Security.Policies is
 
    type Controller_Access is access all Security.Controllers.Controller'Class;
 
-   type Controller_Access_Array is array (Permissions.Permission_Index range <>) of Controller_Access;
+   type Controller_Access_Array is
+     array (Permissions.Permission_Index range <>) of Controller_Access;
 
    --  ------------------------------
    --  Security policy
@@ -133,8 +133,6 @@ package Security.Policies is
 
 private
 
-   use Util.Strings;
-
    subtype Permission_Index is Permissions.Permission_Index;
 
    type Permission_Index_Array is array (Positive range <>) of Permissions.Permission_Index;
@@ -149,8 +147,6 @@ private
 
    type Policy_Manager (Max_Policies : Positive) is
      new Ada.Finalization.Limited_Controlled with record
---        Cache        : Rules_Ref_Access;
---        Policies     : Policy_Vector.Vector;
       Permissions  : Controller_Access_Array_Access;
       Last_Index   : Permission_Index := Permission_Index'First;
 
