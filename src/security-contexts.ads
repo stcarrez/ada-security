@@ -20,6 +20,7 @@ with Ada.Finalization;
 
 with Util.Strings.Maps;
 with Security.Permissions;
+with Security.Policies;
 
 --  == Security Context ==
 --  The security context provides contextual information for a security controller to
@@ -63,7 +64,7 @@ package Security.Contexts is
 
    --  Get the permission manager.
    function Get_Permission_Manager (Context : in Security_Context'Class)
-                                    return Security.Permissions.Permission_Manager_Access;
+                                    return Security.Policies.Policy_Manager_Access;
    pragma Inline_Always (Get_Permission_Manager);
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
@@ -94,7 +95,7 @@ package Security.Contexts is
 
    --  Set the current application and user context.
    procedure Set_Context (Context   : in out Security_Context;
-                          Manager   : in Security.Permissions.Permission_Manager_Access;
+                          Manager   : in Security.Policies.Policy_Manager_Access;
                           Principal : in Security.Principal_Access);
 
    --  Add a context information represented by <b>Value</b> under the name identified by
@@ -137,7 +138,7 @@ private
 
    type Security_Context is new Ada.Finalization.Limited_Controlled with record
       Previous    : Security_Context_Access := null;
-      Manager     : Security.Permissions.Permission_Manager_Access := null;
+      Manager     : Security.Policies.Policy_Manager_Access := null;
       Principal   : Security.Principal_Access := null;
       Context     : Util.Strings.Maps.Map;
    end record;
