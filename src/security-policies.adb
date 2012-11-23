@@ -142,6 +142,15 @@ package body Security.Policies is
       end if;
    end Get_Controller;
 
+   --  ------------------------------
+   --  Create the policy contexts to be associated with the security context.
+   --  ------------------------------
+   function Create_Policy_Contexts (Manager : in Policy_Manager)
+                                    return Policy_Context_Array_Access is
+   begin
+      return new Policy_Context_Array (1 .. Manager.Max_Policies);
+   end Create_Policy_Contexts;
+
    --  Read the policy file
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String) is
