@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------
 with Security.Openid.Tests;
 with Security.Permissions.Tests;
+with Security.Policies.Tests;
 package body Security.Testsuite is
 
    Tests : aliased Util.Tests.Test_Suite;
@@ -26,6 +27,7 @@ package body Security.Testsuite is
    begin
       Security.Openid.Tests.Add_Tests (Ret);
       Security.Permissions.Tests.Add_Tests (Ret);
+      Security.Policies.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
