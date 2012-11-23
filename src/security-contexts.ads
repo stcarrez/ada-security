@@ -18,7 +18,6 @@
 
 with Ada.Finalization;
 
-with Util.Strings.Maps;
 with Security.Permissions;
 with Security.Policies;
 
@@ -67,6 +66,11 @@ package Security.Contexts is
                                     return Security.Policies.Policy_Manager_Access;
    pragma Inline_Always (Get_Permission_Manager);
 
+   --  Get the policy with the name <b>Name</b> registered in the policy manager.
+   --  Returns null if there is no such policy.
+   function Get_Policy (Context : in Security_Context'Class;
+                        Name    : in String) return Security.Policies.Policy_Access;
+
    --  Check if the permission identified by <b>Permission</b> is allowed according to
    --  the current security context.  The result is cached in the security context and
    --  returned in <b>Result</b>.
@@ -98,11 +102,11 @@ package Security.Contexts is
                           Manager   : in Security.Policies.Policy_Manager_Access;
                           Principal : in Security.Principal_Access);
 
-   --  Add a context information represented by <b>Value</b> under the name identified by
-   --  <b>Name</b> in the security context <b>Context</b>.
-   procedure Add_Context (Context   : in out Security_Context;
-                          Name      : in String;
-                          Value     : in String);
+   --  Set a policy context information represented by <b>Value</b> and associated with
+   --  the policy index <b>Policy</b>.
+   procedure Set_Policy_Context (Context   : in out Security_Context;
+                                 Policy    : in Security.Policies.Policy_Index;
+                                 Value     : in Security.Policies.Policy_Context_Access);
 
    --  Get the context information registered under the name <b>Name</b> in the security
    --  context <b>Context</b>.
@@ -140,7 +144,7 @@ private
       Previous    : Security_Context_Access := null;
       Manager     : Security.Policies.Policy_Manager_Access := null;
       Principal   : Security.Principal_Access := null;
-      Context     : Util.Strings.Maps.Map;
+      Contexts    : Security.Policies.Policy_Context_Array_Access := null;
    end record;
 
 end Security.Contexts;
