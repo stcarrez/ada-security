@@ -105,7 +105,7 @@ package Security.Contexts is
    --  Set a policy context information represented by <b>Value</b> and associated with
    --  the policy index <b>Policy</b>.
    procedure Set_Policy_Context (Context   : in out Security_Context;
-                                 Policy    : in Security.Policies.Policy_Index;
+                                 Policy    : in Security.Policies.Policy_Access;
                                  Value     : in Security.Policies.Policy_Context_Access);
 
    --  Get the context information registered under the name <b>Name</b> in the security

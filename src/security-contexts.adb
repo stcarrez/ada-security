@@ -141,15 +141,15 @@ package body Security.Contexts is
    --  the policy index <b>Policy</b>.
    --  ------------------------------
    procedure Set_Policy_Context (Context   : in out Security_Context;
-                                 Policy    : in Security.Policies.Policy_Index;
+                                 Policy    : in Security.Policies.Policy_Access;
                                  Value     : in Security.Policies.Policy_Context_Access) is
       use type Security.Policies.Policy_Context_Array_Access;
    begin
       if Context.Contexts = null then
          Context.Contexts := Context.Manager.Create_Policy_Contexts;
       end if;
-      Free (Context.Contexts (Policy));
-      Context.Contexts (Policy) := Value;
+      Free (Context.Contexts (Policy.Get_Policy_Index));
+      Context.Contexts (Policy.Get_Policy_Index) := Value;
    end Set_Policy_Context;
 
    --  ------------------------------
