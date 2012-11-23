@@ -17,11 +17,16 @@
 -----------------------------------------------------------------------
 
 with Ada.Task_Attributes;
+with Ada.Unchecked_Deallocation;
 
 package body Security.Contexts is
 
    package Task_Context is new Ada.Task_Attributes
      (Security_Context_Access, null);
+
+   procedure Free is
+      new Ada.Unchecked_Deallocation (Object => Security.Policies.Policy_Context'Class,
+                                      Name   => Security.Policies.Policy_Context_Access);
 
    --  ------------------------------
    --  Get the application associated with the current service operation.
@@ -40,6 +45,21 @@ package body Security.Contexts is
    begin
       return Context.Manager;
    end Get_Permission_Manager;
+
+   --  ------------------------------
+   --  Get the policy with the name <b>Name</b> registered in the policy manager.
+   --  Returns null if there is no such policy.
+   --  ------------------------------
+   function Get_Policy (Context : in Security_Context'Class;
+                        Name    : in String) return Security.Policies.Policy_Access is
+      use type Security.Policies.Policy_Manager_Access;
+   begin
+      if Context.Manager = null then
+         return null;
+      else
+         return Context.Manager.Get_Policy (Name);
+      end if;
+   end Get_Policy;
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
@@ -101,21 +121,36 @@ package body Security.Contexts is
    --  ------------------------------
    overriding
    procedure Finalize (Context : in out Security_Context) is
+      use type Security.Policies.Policy_Context_Array_Access;
+
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Object => Security.Policies.Policy_Context_Array,
+                                        Name   => Security.Policies.Policy_Context_Array_Access);
    begin
       Task_Context.Set_Value (Context.Previous);
+      if Context.Contexts /= null then
+         for I in Context.Contexts'Range loop
+            Free (Context.Contexts (I));
+         end loop;
+         Free (Context.Contexts);
+      end if;
    end Finalize;
 
    --  ------------------------------
-   --  Add a context information represented by <b>Value</b> under the name identified by
-   --  <b>Name</b> in the security context <b>Context</b>.
+   --  Set a policy context information represented by <b>Value</b> and associated with
+   --  the policy index <b>Policy</b>.
    --  ------------------------------
-   procedure Add_Context (Context   : in out Security_Context;
-                          Name      : in String;
-                          Value     : in String) is
+   procedure Set_Policy_Context (Context   : in out Security_Context;
+                                 Policy    : in Security.Policies.Policy_Index;
+                                 Value     : in Security.Policies.Policy_Context_Access) is
+      use type Security.Policies.Policy_Context_Array_Access;
    begin
-      Context.Context.Include (Key      => Name,
-                               New_Item => Value);
-   end Add_Context;
+      if Context.Contexts = null then
+         Context.Contexts := Context.Manager.Create_Policy_Contexts;
+      end if;
+      Free (Context.Contexts (Policy));
+      Context.Contexts (Policy) := Value;
+   end Set_Policy_Context;
 
    --  ------------------------------
    --  Get the context information registered under the name <b>Name</b> in the security
