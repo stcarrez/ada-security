@@ -34,6 +34,14 @@ package body Security.Policies is
    end Get_Name;
 
    --  ------------------------------
+   --  Get the policy index.
+   --  ------------------------------
+   function Get_Policy_Index (From : in Policy'Class) return Policy_Index is
+   begin
+      return From.Index;
+   end Get_Policy_Index;
+
+   --  ------------------------------
    --  Add a permission under the given permission name and associated with the controller.
    --  To verify the permission, the controller will be called.
    --  ------------------------------
