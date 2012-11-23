@@ -53,6 +53,10 @@ package Security.Policies is
    --  Get the policy name.
    function Get_Name (From : in Policy) return String;
 
+   --  Get the policy index.
+   function Get_Policy_Index (From : in Policy'Class) return Policy_Index;
+   pragma Inline (Get_Policy_Index);
+
    --  Prepare the XML parser to read the policy configuration.
    procedure Prepare_Config (Pol     : in out Policy;
                              Reader  : in out Util.Serialize.IO.XML.Parser) is null;
