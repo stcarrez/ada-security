@@ -102,6 +102,10 @@ package Security.Policies is
                              Name       : in String;
                              Permission : in Controller_Access);
 
+   --  Create the policy contexts to be associated with the security context.
+   function Create_Policy_Contexts (Manager : in Policy_Manager)
+                                    return Policy_Context_Array_Access;
+
    --  Get the security controller associated with the permission index <b>Index</b>.
    --  Returns null if there is no such controller.
    function Get_Controller (Manager : in Policy_Manager'Class;
