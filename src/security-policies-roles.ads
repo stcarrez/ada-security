@@ -42,6 +42,8 @@ with Ada.Strings.Unbounded;
 --  user has either the <b>admin</b> or the <b>manager</b> role.
 package Security.Policies.Roles is
 
+   NAME : constant String := "Role-Policy";
+
    --  Each role is represented by a <b>Role_Type</b> number to provide a fast
    --  and efficient role check.
    type Role_Type is new Natural range 0 .. 63;
@@ -54,6 +56,18 @@ package Security.Policies.Roles is
    --  to 64 roles (the number of different permissions can be higher).
    type Role_Map is array (Role_Type'Range) of Boolean;
    pragma Pack (Role_Map);
+
+   --  The <b>Role_Policy_Context</b> gives security context information that the role
+   --  based policy can use to verify the permission.
+   type Role_Policy_Context is new Policy_Context with record
+      Roles : Role_Map;
+   end record;
+   type Role_Policy_Context_Access is access all Role_Policy_Context'Class;
+
+   --  Set the roles which are assigned to the user in the security context.
+   --  The role policy will use these roles to verify a permission.
+   procedure Set_Role_Context (Context : in out Security.Contexts.Security_Context'Class;
+                               Roles   : in Role_Map);
 
    --  ------------------------------
    --  Role based policy
