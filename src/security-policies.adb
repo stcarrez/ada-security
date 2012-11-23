@@ -49,6 +49,23 @@ package body Security.Policies is
    --  ------------------------------
 
    --  ------------------------------
+   --  Get the policy with the name <b>Name</b> registered in the policy manager.
+   --  Returns null if there is no such policy.
+   --  ------------------------------
+   function Get_Policy (Manager : in Policy_Manager;
+                        Name    : in String) return Policy_Access is
+   begin
+      for I in Manager.Policies'Range loop
+         if Manager.Policies (I) = null then
+            return null;
+         elsif Manager.Policies (I).Get_Name = Name then
+            return Manager.Policies (I);
+         end if;
+      end loop;
+      return null;
+   end Get_Policy;
+
+   --  ------------------------------
    --  Add the policy to the policy manager.  After a policy is added in the manager,
    --  it can participate in the security policy.
    --  Raises Policy_Error if the policy table is full.
@@ -63,11 +80,12 @@ package body Security.Policies is
          if Manager.Policies (I) = null then
             Manager.Policies (I) := Policy;
             Policy.Manager := Manager'Unchecked_Access;
+            Policy.Index   := I;
             return;
          end if;
       end loop;
       Log.Error ("Policy table is full, increase policy manager table to {0} to add policy {1}",
-                 Positive'Image (Manager.Max_Policies + 1), Name);
+                 Policy_Index'Image (Manager.Max_Policies + 1), Name);
       raise Policy_Error;
    end Add_Policy;
 
