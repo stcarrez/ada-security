@@ -35,6 +35,15 @@ package Security.Policies is
    type Controller_Access_Array is
      array (Permissions.Permission_Index range <>) of Controller_Access;
 
+   type Policy_Index is new Positive;
+
+   type Policy_Context is limited interface;
+   type Policy_Context_Access is access all Policy_Context'Class;
+
+   type Policy_Context_Array is
+     array (Policy_Index range <>) of Policy_Context_Access;
+   type Policy_Context_Array_Access is access Policy_Context_Array;
+
    --  ------------------------------
    --  Security policy
    --  ------------------------------
@@ -68,9 +77,14 @@ package Security.Policies is
    --  ------------------------------
    --  The <b>Permission_Manager</b> verifies through some policy that a permission
    --  is granted to a user.
-   type Policy_Manager (Max_Policies : Positive) is
+   type Policy_Manager (Max_Policies : Policy_Index) is
      new Ada.Finalization.Limited_Controlled with private;
    type Policy_Manager_Access is access all Policy_Manager'Class;
+
+   --  Get the policy with the name <b>Name</b> registered in the policy manager.
+   --  Returns null if there is no such policy.
+   function Get_Policy (Manager : in Policy_Manager;
+                        Name    : in String) return Policy_Access;
 
    --  Add the policy to the policy manager.  After a policy is added in the manager,
    --  it can participate in the security policy.
@@ -139,13 +153,14 @@ private
 
    type Controller_Access_Array_Access is access all Controller_Access_Array;
 
-   type Policy_Access_Array is array (Positive range <>) of Policy_Access;
+   type Policy_Access_Array is array (Policy_Index range <>) of Policy_Access;
 
    type Policy is new Ada.Finalization.Limited_Controlled with record
       Manager : Policy_Manager_Access;
+      Index   : Policy_Index;
    end record;
 
-   type Policy_Manager (Max_Policies : Positive) is
+   type Policy_Manager (Max_Policies : Policy_Index) is
      new Ada.Finalization.Limited_Controlled with record
       Permissions  : Controller_Access_Array_Access;
       Last_Index   : Permission_Index := Permission_Index'First;
