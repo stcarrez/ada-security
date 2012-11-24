@@ -30,13 +30,31 @@ package body Security.Policies.Roles is
    Log : constant Loggers.Logger := Loggers.Create ("Security.Policies.Roles");
 
    --  ------------------------------
+   --  Set the roles which are assigned to the user in the security context.
+   --  The role policy will use these roles to verify a permission.
+   --  ------------------------------
+   procedure Set_Role_Context (Context : in out Security.Contexts.Security_Context'Class;
+                               Roles   : in Role_Map) is
+      Policy : constant Security.Policies.Policy_Access := Context.Get_Policy (NAME);
+      Data   : Role_Policy_Context_Access;
+   begin
+      if Policy = null then
+         Log.Error ("There is no security policy: " & NAME);
+      end if;
+      Data := new Role_Policy_Context;
+      Data.Roles := Roles;
+
+      Context.Set_Policy_Context (Policy, Data.all'Access);
+   end Set_Role_Context;
+
+   --  ------------------------------
    --  Get the policy name.
    --  ------------------------------
    overriding
    function Get_Name (From : in Role_Policy) return String is
       pragma Unreferenced (From);
    begin
-      return "role";
+      return NAME;
    end Get_Name;
 
    --  ------------------------------
