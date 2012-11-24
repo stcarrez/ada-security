@@ -105,8 +105,8 @@ package Security.Policies is
    --  Checks whether the permission defined by the <b>Permission</b> controller data is granted
    --  by the security context passed in <b>Context</b>.
    --  Returns true if such permission is granted.
-   function Has_Permission (Manager : in Policy_Manager;
-                            Context : in Security.Contexts.Security_Context'Class;
+   function Has_Permission (Manager    : in Policy_Manager;
+                            Context    : in Security.Contexts.Security_Context'Class;
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean;
 
