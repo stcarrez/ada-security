@@ -40,6 +40,8 @@ package body Security.Policies.Tests is
                        Test_Read_Policy'Access);
       Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles",
                        Test_Set_Roles'Access);
+      Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles (invalid)",
+                       Test_Set_Invalid_Roles'Access);
 
       --  These tests are identical but registered under different names
       --  for the test documentation.
@@ -124,6 +126,23 @@ package body Security.Policies.Tests is
       T.Assert (Map (Manager), "The manager role is not set in the map");
 
    end Test_Set_Roles;
+
+   --  ------------------------------
+   --  Test Set_Roles on an invalid role name
+   --  ------------------------------
+   procedure Test_Set_Invalid_Roles (T : in out Test) is
+      use Security.Policies.Roles;
+
+      M       : Security.Policies.Roles.Role_Policy;
+      Map     : Role_Map := (others => False);
+   begin
+      M.Set_Roles ("manager,admin", Map);
+      T.Assert (False, "No exception was raised");
+
+   exception
+      when E : Security.Policies.Roles.Invalid_Name =>
+         null;
+   end Test_Set_Invalid_Roles;
 
    --  ------------------------------
    --  Test Has_Permission
