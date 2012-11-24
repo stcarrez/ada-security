@@ -19,14 +19,13 @@
 with Util.Tests;
 with Util.Strings;
 
+with Security.Policies.Roles;
+
 package Security.Policies.Tests is
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new Util.Tests.Test with null record;
-
-   --  Test Add_Permission and Get_Permission_Index
-   procedure Test_Add_Permission (T : in out Test);
 
    --  Test Create_Role and Get_Role_Name
    procedure Test_Create_Role (T : in out Test);
@@ -54,7 +53,7 @@ package Security.Policies.Tests is
 
    --  Returns true if the given permission is stored in the user principal.
    function Has_Role (User : in Test_Principal;
-                      Role : in Role_Type) return Boolean;
+                      Role : in Security.Policies.Roles.Role_Type) return Boolean;
 
    --  Get the principal name.
    function Get_Name (From : in Test_Principal) return String;
