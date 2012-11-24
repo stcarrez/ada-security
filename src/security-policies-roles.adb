@@ -49,6 +49,26 @@ package body Security.Policies.Roles is
    end Set_Role_Context;
 
    --  ------------------------------
+   --  Set the roles which are assigned to the user in the security context.
+   --  The role policy will use these roles to verify a permission.
+   --  ------------------------------
+   procedure Set_Role_Context (Context : in out Security.Contexts.Security_Context'Class;
+                               Roles   : in String) is
+      Policy : constant Security.Policies.Policy_Access := Context.Get_Policy (NAME);
+      Data   : Role_Policy_Context_Access;
+      Map    : Role_Map;
+   begin
+      if Policy = null then
+         Log.Error ("There is no security policy: " & NAME);
+      end if;
+      Role_Policy'Class (Policy.all).Set_Roles (Roles, Map);
+      Data := new Role_Policy_Context;
+      Data.Roles := Map;
+
+      Context.Set_Policy_Context (Policy, Data.all'Access);
+   end Set_Role_Context;
+
+   --  ------------------------------
    --  Get the policy name.
    --  ------------------------------
    overriding
