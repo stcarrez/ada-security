@@ -78,6 +78,11 @@ package Security.Policies.Roles is
    procedure Set_Role_Context (Context : in out Security.Contexts.Security_Context'Class;
                                Roles   : in Role_Map);
 
+   --  Set the roles which are assigned to the user in the security context.
+   --  The role policy will use these roles to verify a permission.
+   procedure Set_Role_Context (Context : in out Security.Contexts.Security_Context'Class;
+                               Roles   : in String);
+
    --  ------------------------------
    --  Role based policy
    --  ------------------------------
