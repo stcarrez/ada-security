@@ -38,6 +38,8 @@ package body Security.Policies.Tests is
                        Test_Has_Permission'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Read_Policy",
                        Test_Read_Policy'Access);
+      Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles",
+                       Test_Set_Roles'Access);
 
       --  These tests are identical but registered under different names
       --  for the test documentation.
@@ -93,6 +95,25 @@ package body Security.Policies.Tests is
          end;
       end loop;
    end Test_Create_Role;
+
+   --  ------------------------------
+   --  Test Set_Roles
+   --  ------------------------------
+   procedure Test_Set_Roles (T : in out Test) is
+      use Security.Policies.Roles;
+
+      M     : Security.Policies.Roles.Role_Policy;
+      Role  : Role_Type;
+      Map   : Role_Map;
+   begin
+      M.Create_Role (Name => "manager",
+                     Role => Role);
+      M.Create_Role (Name => "admin",
+                     Role => Role);
+      Assert_Equals (T, "admin", M.Get_Role_Name (Role), "Invalid name");
+
+      M.Set_Roles ("admin", Map);
+   end Test_Set_Roles;
 
    --  ------------------------------
    --  Test Has_Permission
