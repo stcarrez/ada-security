@@ -86,6 +86,13 @@ package Security.Contexts is
                              Permission : in String;
                              Result     : out Boolean);
 
+   --  Check if the permission identified by <b>Permission</b> is allowed according to
+   --  the current security context.  The result is cached in the security context and
+   --  returned in <b>Result</b>.
+   procedure Has_Permission (Context    : in out Security_Context;
+                             Permission : in Security.Permissions.Permission'Class;
+                             Result     : out Boolean);
+
    --  Initializes the service context.  By creating the <b>Security_Context</b> variable,
    --  the instance will be associated with the current task attribute.  If the current task
    --  already has a security context, the new security context is installed, the old one
