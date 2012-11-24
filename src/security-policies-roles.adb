@@ -18,6 +18,7 @@
 
 with Util.Log.Loggers;
 with Util.Serialize.Mappers.Record_Mapper;
+with Util.Strings.Tokenizers;
 
 with Security.Controllers;
 with Security.Controllers.Roles;
@@ -124,6 +125,32 @@ package body Security.Policies.Roles is
       when Invalid_Name =>
          Manager.Create_Role (Name, Result);
    end Add_Role_Type;
+
+   --  ------------------------------
+   --  Set the roles specified in the <tt>Roles</tt> parameter.  Each role is represented by
+   --  its name and multiple roles are separated by ','.
+   --  Raises Invalid_Name if a role was not found.
+   --  ------------------------------
+   procedure Set_Roles (Manager : in Role_Policy;
+                        Roles   : in String;
+                        Into    : out Role_Map) is
+      procedure Process (Role : in String;
+                         Done : out Boolean);
+
+      procedure Process (Role : in String;
+                         Done : out Boolean) is
+      begin
+         Into (Manager.Find_Role (Role)) := True;
+         Done := False;
+      end Process;
+
+   begin
+      Into := (others => False);
+      Util.Strings.Tokenizers.Iterate_Tokens (Content => Roles,
+                                              Pattern => ",",
+                                              Process => Process'Access,
+                                              Going   => Ada.Strings.Forward);
+   end Set_Roles;
 
    type Config_Fields is (FIELD_NAME, FIELD_ROLE, FIELD_ROLE_PERMISSION, FIELD_ROLE_NAME);
 
