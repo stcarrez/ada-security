@@ -36,7 +36,7 @@ package Security.Permissions is
 
 
    --  The permission root class.
-   type Permission (Id : Permission_Index) is abstract tagged limited null record;
+   type Permission (Id : Permission_Index) is tagged limited null record;
 
    --  Each permission is represented by a <b>Permission_Type</b> number to provide a fast
    --  and efficient permission check.
