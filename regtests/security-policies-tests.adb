@@ -104,7 +104,7 @@ package body Security.Policies.Tests is
 
       M     : Security.Policies.Roles.Role_Policy;
       Role  : Role_Type;
-      Map   : Role_Map;
+      Map   : Role_Map := (others => False);
    begin
       M.Create_Role (Name => "manager",
                      Role => Role);
@@ -112,7 +112,9 @@ package body Security.Policies.Tests is
                      Role => Role);
       Assert_Equals (T, "admin", M.Get_Role_Name (Role), "Invalid name");
 
+      T.Assert (not Map (Role), "The admin role must not set in the map");
       M.Set_Roles ("admin", Map);
+      T.Assert (Map (Role), "The admin role is not set in the map");
    end Test_Set_Roles;
 
    --  ------------------------------
