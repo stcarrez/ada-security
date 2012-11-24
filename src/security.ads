@@ -64,6 +64,9 @@
 --  the application context.  To check the permission, the security policy manager is called
 --  and it will ask a security controller to verify the permission.
 --
+--  The framework allows an application to plug its own security policy, its own policy context,
+--  its own principal and authentication mechanism.
+--
 --  @include security-permissions.ads
 --  @include security-openid.ads
 --  @include security-oauth.ads
