@@ -40,6 +40,11 @@ with Ada.Strings.Unbounded;
 --  This definition declares two roles: <tt>admin</tt> and <tt>manager</tt>
 --  It defines a permission <b>create-workspace</b> that will be granted if the
 --  user has either the <b>admin</b> or the <b>manager</b> role.
+--
+--  A <tt>Security_Context</tt> can be associated
+--
+--
+--
 package Security.Policies.Roles is
 
    NAME : constant String := "Role-Policy";
@@ -57,6 +62,9 @@ package Security.Policies.Roles is
    type Role_Map is array (Role_Type'Range) of Boolean;
    pragma Pack (Role_Map);
 
+   --  ------------------------------
+   --  Policy context
+   --  ------------------------------
    --  The <b>Role_Policy_Context</b> gives security context information that the role
    --  based policy can use to verify the permission.
    type Role_Policy_Context is new Policy_Context with record
@@ -99,6 +107,13 @@ package Security.Policies.Roles is
    procedure Add_Role_Type (Manager   : in out Role_Policy;
                             Name      : in String;
                             Result    : out Role_Type);
+
+   --  Set the roles specified in the <tt>Roles</tt> parameter.  Each role is represented by
+   --  its name and multiple roles are separated by ','.
+   --  Raises Invalid_Name if a role was not found.
+   procedure Set_Roles (Manager : in Role_Policy;
+                        Roles   : in String;
+                        Into    : out Role_Map);
 
    --  Setup the XML parser to read the <b>role-permission</b> description.
    overriding
