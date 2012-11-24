@@ -16,11 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Permissions ==
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
---
---
 package Security.Permissions is
 
    Invalid_Name : exception;
