@@ -154,21 +154,6 @@ package body Security.Policies is
    end Has_Permission;
 
    --  ------------------------------
-   --  Get the security controller associated with the permission index <b>Index</b>.
-   --  Returns null if there is no such controller.
-   --  ------------------------------
-   function Get_Controller (Manager : in Policy_Manager'Class;
-                            Index   : in Permissions.Permission_Index) return Controller_Access is
-      use type Permissions.Permission_Index;
-   begin
-      if Index >= Manager.Last_Index then
-         return null;
-      else
-         return Manager.Permissions (Index);
-      end if;
-   end Get_Controller;
-
-   --  ------------------------------
    --  Create the policy contexts to be associated with the security context.
    --  ------------------------------
    function Create_Policy_Contexts (Manager : in Policy_Manager)
