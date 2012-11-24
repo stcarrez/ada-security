@@ -20,15 +20,6 @@
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
 --
---  === Principal ===
---  The <tt>Principal</tt> is the entity that can be authenticated.  A principal is obtained
---  after successful authentication of a user or of a system through an authorization process.
---  The OpenID or OAuth authentication processes generate such security principal.
---
---  === Permission ===
---  The <tt>Permission</tt> represents an access to a system or application resource.
---  A permission is checked by using the security manager.  The security manager uses a
---  security controller to enforce the permission.
 --
 package Security.Permissions is
 
