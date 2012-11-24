@@ -30,6 +30,9 @@ package Security.Policies.Tests is
    --  Test Create_Role and Get_Role_Name
    procedure Test_Create_Role (T : in out Test);
 
+   --  Test Set_Roles
+   procedure Test_Set_Roles (T : in out Test);
+
    --  Test Has_Permission
    procedure Test_Has_Permission (T : in out Test);
 
