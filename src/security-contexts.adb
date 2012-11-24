@@ -73,7 +73,6 @@ package body Security.Contexts is
    procedure Has_Permission (Context    : in out Security_Context;
                              Permission : in Security.Permissions.Permission_Index;
                              Result     : out Boolean) is
-      use type Security.Policies.Controller_Access;
       use type Security.Policies.Policy_Manager_Access;
    begin
       if Context.Manager = null then
@@ -81,14 +80,9 @@ package body Security.Contexts is
          return;
       end if;
       declare
-         C : constant Policies.Controller_Access := Context.Manager.Get_Controller (Permission);
+         Perm : Security.Permissions.Permission (Permission);
       begin
-         if C = null then
-            Result := False;
-         else
-            --              Result := C.Has_Permission (Context);
-            Result := False;
-         end if;
+         Result := Context.Manager.Has_Permission (Context, Perm);
       end;
    end Has_Permission;
 
@@ -159,6 +153,7 @@ package body Security.Contexts is
    --  context <b>Context</b>.
    --  Raises <b>Invalid_Context</b> if there is no such information.
    --  Raises <b>Invalid_Policy</b> if the policy was not set.
+   --  ------------------------------
    function Get_Policy_Context (Context  : in Security_Context;
                                 Policy   : in Security.Policies.Policy_Access)
                                 return Security.Policies.Policy_Context_Access is
