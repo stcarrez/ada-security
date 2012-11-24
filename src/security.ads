@@ -23,6 +23,10 @@
 --  This package defines abstractions that are close or similar to Java
 --  security package.
 --
+--  === Policy and policy manager ===
+--  The <tt>Policy</tt> defines and implements the set of security rules that specify how to
+--  protect the system or resources.  The <tt>Policy_Manager</tt> maintains the security policies.
+--
 --  === Principal ===
 --  The <tt>Principal</tt> is the entity that can be authenticated.  A principal is obtained
 --  after successful authentication of a user or of a system through an authorization process.
@@ -30,8 +34,16 @@
 --
 --  === Permission ===
 --  The <tt>Permission</tt> represents an access to a system or application resource.
---  A permission is checked by using the security manager.  The security manager uses a
+--  A permission is checked by using the security policy manager.  The policy manager uses a
 --  security controller to enforce the permission.
+--
+--  === Security Context ===
+--  The <tt>Security_Context</tt> holds the contextual information that the security controller
+--  can use to verify the permission.  The security context is associated with a principal and
+--  a set of policy context.
+--
+--
+--  [http://ada-security.googlecode.com/svn/wiki/ModelOverview.png]
 --
 --  @include security-permissions.ads
 --  @include security-openid.ads
