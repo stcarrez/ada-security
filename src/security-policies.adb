@@ -137,8 +137,20 @@ package body Security.Policies is
                             Context    : in Security.Contexts.Security_Context'Class;
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean is
+      use type Permissions.Permission_Index;
    begin
-      return False;
+      if Permission.Id >= Manager.Last_Index then
+         return False;
+      end if;
+      declare
+         C : constant Controller_Access := Manager.Permissions (Permission.Id);
+      begin
+         if C = null then
+            return False;
+         else
+            return C.Has_Permission (Context, Permission);
+         end if;
+      end;
    end Has_Permission;
 
    --  ------------------------------
