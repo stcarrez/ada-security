@@ -41,9 +41,10 @@ with Ada.Strings.Unbounded;
 --  It defines a permission <b>create-workspace</b> that will be granted if the
 --  user has either the <b>admin</b> or the <b>manager</b> role.
 --
---  A <tt>Security_Context</tt> can be associated
+--  A <tt>Security_Context</tt> must be associated with a set of roles before checking the
+--  permission.  This is done by using the <tt>Set_Role_Context</tt> operation:
 --
---
+--     Security.Policies.Roles.Set_Role_Context (Security.Contexts.Current, "admin");
 --
 package Security.Policies.Roles is
 
