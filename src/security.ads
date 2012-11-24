@@ -23,6 +23,8 @@
 --  This package defines abstractions that are close or similar to Java
 --  security package.
 --
+--  The security framework uses the following abstractions:
+--
 --  === Policy and policy manager ===
 --  The <tt>Policy</tt> defines and implements the set of security rules that specify how to
 --  protect the system or resources.  The <tt>Policy_Manager</tt> maintains the security policies.
@@ -42,8 +44,25 @@
 --  can use to verify the permission.  The security context is associated with a principal and
 --  a set of policy context.
 --
+--  == Overview ==
+--  An application will create a security policy manager and register one or several security
+--  policies.  The framework defines a simple role based security policy and an URL security
+--  policy intended to provide security in web applications.  The security policy manager reads
+--  some security policy configuration file which allows the security policies to configure
+--  and create the security controllers.  These controllers will enforce the security according
+--  to the application security rules.  All these components (yellow) are built only once when
+--  an application starts.
+--
+--  A user is authenticated through an authentication system which creates a <tt>Principal</tt>
+--  instance that identifies the user (green).  The security framework provides two authentication
+--  systems: OpenID and OAuth.
 --
 --  [http://ada-security.googlecode.com/svn/wiki/ModelOverview.png]
+--
+--  When a permission must be enforced, a security context is created and linked to the
+--  <tt>Principal</tt> instance.  Additional security policy context can be added depending on
+--  the application context.  To check the permission, the security policy manager is called
+--  and it will ask a security controller to verify the permission.
 --
 --  @include security-permissions.ads
 --  @include security-openid.ads
