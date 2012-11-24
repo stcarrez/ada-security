@@ -52,22 +52,4 @@ package Security.Controllers is
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean is abstract;
 
-   type Controller_Factory is not null access function return Controller_Access;
-
-   --  To keep this implementation simple, a maximum of 32 security controller factory
-   --  can be registered.  ASF provides one based on roles.  AWA provides another one
-   --  based on entity ACLs.
-   MAX_CONTROLLER_FACTORY : constant Positive := 32;
-
-   --  Register in a global table the controller factory under the name <b>Name</b>.
-   --  When this factory is used, the <b>Factory</b> operation will be called to
-   --  create new instances of the controller.
-   procedure Register_Controller (Name    : in String;
-                                  Factory : in Controller_Factory);
-
-   --  Create a security controller by using the controller factory registered under
-   --  the name <b>Name</b>.
-   --  Raises <b>Invalid_Controller</b> if the name is not recognized.
-   function Create_Controller (Name : in String) return Controller_Access;
-
 end Security.Controllers;
