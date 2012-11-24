@@ -47,11 +47,11 @@ package Security.Policies is
    --  ------------------------------
    --  Security policy
    --  ------------------------------
-   type Policy is new Ada.Finalization.Limited_Controlled with private;
+   type Policy is abstract new Ada.Finalization.Limited_Controlled with private;
    type Policy_Access is access all Policy'Class;
 
    --  Get the policy name.
-   function Get_Name (From : in Policy) return String;
+   function Get_Name (From : in Policy) return String is abstract;
 
    --  Get the policy index.
    function Get_Policy_Index (From : in Policy'Class) return Policy_Index;
@@ -165,7 +165,7 @@ private
 
    type Policy_Access_Array is array (Policy_Index range <>) of Policy_Access;
 
-   type Policy is new Ada.Finalization.Limited_Controlled with record
+   type Policy is abstract new Ada.Finalization.Limited_Controlled with record
       Manager : Policy_Manager_Access;
       Index   : Policy_Index;
    end record;
