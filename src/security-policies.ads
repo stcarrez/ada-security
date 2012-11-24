@@ -114,12 +114,6 @@ package Security.Policies is
    function Create_Policy_Contexts (Manager : in Policy_Manager)
                                     return Policy_Context_Array_Access;
 
-   --  Get the security controller associated with the permission index <b>Index</b>.
-   --  Returns null if there is no such controller.
-   function Get_Controller (Manager : in Policy_Manager'Class;
-                            Index   : in Permissions.Permission_Index) return Controller_Access;
-   pragma Inline_Always (Get_Controller);
-
    --  Read the policy file
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String);
