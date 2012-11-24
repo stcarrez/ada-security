@@ -28,12 +28,6 @@ package body Security.Policies is
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Policies");
 
-   --  Get the policy name.
-   function Get_Name (From : in Policy) return String is
-   begin
-      return "";
-   end Get_Name;
-
    --  ------------------------------
    --  Get the policy index.
    --  ------------------------------
