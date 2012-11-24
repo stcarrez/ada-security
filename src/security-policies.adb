@@ -21,6 +21,7 @@ with Ada.Unchecked_Deallocation;
 with Util.Log.Loggers;
 
 with Security.Controllers;
+with Security.Contexts;
 
 package body Security.Policies is
 
@@ -126,6 +127,19 @@ package body Security.Policies is
       end if;
       Manager.Permissions (Index) := Permission;
    end Add_Permission;
+
+   --  ------------------------------
+   --  Checks whether the permission defined by the <b>Permission</b> is granted
+   --  for the security context passed in <b>Context</b>.
+   --  Returns true if such permission is granted.
+   --  ------------------------------
+   function Has_Permission (Manager    : in Policy_Manager;
+                            Context    : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
+                            return Boolean is
+   begin
+      return False;
+   end Has_Permission;
 
    --  ------------------------------
    --  Get the security controller associated with the permission index <b>Index</b>.
