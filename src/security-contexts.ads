@@ -52,6 +52,7 @@ with Security.Policies;
 package Security.Contexts is
 
    Invalid_Context : exception;
+   Invalid_Policy  : exception;
 
    type Security_Context is new Ada.Finalization.Limited_Controlled with private;
    type Security_Context_Access is access all Security_Context'Class;
@@ -103,20 +104,22 @@ package Security.Contexts is
                           Principal : in Security.Principal_Access);
 
    --  Set a policy context information represented by <b>Value</b> and associated with
-   --  the policy index <b>Policy</b>.
+   --  the <b>Policy</b>.
    procedure Set_Policy_Context (Context   : in out Security_Context;
                                  Policy    : in Security.Policies.Policy_Access;
                                  Value     : in Security.Policies.Policy_Context_Access);
 
-   --  Get the context information registered under the name <b>Name</b> in the security
+   --  Get the policy context information registered for the given security policy in the security
    --  context <b>Context</b>.
    --  Raises <b>Invalid_Context</b> if there is no such information.
-   function Get_Context (Context  : in Security_Context;
-                         Name     : in String) return String;
+   --  Raises <b>Invalid_Policy</b> if the policy was not set.
+   function Get_Policy_Context (Context  : in Security_Context;
+                                Policy   : in Security.Policies.Policy_Access)
+                                return Security.Policies.Policy_Context_Access;
 
-   --  Returns True if a context information was registered under the name <b>Name</b>.
-   function Has_Context (Context : in Security_Context;
-                         Name    : in String) return Boolean;
+   --  Returns True if a context information was registered for the security policy.
+   function Has_Policy_Context (Context : in Security_Context;
+                                Policy  : in Security.Policies.Policy_Access) return Boolean;
 
    --  Get the current security context.
    --  Returns null if the current thread is not associated with any security context.
