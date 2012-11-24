@@ -33,7 +33,8 @@ package Security.Policies.Urls is
    --  URI Permission
    --  ------------------------------
    --  Represents a permission to access a given URI.
-   type URI_Permission (Len : Natural) is new Permissions.Permission with record
+   type URI_Permission (Id  : Permissions.Permission_Index;
+                        Len : Natural) is new Permissions.Permission (Id) with record
       URI : String (1 .. Len);
    end record;
 
