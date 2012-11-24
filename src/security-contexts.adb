@@ -21,6 +21,10 @@ with Ada.Unchecked_Deallocation;
 
 package body Security.Contexts is
 
+   use type Security.Policies.Policy_Context_Array_Access;
+   use type Security.Policies.Policy_Access;
+   use type Security.Policies.Policy_Context_Access;
+
    package Task_Context is new Ada.Task_Attributes
      (Security_Context_Access, null);
 
@@ -121,7 +125,6 @@ package body Security.Contexts is
    --  ------------------------------
    overriding
    procedure Finalize (Context : in out Security_Context) is
-      use type Security.Policies.Policy_Context_Array_Access;
 
       procedure Free is
         new Ada.Unchecked_Deallocation (Object => Security.Policies.Policy_Context_Array,
@@ -143,7 +146,6 @@ package body Security.Contexts is
    procedure Set_Policy_Context (Context   : in out Security_Context;
                                  Policy    : in Security.Policies.Policy_Access;
                                  Value     : in Security.Policies.Policy_Context_Access) is
-      use type Security.Policies.Policy_Context_Array_Access;
    begin
       if Context.Contexts = null then
          Context.Contexts := Context.Manager.Create_Policy_Contexts;
@@ -153,30 +155,34 @@ package body Security.Contexts is
    end Set_Policy_Context;
 
    --  ------------------------------
-   --  Get the context information registered under the name <b>Name</b> in the security
+   --  Get the policy context information registered for the given security policy in the security
    --  context <b>Context</b>.
    --  Raises <b>Invalid_Context</b> if there is no such information.
-   --  ------------------------------
-   function Get_Context (Context  : in Security_Context;
-                         Name     : in String) return String is
-      Pos : constant Util.Strings.Maps.Cursor := Context.Context.Find (Name);
+   --  Raises <b>Invalid_Policy</b> if the policy was not set.
+   function Get_Policy_Context (Context  : in Security_Context;
+                                Policy   : in Security.Policies.Policy_Access)
+                                return Security.Policies.Policy_Context_Access is
+      Result : Security.Policies.Policy_Context_Access;
    begin
-      if Util.Strings.Maps.Has_Element (Pos) then
-         return Util.Strings.Maps.Element (Pos);
-      else
+      if Policy = null then
+         raise Invalid_Policy;
+      end if;
+      if Context.Contexts = null then
          raise Invalid_Context;
       end if;
-   end Get_Context;
+      Result := Context.Contexts (Policy.Get_Policy_Index);
+      return Result;
+   end Get_Policy_Context;
 
    --  ------------------------------
-   --  Returns True if a context information was registered under the name <b>Name</b>.
+   --  Returns True if a context information was registered for the security policy.
    --  ------------------------------
-   function Has_Context (Context : in Security_Context;
-                         Name    : in String) return Boolean is
-      use type Util.Strings.Maps.Cursor;
+   function Has_Policy_Context (Context : in Security_Context;
+                                Policy  : in Security.Policies.Policy_Access) return Boolean is
    begin
-      return Context.Context.Find (Name) /= Util.Strings.Maps.No_Element;
-   end Has_Context;
+      return Policy /= null and then Context.Contexts /= null
+        and then Context.Contexts (Policy.Get_Policy_Index) /= null;
+   end Has_Policy_Context;
 
    --  ------------------------------
    --  Set the current application and user context.
