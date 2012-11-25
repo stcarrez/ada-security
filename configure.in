@@ -94,36 +94,6 @@ rm -f t.gpr
 AC_MSG_RESULT(${UTIL_DIR})
 AC_SUBST(UTIL_DIR)
 
-##########################################
-# Ada Expression Language library
-##########################################
-AC_MSG_CHECKING([Ada Expression Language library (code.google.com/p/ada-el)])
-AC_ARG_WITH(ada-el,
-AS_HELP_STRING([--with-ada-el=x], [Path for the Ada Expression Language library (code.google.com/p/ada-el)]),
-[
-  EL_DIR=${withval}/
-],
-[
-  echo "with \"el\"; project t is for Source_Dirs use (); end t;" > t.gpr
-  gnatmake -p -Pt >/dev/null 2>/dev/null
-  if test $? -eq 0; then
-    EL_DIR=
-  else
-    EL_DIR=../el/
-  fi;
-  rm -f t.gpr
-])
-echo "with \"${EL_DIR}el\"; project t is for Source_Dirs use (); end t;" > t.gpr
-gnatmake -p -Pt >/dev/null 2>/dev/null
-if test $? -ne 0 ; then
-   rm -f t.gpr
-   AC_MSG_ERROR([Ada Expression Language library not found in ${EL_DIR}])
-fi
-rm -f t.gpr
-AC_MSG_RESULT(${EL_DIR})
-AC_SUBST(EL_DIR)
-
-
 AC_OUTPUT(
 Makefile security.gpr tests.gpr distrib/security.gpr
 )
