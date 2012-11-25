@@ -68,8 +68,6 @@
 --  its own principal and authentication mechanism.
 --
 --  @include security-permissions.ads
---  @include security-openid.ads
---  @include security-oauth.ads
 --  @include security-contexts.ads
 --  @include security-controllers.ads
 package Security is
