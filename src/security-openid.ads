@@ -26,6 +26,10 @@ with Ada.Finalization;
 --  See OpenID Authentication 2.0 - Final
 --  http://openid.net/specs/openid-authentication-2_0.html
 --
+--  There are basically two steps that an application must implement.
+--
+--  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
+--
 --  The authentication process is the following:
 --
 --    * The <b>Initialize</b> procedure is called to configure the OpenID realm and set the
@@ -42,9 +46,6 @@ with Ada.Finalization;
 --    * The <b>Verify</b> procedure is called with the association to check the result and
 --      obtain the authentication results.
 --
---  There are basically two steps that an application must implement.
---
---  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
 --
 --  == Discovery: creating the authentication URL ==
 --  The first step is to create an authentication URL to which the user must be redirected.
