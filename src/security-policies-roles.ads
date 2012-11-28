@@ -21,9 +21,23 @@ with Ada.Strings.Unbounded;
 --  == Role Based Security Policy ==
 --  The <tt>Security.Policies.Roles</tt> package implements a role based security policy.
 --
+--  === Policy creation ===
+--  An instance of the <tt>Role_Policy</tt> must be created and registered in the policy manager.
+--  Get or declare the following variables:
+--
+--    Manager : Security.Policies.Policy_Manager;
+--    Policy  : Security.Policies.Roles.Role_Policy_Access;
+--
+--  Create the role policy and register it in the policy manager as follows:
+--
+--    Policy := new Role_Policy;
+--    Manager.Add_Policy (Policy.all'Access);
+--
+--  === Policy Configuration ===
 --  A role is represented by a name in security configuration files.  A role based permission
 --  is associated with a list of roles.  The permission is granted if the user has one of these
---  roles.
+--  roles.  When the role based policy is registered in the policy manager, the following
+--  XML configuration is used:
 --
 --    <security-role>
 --      <role-name>admin</role-name>
@@ -41,6 +55,11 @@ with Ada.Strings.Unbounded;
 --  It defines a permission <b>create-workspace</b> that will be granted if the
 --  user has either the <b>admin</b> or the <b>manager</b> role.
 --
+--  Each role is identified by a name in the configuration file.  It is represented by
+--  a <tt>Role_Type</tt>.  To provide an efficient implementation, the <tt>Role_Type</tt>
+--  is represented as an integer with a limit of 64 different roles.
+--
+--  === Assigning roles to users ===
 --  A <tt>Security_Context</tt> must be associated with a set of roles before checking the
 --  permission.  This is done by using the <tt>Set_Role_Context</tt> operation:
 --
