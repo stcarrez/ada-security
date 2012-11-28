@@ -29,6 +29,7 @@ limited with Security.Contexts;
 --  == Security Policies ==
 --
 --  @include security-policies-roles.ads
+--  @include security-policies-urls.ads
 package Security.Policies is
 
    type Security_Context_Access is access all Contexts.Security_Context'Class;
