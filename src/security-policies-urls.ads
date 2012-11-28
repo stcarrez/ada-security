@@ -25,6 +25,44 @@ with Util.Serialize.IO.XML;
 
 with GNAT.Regexp;
 
+--  == URL Security Policy ==
+--  The <tt>Security.Policies.Urls</tt> implements a security policy intended to be used
+--  in web servers.
+--
+--  === Policy creation ===
+--  An instance of the <tt>URL_Policy</tt> must be created and registered in the policy manager.
+--  Get or declare the following variables:
+--
+--    Manager : Security.Policies.Policy_Manager;
+--    Policy  : Security.Policies.Urls.URL_Policy_Access;
+--
+--  Create the URL policy and register it in the policy manager as follows:
+--
+--    Policy := new URL_Policy;
+--    Manager.Add_Policy (Policy.all'Access);
+--
+--  === Policy Configuration ===
+--  Once the URL policy is registered, the policy manager can read and process the following
+--  XML configuration:
+--
+--  <url-policy id='1'>
+--     <permission>create-workspace</permission>
+--     <permission>admin</permission>
+--     <url-pattern>/workspace/create</url-pattern>
+--     <url-pattern>/workspace/setup/*</url-pattern>
+--  </url-policy>
+--
+--  This policy gives access to the URL that match one of the URL pattern if the
+--  security context has the permission <b>create-workspace</b> or <b>admin</b>.
+--  These two permissions are checked according to another security policy.
+--  The XML configuration can define several <tt>url-policy</tt>.  They are checked in
+--  the order defined in the XML.  In other words, the first <tt>url-policy</tt> that matches
+--  the URL is used to verify the permission.
+--
+--  The <tt>url-policy</tt> definition can contain several <tt>permission</tt>.
+--
+--  === Checking for permission ===
+--
 package Security.Policies.Urls is
 
    NAME : constant String := "URL-Policy";
