@@ -274,8 +274,8 @@ package body Security.Policies.Urls is
    end Finish_Config;
 
 begin
-   Policy_Mapping.Add_Mapping ("policy", FIELD_POLICY);
-   Policy_Mapping.Add_Mapping ("policy/@id", FIELD_ID);
-   Policy_Mapping.Add_Mapping ("policy/permission", FIELD_PERMISSION);
-   Policy_Mapping.Add_Mapping ("policy/url-pattern", FIELD_URL_PATTERN);
+   Policy_Mapping.Add_Mapping ("url-policy", FIELD_POLICY);
+   Policy_Mapping.Add_Mapping ("url-policy/@id", FIELD_ID);
+   Policy_Mapping.Add_Mapping ("url-policy/permission", FIELD_PERMISSION);
+   Policy_Mapping.Add_Mapping ("url-policy/url-pattern", FIELD_URL_PATTERN);
 end Security.Policies.Urls;
