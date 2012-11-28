@@ -10,6 +10,7 @@ GNATMAKE=@GNATMAKE@ -XMODE=${MODE} -XPROCESSORS=4
 GNATCLEAN=gnatclean
 SVN=svn
 INSTALL=@INSTALL@
+DYNAMO=dynamo
 
 BUILDS_SHARED=@BUILDS_SHARED@
 
@@ -97,6 +98,9 @@ rebuild: clean build
 check test:	build
 	$(GNATMAKE) -p -Ptests
 	bin/security_harness -xml security-aunit.xml
+
+doc:
+	$(DYNAMO) build-doc wiki
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
