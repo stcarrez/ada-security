@@ -27,14 +27,6 @@ package Security.Permissions is
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
 
-   --  Get the last permission index registered in the global permission map.
-   function Get_Last_Permission_Index return Permission_Index;
-
-   --  Add the permission name and allocate a unique permission index.
-   procedure Add_Permission (Name  : in String;
-                             Index : out Permission_Index);
-
-
    --  The permission root class.
    --  Each permission is represented by a <b>Permission_Index</b> number to provide a fast
    --  and efficient permission check.
@@ -42,9 +34,18 @@ package Security.Permissions is
 
    generic
       Name : String;
-   package Permission_ACL is
+   package Definition is
       function Permission return Permission_Index;
       pragma Inline_Always (Permission);
-   end Permission_ACL;
+   end Definition;
+
+   --  Add the permission name and allocate a unique permission index.
+   procedure Add_Permission (Name  : in String;
+                             Index : out Permission_Index);
+
+private
+
+   --  Get the last permission index registered in the global permission map.
+   function Get_Last_Permission_Index return Permission_Index;
 
 end Security.Permissions;
