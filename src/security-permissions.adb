@@ -117,7 +117,7 @@ package body Security.Permissions is
       Permission_Indexes.Add_Permission (Name, Index);
    end Add_Permission;
 
-   package body Permission_ACL is
+   package body Definition is
       P : Permission_Index;
 
       function Permission return Permission_Index is
@@ -127,6 +127,6 @@ package body Security.Permissions is
 
    begin
       Add_Permission (Name => Name, Index => P);
-   end Permission_ACL;
+   end Definition;
 
 end Security.Permissions;
