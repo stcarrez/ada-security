@@ -145,10 +145,10 @@ package Security.Contexts is
 
 private
 
-   type Permission_Cache is record
-      Perm   : Security.Permissions.Permission_Type;
-      Result : Boolean;
-   end record;
+--     type Permission_Cache is record
+--        Perm   : Security.Permissions.Permission_Type;
+--        Result : Boolean;
+--     end record;
 
    type Security_Context is new Ada.Finalization.Limited_Controlled with record
       Previous    : Security_Context_Access := null;
