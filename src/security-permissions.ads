@@ -16,8 +16,18 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
+--  == Permission ==
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
---  checked by the access control manager.
+--  checked by the access control manager.  An application should declare each permission
+--  by instantiating the <tt>Definition</tt> package:
+--
+--    package Perm_Create_Workspace is new Security.Permissions.Definition ("create-workspace");
+--
+--  This declares a permission that can be represented by "<tt>create-workspace</tt>" in
+--  configuration files.  In Ada, the permission is used as follows:
+--
+--     Perm_Create_Workspace.Permission
+--
 package Security.Permissions is
 
    Invalid_Name : exception;
