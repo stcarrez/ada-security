@@ -149,7 +149,7 @@ package body Security.Policies.Tests is
    --  ------------------------------
    procedure Test_Has_Permission (T : in out Test) is
       M    : Security.Policies.Policy_Manager (1);
-      Perm : Permissions.Permission_Type;
+--        Perm : Permissions.Permission_Type;
       User : Test_Principal;
    begin
       --        T.Assert (not M.Has_Permission (User, 1), "User has a non-existing permission");
