@@ -36,17 +36,9 @@ package Security.Permissions is
 
 
    --  The permission root class.
-   type Permission (Id : Permission_Index) is tagged limited null record;
-
-   --  Each permission is represented by a <b>Permission_Type</b> number to provide a fast
+   --  Each permission is represented by a <b>Permission_Index</b> number to provide a fast
    --  and efficient permission check.
-   type Permission_Type is new Natural range 0 .. 63;
-
-   --  The <b>Permission_Map</b> represents a set of permissions which are granted to a user.
-   --  Each permission is represented by a boolean in the map.  The implementation is limited
-   --  to 64 permissions.
-   type Permission_Map is array (Permission_Type'Range) of Boolean;
-   pragma Pack (Permission_Map);
+   type Permission (Id : Permission_Index) is tagged limited null record;
 
    generic
       Name : String;
