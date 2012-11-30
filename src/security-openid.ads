@@ -44,7 +44,7 @@ with Ada.Finalization;
 --      The <b>Association</b> record holds session, and authentication.
 --    * The <b>Get_Authentication_URL</b> builds the provider OpenID authentication
 --      URL for the association.
---    * The application should redirected the user to the authentication URL.
+--    * The application should redirect the user to the authentication URL.
 --    * The OpenID provider authenticate the user and redirects the user to the callback CB.
 --    * The association is decoded from the callback parameter.
 --    * The <b>Verify</b> procedure is called with the association to check the result and
