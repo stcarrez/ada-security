@@ -25,13 +25,6 @@ with Security.Permissions;
 --  context and other controller specific and internal data to verify that the permission
 --  is granted.
 --
---  To implement a new security controller, one must:
---
---    * Define a type that implements the <b>Controller</b> interface with the
---      <b>Has_Permission</b> operation
---    * Write a function to allocate instances of the given <b>Controller</b> type
---    * Register the function under a unique name by using <b>Register_Controller</b>
---
 --  Security controller instances are created when the security policy rules are parsed.
 --  These instances are shared across possibly several concurrent requests.
 package Security.Controllers is
