@@ -26,7 +26,11 @@ with Ada.Finalization;
 --  See OpenID Authentication 2.0 - Final
 --  http://openid.net/specs/openid-authentication-2_0.html
 --
---  There are basically two steps that an application must implement.
+--  There are basically two steps that an application must implement:
+--
+--    * Discovery to resolve and use the OpenID provider and redirect the user to the
+--      provider authentication form.
+--    * Verify to decode the authentication and check its result.
 --
 --  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
 --
