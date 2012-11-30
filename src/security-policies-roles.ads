@@ -83,6 +83,16 @@ package Security.Policies.Roles is
    pragma Pack (Role_Map);
 
    --  ------------------------------
+   --  Role principal context
+   --  ------------------------------
+   --  The <tt>Role_Principal_Context</tt> interface must be implemented by the user
+   --  <tt>Principal</tt> to be able to use the role based policy.   The role based policy
+   --  controller will first check that the <tt>Principal</tt> implements that interface.
+   --  It uses the <tt>Get_Roles</tt> function to get the current roles assigned to the user.
+   type Role_Principal_Context is limited interface;
+   function Get_Roles (User : in Role_Principal_Context) return Role_Map is abstract;
+
+   --  ------------------------------
    --  Policy context
    --  ------------------------------
    --  The <b>Role_Policy_Context</b> gives security context information that the role
