@@ -27,9 +27,21 @@ limited with Security.Controllers;
 limited with Security.Contexts;
 
 --  == Security Policies ==
+--  The Security Policy defines and implements the set of security rules that specify
+--  how to protect the system or resources. The <tt>Policy_Manager</tt> maintains
+--  the security policies.  These policies are registered when an application starts
+--  and before reading the policy configuration files.
+--
+--  [http://ada-security.googlecode.com/svn/wiki/PolicyModel.png]
+--
+--  While the policy configuration files are processed, the policy instances that have been
+--  registered will create a security controller and bind it to a given permission.  After
+--  successful initialization, the <tt>Policy_Manager</tt> contains a list of securiy
+--  controllers which are associated with each permission defined by the application.
 --
 --  @include security-policies-roles.ads
 --  @include security-policies-urls.ads
+--  @include security-controllers.ads
 package Security.Policies is
 
    type Security_Context_Access is access all Contexts.Security_Context'Class;
