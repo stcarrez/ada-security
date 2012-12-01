@@ -274,20 +274,15 @@ package body Security.Policies.Tests is
                 "Permission was not granted and user has admin role");
 
       declare
-
          S : Util.Measures.Stamp;
+         Result : Boolean;
       begin
          for I in 1 .. 1_000 loop
-            declare
-               URI : constant String := "/admin/home/" & Util.Strings.Image (I) & "/l.html";
-               P   : constant URLs.URI_Permission (URI'Length)
-                 := URLs.URI_Permission '(Len => URI'Length, URI => URI);
-            begin
-               T.Assert (Contexts.Has_Permission (Permission => P_Admin.Permission),
-                         "Permission not granted");
-            end;
+            Result := Contexts.Has_Permission (Permission => P_Admin.Permission);
          end loop;
-         Util.Measures.Report (S, "Has_Permission (1000 calls, cache miss)");
+         Util.Measures.Report (S, "Has_Permission role based (1000 calls)");
+
+         T.Assert (Result, "Permission not granted");
       end;
       declare
          use Security.Permissions.Tests;
