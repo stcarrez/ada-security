@@ -165,13 +165,13 @@ package body Security.Policies.Urls is
 
    type Policy_Fields is (FIELD_ID, FIELD_PERMISSION, FIELD_URL_PATTERN, FIELD_POLICY);
 
-   procedure Set_Member (P     : in out Policy_Config;
+   procedure Set_Member (P     : in out URL_Policy'Class;
                          Field : in Policy_Fields;
                          Value : in Util.Beans.Objects.Object);
 
-   procedure Process (Policy : in Policy_Config);
+   procedure Process (Policy : in out URL_Policy'Class);
 
-   procedure Set_Member (P     : in out Policy_Config;
+   procedure Set_Member (P     : in out URL_Policy'Class;
                          Field : in Policy_Fields;
                          Value : in Util.Beans.Objects.Object) is
    begin
@@ -194,7 +194,7 @@ package body Security.Policies.Urls is
       end case;
    end Set_Member;
 
-   procedure Process (Policy : in Policy_Config) is
+   procedure Process (Policy : in out URL_Policy'Class) is
       Pol    : Security.Policies.URLs.Policy;
       Count  : constant Natural := Natural (Policy.Permissions.Length);
       Rule   : constant Access_Rule_Ref := Access_Rule_Refs.Create (new Access_Rule (Count));
@@ -228,15 +228,15 @@ package body Security.Policies.Urls is
          begin
             Pol.Id   := Policy.Id;
             Pol.Pattern := GNAT.Regexp.Compile (Util.Beans.Objects.To_String (Pattern));
-            Policy.Manager.Policies.Append (Pol);
+            Policy.Policies.Append (Pol);
          end;
          Util.Beans.Objects.Vectors.Next (Iter);
       end loop;
    end Process;
 
    package Policy_Mapper is
-     new Util.Serialize.Mappers.Record_Mapper (Element_Type        => Policy_Config,
-                                               Element_Type_Access => Policy_Config_Access,
+     new Util.Serialize.Mappers.Record_Mapper (Element_Type        => URL_Policy'Class,
+                                               Element_Type_Access => URL_Policy_Access,
                                                Fields              => Policy_Fields,
                                                Set_Member          => Set_Member);
 
@@ -248,13 +248,10 @@ package body Security.Policies.Urls is
    overriding
    procedure Prepare_Config (Policy : in out URL_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
-
-      Config : Policy_Config_Access := new Policy_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
       Reader.Add_Mapping ("module", Policy_Mapping'Access);
-      Config.Manager := Policy'Unchecked_Access;
-      Policy_Mapper.Set_Context (Reader, Config);
+      Policy_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
    end Prepare_Config;
 
    --  ------------------------------

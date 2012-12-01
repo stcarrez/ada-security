@@ -192,6 +192,9 @@ private
    type URL_Policy is new Security.Policies.Policy with record
       Cache        : Rules_Ref_Access;
       Policies     : Policy_Vector.Vector;
+      Id           : Natural := 0;
+      Permissions  : Util.Beans.Objects.Vectors.Vector;
+      Patterns     : Util.Beans.Objects.Vectors.Vector;
    end record;
 
 end Security.Policies.Urls;
