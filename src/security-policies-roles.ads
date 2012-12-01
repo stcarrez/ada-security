@@ -159,6 +159,11 @@ package Security.Policies.Roles is
    overriding
    procedure Finalize (Policy : in out Role_Policy);
 
+   --  Get the role policy associated with the given policy manager.
+   --  Returns the role policy instance or null if it was not registered in the policy manager.
+   function Get_Role_Policy (Manager : in Security.Policies.Policy_Manager'Class)
+                             return Role_Policy_Access;
+
 private
 
    type Role_Name_Array is
