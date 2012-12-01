@@ -41,6 +41,9 @@ package Security.Policies.Tests is
    --  Test Has_Permission
    procedure Test_Has_Permission (T : in out Test);
 
+   --  Test reading an empty policy file
+   procedure Test_Read_Empty_Policy (T : in out Test);
+
    --  Test reading policy files
    procedure Test_Read_Policy (T : in out Test);
 
