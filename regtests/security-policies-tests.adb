@@ -256,7 +256,7 @@ package body Security.Policies.Tests is
       Admin        : Policies.Roles.Role_Type;
       Manager_Perm : Policies.Roles.Role_Type;
       Context      : aliased Security.Contexts.Security_Context;
-      R            : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
+      R            : Security.Policies.Roles.Role_Policy_Access;
    begin
       Configure_Policy (M, "simple-policy.xml");
       Context.Set_Context (Manager   => M'Unchecked_Access,
