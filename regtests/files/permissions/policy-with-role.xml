@@ -27,19 +27,19 @@
     <role>manager</role>
   </role-permission>
 
-  <policy>
+  <url-policy>
     <permission>admin</permission>
     <url-pattern>/admin/.*</url-pattern>
-  </policy>
+  </url-policy>
 
-  <policy>
+  <url-policy>
     <permission>developer</permission>
     <url-pattern>/developer/.*</url-pattern>
-  </policy>
+  </url-policy>
 
-  <policy>
+  <url-policy>
     <permission>manager</permission>
     <url-pattern>/manager/.*</url-pattern>
-  </policy>
+  </url-policy>
 
 </policy-rules>

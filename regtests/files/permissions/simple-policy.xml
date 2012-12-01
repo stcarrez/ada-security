@@ -4,8 +4,8 @@
     <role>admin</role>
     <role>manager</role>
   </role-permission>
-  <policy id='1'>
+  <url-policy id='1'>
     <permission>admin</permission>
     <url-pattern>/admin/.*</url-pattern>
-  </policy>
+  </url-policy>
 </policy-rules>
