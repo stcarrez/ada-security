@@ -28,6 +28,10 @@ package body Security.Policies is
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Policies");
 
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
+                                     Controller_Access);
+
    --  ------------------------------
    --  Get the policy index.
    --  ------------------------------
@@ -46,10 +50,6 @@ package body Security.Policies is
    begin
       Manager.Manager.Add_Permission (Name, Permission);
    end Add_Permission;
-
-   --  ------------------------------
-   --  Permission Manager
-   --  ------------------------------
 
    --  ------------------------------
    --  Get the policy with the name <b>Name</b> registered in the policy manager.
@@ -119,6 +119,13 @@ package body Security.Policies is
             Manager.Last_Index := Count;
          end;
       end if;
+
+      --  If the permission has a controller, release it.
+      if Manager.Permissions (Index) /= null then
+         Log.Warn ("Permission {0} is redefined", Name);
+         Free (Manager.Permissions (Index));
+      end if;
+
       Manager.Permissions (Index) := Permission;
    end Add_Permission;
 
@@ -187,20 +194,20 @@ package body Security.Policies is
 
    end Read_Policy;
 
-   --  Initialize the permission manager.
+   --  ------------------------------
+   --  Initialize the policy manager.
+   --  ------------------------------
    overriding
    procedure Initialize (Manager : in out Policy_Manager) is
    begin
       null;
    end Initialize;
 
-   --  Finalize the permission manager.
+   --  ------------------------------
+   --  Finalize the policy manager.
+   --  ------------------------------
    overriding
    procedure Finalize (Manager : in out Policy_Manager) is
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
-                                        Controller_Access);
-
       procedure Free is
         new Ada.Unchecked_Deallocation (Controller_Access_Array,
                                         Controller_Access_Array_Access);
@@ -209,22 +216,24 @@ package body Security.Policies is
                                         Policy_Access);
 
    begin
+      --  Release the security controllers.
       if Manager.Permissions /= null then
          for I in Manager.Permissions.all'Range loop
-            exit when Manager.Permissions (I) = null;
-
-            --  SCz 2011-12-03: GNAT 2011 reports a compilation error:
-            --  'missing "with" clause on package "Security.Controllers"'
-            --  if we use the 'Security.Controller_Access' type, even if this "with" clause exist.
-            --  gcc 4.4.3 under Ubuntu does not have this issue.
-            --  We use the 'Security.Controllers.Controller_Access' type to avoid the compiler bug
-            --  but we have to use a temporary variable and do some type conversion...
-            declare
-               P : Controller_Access := Manager.Permissions (I).all'Access;
-            begin
-               Free (P);
-               Manager.Permissions (I) := null;
-            end;
+            if Manager.Permissions (I) /= null then
+               --  SCz 2011-12-03: GNAT 2011 reports a compilation error:
+               --  'missing "with" clause on package "Security.Controllers"'
+               --  if we use the 'Security.Controller_Access' type, even if this "with"
+               --  clause exist.
+               --  gcc 4.4.3 under Ubuntu does not have this issue.
+               --  We use the 'Security.Controllers.Controller_Access' type to avoid the compiler
+               --  bug but we have to use a temporary variable and do some type conversion...
+               declare
+                  P : Controller_Access := Manager.Permissions (I).all'Access;
+               begin
+                  Free (P);
+                  Manager.Permissions (I) := null;
+               end;
+            end if;
          end loop;
          Free (Manager.Permissions);
       end if;
