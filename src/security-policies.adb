@@ -204,6 +204,9 @@ package body Security.Policies is
       procedure Free is
         new Ada.Unchecked_Deallocation (Controller_Access_Array,
                                         Controller_Access_Array_Access);
+      procedure Free is
+        new Ada.Unchecked_Deallocation (Policy'Class,
+                                        Policy_Access);
 
    begin
       if Manager.Permissions /= null then
@@ -225,6 +228,13 @@ package body Security.Policies is
          end loop;
          Free (Manager.Permissions);
       end if;
+
+      --  Release the policy instances.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Free (Manager.Policies (I));
+      end loop;
+
    end Finalize;
 
 end Security.Policies;
