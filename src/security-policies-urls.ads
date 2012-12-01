@@ -45,12 +45,15 @@ with GNAT.Regexp;
 --  Once the URL policy is registered, the policy manager can read and process the following
 --  XML configuration:
 --
---    <url-policy id='1'>
---     <permission>create-workspace</permission>
---     <permission>admin</permission>
---     <url-pattern>/workspace/create</url-pattern>
---     <url-pattern>/workspace/setup/*</url-pattern>
---    </url-policy>
+--    <policy-rules>
+--      <url-policy id='1'>
+--        <permission>create-workspace</permission>
+--        <permission>admin</permission>
+--        <url-pattern>/workspace/create</url-pattern>
+--        <url-pattern>/workspace/setup/*</url-pattern>
+--      </url-policy>
+--      ...
+--    </policy-rules>
 --
 --  This policy gives access to the URL that match one of the URL pattern if the
 --  security context has the permission <b>create-workspace</b> or <b>admin</b>.
@@ -65,13 +68,12 @@ with GNAT.Regexp;
 --  To check a URL permission, you must declare a <tt>URI_Permission</tt> object with the URL.
 --
 --     URI    : constant String := ...;
---     Perm   : constant Policies.URLs.URI_Permission (1, URI'Length)
---               := URI_Permission '(1, Len => URI'Length, URI => URI);
---     Result : Boolean;
+--     Perm   : constant Policies.URLs.URI_Permission (URI'Length)
+--               := URI_Permission '(Len => URI'Length, URI => URI);
 --
---  Having the security context, we can check the permission:
+--  Then, we can check the permission:
 --
---     Context.Has_Permission (Perm, Result);
+--     Result : Boolean := Security.Contexts.Has_Permission (Perm);
 --
 package Security.Policies.Urls is
 
