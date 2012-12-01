@@ -255,17 +255,6 @@ package body Security.Policies.Urls is
    end Prepare_Config;
 
    --  ------------------------------
-   --  Finish reading the XML policy configuration.  The security policy implementation can use
-   --  this procedure to perform any configuration setup after the configuration is parsed.
-   --  ------------------------------
-   overriding
-   procedure Finish_Config (Into    : in out URL_Policy;
-                            Reader  : in out Util.Serialize.IO.XML.Parser) is
-   begin
-      null;
-   end Finish_Config;
-
-   --  ------------------------------
    --  Get the URL policy associated with the given policy manager.
    --  Returns the URL policy instance or null if it was not registered in the policy manager.
    --  ------------------------------
