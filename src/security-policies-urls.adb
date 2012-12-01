@@ -77,7 +77,7 @@ package body Security.Policies.Urls is
       begin
          if P /= null then
             for I in P.Permissions'Range loop
---                 Context.Has_Permission (P.Permissions (I), Granted);
+               Context.Has_Permission (P.Permissions (I), Granted);
                if Granted then
                   return True;
                end if;
