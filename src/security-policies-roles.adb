@@ -264,6 +264,21 @@ package body Security.Policies.Roles is
       end loop;
    end Finalize;
 
+   --  ------------------------------
+   --  Get the role policy associated with the given policy manager.
+   --  Returns the role policy instance or null if it was not registered in the policy manager.
+   --  ------------------------------
+   function Get_Role_Policy (Manager : in Security.Policies.Policy_Manager'Class)
+                             return Role_Policy_Access is
+      Policy : constant Security.Policies.Policy_Access := Manager.Get_Policy (NAME);
+   begin
+      if Policy = null or else not (Policy.all in Role_Policy'Class) then
+         return null;
+      else
+         return Role_Policy'Class (Policy.all)'Access;
+      end if;
+   end Get_Role_Policy;
+
 begin
    Mapper.Add_Mapping ("role-permission", FIELD_ROLE_PERMISSION);
    Mapper.Add_Mapping ("role-permission/name", FIELD_NAME);
