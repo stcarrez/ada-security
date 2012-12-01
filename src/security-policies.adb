@@ -163,6 +163,33 @@ package body Security.Policies is
       return new Policy_Context_Array (1 .. Manager.Max_Policies);
    end Create_Policy_Contexts;
 
+   --  ------------------------------
+   --  Prepare the XML parser to read the policy configuration.
+   --  ------------------------------
+   procedure Prepare_Config (Manager : in out Policy_Manager;
+                             Reader  : in out Util.Serialize.IO.XML.Parser) is
+   begin
+      --  Prepare the reader to parse the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Prepare_Config (Reader);
+      end loop;
+   end Prepare_Config;
+
+   --  ------------------------------
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   --  ------------------------------
+   procedure Finish_Config (Manager : in out Policy_Manager;
+                            Reader  : in out Util.Serialize.IO.XML.Parser) is
+   begin
+      --  Finish the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Finish_Config (Reader);
+      end loop;
+   end Finish_Config;
+
    --  Read the policy file
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String) is
@@ -177,20 +204,8 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
-      --  Prepare the reader to parse the policy configuration.
-      for I in Manager.Policies'Range loop
-         exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Prepare_Config (Reader);
-      end loop;
-
       --  Read the configuration file.
       Reader.Parse (File);
-
-      --  Finish the policy configuration.
-      for I in Manager.Policies'Range loop
-         exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Finish_Config (Reader);
-      end loop;
 
    end Read_Policy;
 
