@@ -249,9 +249,11 @@ package body Security.Policies.Tests is
    --  Test reading policy files
    --  ------------------------------
    procedure Test_Read_Policy (T : in out Test) is
+      use Security.Permissions.Tests;
+
       M            : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
       User         : aliased Test_Principal;
-      Admin_Perm   : Policies.Roles.Role_Type;
+      Admin        : Policies.Roles.Role_Type;
       Manager_Perm : Policies.Roles.Role_Type;
       Context      : aliased Security.Contexts.Security_Context;
       R            : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
@@ -260,10 +262,18 @@ package body Security.Policies.Tests is
       Context.Set_Context (Manager   => M'Unchecked_Access,
                            Principal => User'Unchecked_Access);
 
-      User.Roles (Admin_Perm) := True;
+      R := Security.Policies.Roles.Get_Role_Policy (M);
+      Admin := R.Find_Role ("admin");
+
+      T.Assert (not Contexts.Has_Permission (Permission => P_Admin.Permission),
+                "Permission was granted but user has no role");
+
+      User.Roles (Admin) := True;
+
+      T.Assert (Contexts.Has_Permission (Permission => P_Admin.Permission),
+                "Permission was not granted and user has admin role");
 
       declare
-         use Security.Permissions.Tests;
 
          S : Util.Measures.Stamp;
       begin
