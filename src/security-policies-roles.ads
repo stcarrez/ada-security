@@ -20,6 +20,9 @@ with Ada.Strings.Unbounded;
 
 --  == Role Based Security Policy ==
 --  The <tt>Security.Policies.Roles</tt> package implements a role based security policy.
+--  In this policy, users are assigned one or several roles and permissions are
+--  associated with roles.  A permission is granted if the user has one of the roles required
+--  by the permission.
 --
 --  === Policy creation ===
 --  An instance of the <tt>Role_Policy</tt> must be created and registered in the policy manager.
