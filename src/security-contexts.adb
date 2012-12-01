@@ -250,4 +250,20 @@ package body Security.Contexts is
       end if;
    end Has_Permission;
 
+   --  ------------------------------
+   --  Check if the permission identified by <b>Permission</b> is allowed according to
+   --  the current security context.
+   --  ------------------------------
+   function Has_Permission (Permission : in Permissions.Permission'Class) return Boolean is
+      Result  : Boolean;
+      Context : constant Security_Context_Access := Current;
+   begin
+      if Context = null then
+         return False;
+      else
+         Context.Has_Permission (Permission, Result);
+         return Result;
+      end if;
+   end Has_Permission;
+
 end Security.Contexts;
