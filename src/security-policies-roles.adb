@@ -200,7 +200,7 @@ package body Security.Policies.Roles is
                Into.Count := Into.Count + 1;
 
             exception
-               when Permissions.Invalid_Name =>
+               when Invalid_Name =>
                   raise Util.Serialize.Mappers.Field_Error with "Invalid role: " & Role;
             end;
 
