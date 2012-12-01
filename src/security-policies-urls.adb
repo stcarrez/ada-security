@@ -17,16 +17,13 @@
 -----------------------------------------------------------------------
 
 with Ada.Unchecked_Deallocation;
-with Ada.Strings.Unbounded;
 
-with Util.Refs;
 with Util.Beans.Objects;
 with Util.Beans.Objects.Vectors;
 with Util.Serialize.Mappers;
 with Util.Serialize.Mappers.Record_Mapper;
 
-with GNAT.Regexp;
-with Security.Controllers;
+with Security.Contexts;
 
 package body Security.Policies.Urls is
 
@@ -153,8 +150,6 @@ package body Security.Policies.Urls is
    --  ------------------------------
    overriding
    procedure Finalize (Manager : in out URL_Policy) is
-      use Ada.Strings.Unbounded;
-      use Security.Controllers;
 
       procedure Free is
         new Ada.Unchecked_Deallocation (Rules_Ref.Atomic_Ref,
@@ -272,6 +267,21 @@ package body Security.Policies.Urls is
    begin
       null;
    end Finish_Config;
+
+   --  ------------------------------
+   --  Get the URL policy associated with the given policy manager.
+   --  Returns the URL policy instance or null if it was not registered in the policy manager.
+   --  ------------------------------
+   function Get_URL_Policy (Manager : in Security.Policies.Policy_Manager'Class)
+                            return URL_Policy_Access is
+      Policy : constant Security.Policies.Policy_Access := Manager.Get_Policy (NAME);
+   begin
+      if Policy = null or else not (Policy.all in URL_Policy'Class) then
+         return null;
+      else
+         return URL_Policy'Class (Policy.all)'Access;
+      end if;
+   end Get_URL_Policy;
 
 begin
    Policy_Mapping.Add_Mapping ("url-policy", FIELD_POLICY);
