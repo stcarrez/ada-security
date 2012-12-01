@@ -319,7 +319,7 @@ package body Security.Policies.Tests is
                            URI : in String) is
       M           : aliased Security.Policies.Policy_Manager (2);
       User        : aliased Test_Principal;
-      Admin_Perm  : Roles.Role_Type;
+      Admin       : Roles.Role_Type;
       Context     : aliased Security.Contexts.Security_Context;
       P           : Security.Policies.Policy_Access;
       R           : Security.Policies.Roles.Role_Policy_Access;
@@ -331,7 +331,7 @@ package body Security.Policies.Tests is
                            Principal => User'Unchecked_Access);
 
       R := Security.Policies.Roles.Get_Role_Policy (M);
-      Admin_Perm := R.Find_Role (Role);
+      Admin := R.Find_Role (Role);
 
       declare
          P   : constant URLs.URI_Permission (URI'Length)
@@ -343,7 +343,7 @@ package body Security.Policies.Tests is
            "Permission was granted for user without role.  URI=" & URI);
 
          --  Set the role.
-         User.Roles (Admin_Perm) := True;
+         User.Roles (Admin) := True;
          T.Assert (U.Has_Permission (Context    => Context'Unchecked_Access,
                                      Permission => P),
            "Permission was not granted for user with role.  URI=" & URI);
