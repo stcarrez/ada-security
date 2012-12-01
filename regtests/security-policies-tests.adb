@@ -37,6 +37,8 @@ package body Security.Policies.Tests is
                        Test_Create_Role'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Has_Permission",
                        Test_Has_Permission'Access);
+      Caller.Add_Test (Suite, "Test Security.Permissions.Read_Policy (empty)",
+                       Test_Read_Empty_Policy'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Read_Policy",
                        Test_Read_Policy'Access);
       Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles",
@@ -156,27 +158,74 @@ package body Security.Policies.Tests is
       null;
    end Test_Has_Permission;
 
+   procedure Configure_Policy (Manager : in out Security.Policies.Policy_Manager;
+                               Name    : in String) is
+      Dir         : constant String := "regtests/files/permissions/";
+      Path        : constant String := Util.Tests.Get_Path (Dir);
+      R           : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
+      U           : Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
+   begin
+      Manager.Add_Policy (R.all'Access);
+      Manager.Add_Policy (U.all'Access);
+      Manager.Read_Policy (Util.Files.Compose (Path, Name));
+   end Configure_Policy;
+
+   --  ------------------------------
+   --  Test reading an empty policy file
+   --  ------------------------------
+   procedure Test_Read_Empty_Policy (T : in out Test) is
+      M           : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
+      User        : aliased Test_Principal;
+      Context     : aliased Security.Contexts.Security_Context;
+      P           : Security.Policies.Policy_Access;
+      R           : Security.Policies.Roles.Role_Policy_Access;
+   begin
+      Configure_Policy (M, "empty.xml");
+      Context.Set_Context (Manager   => M'Unchecked_Access,
+                           Principal => User'Unchecked_Access);
+
+      P := M.Get_Policy (Security.Policies.Roles.NAME);
+      T.Assert (P /= null, "Role policy not found");
+      T.Assert (P.all in Roles.Role_Policy'Class, "Invalid role policy");
+
+      R := Roles.Role_Policy'Class (P.all)'Access;
+      declare
+         Admin : Policies.Roles.Role_Type;
+      begin
+         Admin := R.Find_Role ("admin");
+         T.Fail ("'admin' role was returned");
+
+      exception
+         when Security.Policies.Roles.Invalid_Name =>
+            null;
+      end;
+
+      T.Assert (not Contexts.Has_Permission (Permissions.Tests.P_Admin.Permission),
+                "Has_Permission (admin) failed for empty policy");
+
+      T.Assert (not Contexts.Has_Permission (Permissions.Tests.P_Create.Permission),
+                "Has_Permission (create) failed for empty policy");
+
+      T.Assert (not Contexts.Has_Permission (Permissions.Tests.P_Update.Permission),
+                "Has_Permission (update) failed for empty policy");
+
+      T.Assert (not Contexts.Has_Permission (Permissions.Tests.P_Delete.Permission),
+                "Has_Permission (delete) failed for empty policy");
+
+   end Test_Read_Empty_Policy;
+
    --  ------------------------------
    --  Test reading policy files
    --  ------------------------------
    procedure Test_Read_Policy (T : in out Test) is
       M           : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
-      Dir         : constant String := "regtests/files/permissions/";
-      Path        : constant String := Util.Tests.Get_Path (Dir);
       User        : aliased Test_Principal;
       Admin_Perm  : Policies.Roles.Role_Type;
       Manager_Perm : Policies.Roles.Role_Type;
       Context     : aliased Security.Contexts.Security_Context;
       R            : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
    begin
-      M.Add_Policy (R.all'Access);
-      M.Read_Policy (Util.Files.Compose (Path, "empty.xml"));
-
-      R.Add_Role_Type (Name   => "admin",
-                       Result => Admin_Perm);
-      R.Add_Role_Type (Name   => "manager",
-                       Result => Manager_Perm);
-      M.Read_Policy (Util.Files.Compose (Path, "simple-policy.xml"));
+      Configure_Policy (M, "simple-policy.xml");
 
       User.Roles (Admin_Perm) := True;
 
@@ -228,21 +277,24 @@ package body Security.Policies.Tests is
                            Role  : in String;
                            URI : in String) is
       M           : aliased Security.Policies.Policy_Manager (2);
-      Dir         : constant String := "regtests/files/permissions/";
-      Path        : constant String := Util.Tests.Get_Path (Dir);
       User        : aliased Test_Principal;
       Admin_Perm  : Roles.Role_Type;
       Context     : aliased Security.Contexts.Security_Context;
-      R           : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
+      P           : Security.Policies.Policy_Access;
+      R           : Security.Policies.Roles.Role_Policy_Access;
       U           : Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
    begin
-      M.Add_Policy (R.all'Access);
-      M.Add_Policy (U.all'Access);
-      M.Read_Policy (Util.Files.Compose (Path, File));
+      Configure_Policy (M, File);
 
-      Admin_Perm := R.Find_Role (Role);
       Context.Set_Context (Manager   => M'Unchecked_Access,
                            Principal => User'Unchecked_Access);
+
+      P := M.Get_Policy (Security.Policies.Roles.NAME);
+      T.Assert (P /= null, "Role policy not found");
+      T.Assert (P.all in Roles.Role_Policy'Class, "Invalid role policy");
+
+      R := Roles.Role_Policy'Class (P.all)'Access;
+      Admin_Perm := R.Find_Role (Role);
 
       declare
          P   : constant URLs.URI_Permission (URI'Length)
