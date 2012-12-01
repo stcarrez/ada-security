@@ -28,41 +28,50 @@ with Ada.Finalization;
 --
 --  There are basically two steps that an application must implement:
 --
---    * Discovery to resolve and use the OpenID provider and redirect the user to the
+--    * <b>Discovery</b>: to resolve and use the OpenID provider and redirect the user to the
 --      provider authentication form.
---    * Verify to decode the authentication and check its result.
+--    * <b>Verify</b>: to decode the authentication and check its result.
 --
 --  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
 --
 --  The authentication process is the following:
 --
---    * The <b>Initialize</b> procedure is called to configure the OpenID realm and set the
---      OpenID return callback CB.
---    * The <b>Discover</b> procedure is called to retrieve from the OpenID provider the XRDS
---      stream and identify the provider.  An <b>End_Point</b> is returned.
---    * The <b>Associate</b> procedure is called to make the association with the <b>End_Point</b>.
---      The <b>Association</b> record holds session, and authentication.
---    * The <b>Get_Authentication_URL</b> builds the provider OpenID authentication
---      URL for the association.
 --    * The application should redirect the user to the authentication URL.
 --    * The OpenID provider authenticate the user and redirects the user to the callback CB.
 --    * The association is decoded from the callback parameter.
 --    * The <b>Verify</b> procedure is called with the association to check the result and
 --      obtain the authentication results.
 --
+--  === Initialization ===
+--  The initialization process must be done before each two steps (discovery and verify).
+--  The OpenID manager must be declared and configured.
 --
---  == Discovery: creating the authentication URL ==
+--    Mgr   : Openid.Manager;
+--
+--  For the configuration, the <b>Initialize</b> procedure is called to configure
+--  the OpenID realm and set the OpenID return callback CB.  The return callback
+--  must be a valid URL that is based on the realm.  Example:
+--
+--    Mgr.Initialize (Name      => "http://app.site.com/auth",
+--                    Return_To => "http://app.site.com/auth/verify");
+--
+--  After this initialization, the OpenID manager can be used in the authentication process.
+--
+--  === Discovery: creating the authentication URL ===
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenId manager, discover the OpenID provider,
 --  do the association and get an <b>End_Point</b>.
 --
---    Mgr   : Openid.Manager;
 --    OP    : Openid.End_Point;
 --    Assoc : constant Association_Access := new Association;
 --
---  The
+--  The following steps are performed:
 --
---    Server.Initialize (Mgr);
+--    * The <b>Discover</b> procedure is called to retrieve from the OpenID provider the XRDS
+--      stream and identify the provider.  An <b>End_Point</b> is returned in <tt>OP</tt>.
+--    * The <b>Associate</b> procedure is called to make the association with the <b>End_Point</b>.
+--      The <b>Association</b> record holds session, and authentication.
+--
 --    Mgr.Discover (Provider, OP);  --  Yadis discovery (get the XRDS file).
 --    Mgr.Associate (OP, Assoc.all);--  Associate and get an end-point with a key.
 --
@@ -71,13 +80,12 @@ with Ada.Finalization;
 --
 --    Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
 --
---  == Verify: acknowledge the authentication in the callback URL ==
+--  === Verify: acknowledge the authentication in the callback URL ===
 --  The second step is done when the user has finished the authentication successfully or not.
 --  For this step, the application must get back the association that was saved in the session.
 --  It must also prepare a parameters object that allows the OpenID framework to get the
 --  URI parameters from the return callback.
 --
---    Mgr     : Openid.Manager;
 --    Assoc   : Association_Access := ...;  --  Get the association saved in the session.
 --    Auth    : Openid.Authentication;
 --    Params  : Auth_Params;
@@ -86,7 +94,6 @@ with Ada.Finalization;
 --  the association, parameters and the authentication result.  The <b>Get_Status</b> function
 --  must be used to check that the authentication succeeded.
 --
---    Server.Initialize (Mgr);
 --    Mgr.Verify (Assoc.all, Params, Auth);
 --    if Openid.Get_Status (Auth) /= Openid.AUTHENTICATED then ...  -- Failure.
 --
