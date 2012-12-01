@@ -323,7 +323,7 @@ package body Security.Policies.Tests is
       Context     : aliased Security.Contexts.Security_Context;
       P           : Security.Policies.Policy_Access;
       R           : Security.Policies.Roles.Role_Policy_Access;
-      U           : Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
+      U           : Security.Policies.URLs.URL_Policy_Access;
    begin
       Configure_Policy (M, File);
 
@@ -331,6 +331,7 @@ package body Security.Policies.Tests is
                            Principal => User'Unchecked_Access);
 
       R := Security.Policies.Roles.Get_Role_Policy (M);
+      U := Security.Policies.URLs.Get_URL_Policy (M);
       Admin := R.Find_Role (Role);
 
       declare
