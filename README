@@ -5,6 +5,7 @@ This includes:
 
  o An OpenID client authentication
  o An OAuth 2.0 client authentication
+ o A policy based security framework to protect the resources
 
 To use Ada Security library, configure as follows:
 
