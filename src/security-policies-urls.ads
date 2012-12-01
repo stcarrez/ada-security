@@ -129,6 +129,11 @@ package Security.Policies.Urls is
    procedure Finish_Config (Into    : in out URL_Policy;
                             Reader  : in out Util.Serialize.IO.XML.Parser);
 
+   --  Get the URL policy associated with the given policy manager.
+   --  Returns the URL policy instance or null if it was not registered in the policy manager.
+   function Get_URL_Policy (Manager : in Security.Policies.Policy_Manager'Class)
+                            return URL_Policy_Access;
+
 private
 
    use Util.Strings;
