@@ -25,11 +25,6 @@ with Security.Policies.Urls;
 
 package Security.Policies.Tests is
 
-   package P_Admin is new Permissions.Definition ("admin");
-   package P_Create is new Permissions.Definition ("create");
-   package P_Update is new Permissions.Definition ("update");
-   package P_Delete is new Permissions.Definition ("delete");
-
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
    type Test is new Util.Tests.Test with null record;
