@@ -130,6 +130,15 @@ package Security.Policies is
    function Create_Policy_Contexts (Manager : in Policy_Manager)
                                     return Policy_Context_Array_Access;
 
+   --  Prepare the XML parser to read the policy configuration.
+   procedure Prepare_Config (Manager : in out Policy_Manager;
+                             Reader  : in out Util.Serialize.IO.XML.Parser);
+
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   procedure Finish_Config (Manager : in out Policy_Manager;
+                            Reader  : in out Util.Serialize.IO.XML.Parser);
+
    --  Read the policy file
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String);
