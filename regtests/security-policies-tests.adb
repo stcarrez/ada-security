@@ -23,6 +23,7 @@ with Util.Measures;
 
 with Security.Contexts;
 with Security.Policies.Roles;
+with Security.Permissions.Tests;
 package body Security.Policies.Tests is
 
    use Util.Tests;
@@ -181,37 +182,40 @@ package body Security.Policies.Tests is
 
       Context.Set_Context (Manager   => M'Unchecked_Access,
                            Principal => User'Unchecked_Access);
---        declare
---           S : Util.Measures.Stamp;
---        begin
---           for I in 1 .. 1_000 loop
---              declare
---                 URI : constant String := "/admin/home/" & Util.Strings.Image (I) & "/l.html";
---                 P   : constant URI_Permission (URI'Length)
---                   := URI_Permission '(Len => URI'Length, URI => URI);
---              begin
---                 T.Assert (M.Has_Permission (Context    => Context'Unchecked_Access,
---                                             Permission => P), "Permission not granted");
---              end;
---           end loop;
---           Util.Measures.Report (S, "Has_Permission (1000 calls, cache miss)");
---        end;
---
---        declare
---           S : Util.Measures.Stamp;
---        begin
---           for I in 1 .. 1_000 loop
---              declare
---                 URI : constant String := "/admin/home/list.html";
---                 P   : constant URI_Permission (URI'Length)
---                   := URI_Permission '(Len => URI'Length, URI => URI);
---              begin
---                 T.Assert (M.Has_Permission (Context    => Context'Unchecked_Access,
---                                             Permission => P), "Permission not granted");
---              end;
---           end loop;
---           Util.Measures.Report (S, "Has_Permission (1000 calls, cache hit)");
---        end;
+      declare
+         use Security.Permissions.Tests;
+
+         S : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 1_000 loop
+            declare
+               URI : constant String := "/admin/home/" & Util.Strings.Image (I) & "/l.html";
+               P   : constant URLs.URI_Permission (URI'Length)
+                 := URLs.URI_Permission '(Len => URI'Length, URI => URI);
+            begin
+               T.Assert (Contexts.Has_Permission (Permission => P_Admin.Permission),
+                         "Permission not granted");
+            end;
+         end loop;
+         Util.Measures.Report (S, "Has_Permission (1000 calls, cache miss)");
+      end;
+      declare
+         use Security.Permissions.Tests;
+
+         S : Util.Measures.Stamp;
+      begin
+         for I in 1 .. 1_000 loop
+            declare
+               URI : constant String := "/admin/home/list.html";
+               P   : constant URLs.URI_Permission (URI'Length)
+                 := URLs.URI_Permission '(Len => URI'Length, URI => URI);
+            begin
+               T.Assert (Contexts.Has_Permission (Permission => P_Admin.Permission),
+                         "Permission not granted");
+            end;
+         end loop;
+         Util.Measures.Report (S, "Has_Permission (1000 calls, cache hit)");
+      end;
 
    end Test_Read_Policy;
 
