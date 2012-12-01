@@ -42,17 +42,20 @@ with Ada.Strings.Unbounded;
 --  roles.  When the role based policy is registered in the policy manager, the following
 --  XML configuration is used:
 --
---    <security-role>
---      <role-name>admin</role-name>
---    </security-role>
---    <security-role>
---      <role-name>manager</role-name>
---    </security-role>
---    <role-permission>
---      <name>create-workspace</name>
---      <role>admin</role>
---      <role>manager</role>
---    </role-permission>
+--    <policy-rules>
+--      <security-role>
+--        <role-name>admin</role-name>
+--      </security-role>
+--      <security-role>
+--        <role-name>manager</role-name>
+--      </security-role>
+--      <role-permission>
+--        <name>create-workspace</name>
+--        <role>admin</role>
+--        <role>manager</role>
+--      </role-permission>
+--      ...
+--    </policy-rules>
 --
 --  This definition declares two roles: <tt>admin</tt> and <tt>manager</tt>
 --  It defines a permission <b>create-workspace</b> that will be granted if the
