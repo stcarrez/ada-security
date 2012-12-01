@@ -38,6 +38,9 @@ package Security.Policies.Tests is
    --  Test Set_Roles on an invalid role name
    procedure Test_Set_Invalid_Roles (T : in out Test);
 
+   --  Test the Get_Policy, Get_Role_Policy and Add_Policy operations.
+   procedure Test_Get_Role_Policy (T : in out Test);
+
    --  Test Has_Permission
    procedure Test_Has_Permission (T : in out Test);
 
