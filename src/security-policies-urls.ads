@@ -77,12 +77,13 @@ package Security.Policies.Urls is
 
    NAME : constant String := "URL-Policy";
 
+   package P_URL is new Security.Permissions.Definition ("url");
+
    --  ------------------------------
    --  URI Permission
    --  ------------------------------
    --  Represents a permission to access a given URI.
-   type URI_Permission (Id  : Permissions.Permission_Index;
-                        Len : Natural) is new Permissions.Permission (Id) with record
+   type URI_Permission (Len : Natural) is new Permissions.Permission (P_URL.Permission) with record
       URI : String (1 .. Len);
    end record;
 
