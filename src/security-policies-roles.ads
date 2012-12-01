@@ -176,15 +176,11 @@ private
      array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
 
    type Role_Policy is new Policy with record
-      Names        : Role_Name_Array;
-      Next_Role    : Role_Type := Role_Type'First;
-   end record;
-
-   type Controller_Config is record
-      Name    : Util.Beans.Objects.Object;
-      Roles   : Role_Type_Array (1 .. Integer (Role_Type'Last));
-      Count   : Natural := 0;
-      Manager : Role_Policy_Access;
+      Names     : Role_Name_Array;
+      Next_Role : Role_Type := Role_Type'First;
+      Name      : Util.Beans.Objects.Object;
+      Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last));
+      Count     : Natural := 0;
    end record;
 
 end Security.Policies.Roles;
