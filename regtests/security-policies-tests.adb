@@ -39,7 +39,15 @@ package body Security.Policies.Tests is
                        Test_Has_Permission'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Read_Policy (empty)",
                        Test_Read_Empty_Policy'Access);
-      Caller.Add_Test (Suite, "Test Security.Permissions.Read_Policy",
+
+      Caller.Add_Test (Suite, "Test Security.Policies.Add_Policy",
+                       Test_Get_Role_Policy'Access);
+      Caller.Add_Test (Suite, "Test Security.Policies.Get_Policy",
+                       Test_Get_Role_Policy'Access);
+      Caller.Add_Test (Suite, "Test Security.Policies.Roles.Get_Role_Policy",
+                       Test_Get_Role_Policy'Access);
+
+      Caller.Add_Test (Suite, "Test Security.Policies.Read_Policy",
                        Test_Read_Policy'Access);
       Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles",
                        Test_Set_Roles'Access);
@@ -171,6 +179,33 @@ package body Security.Policies.Tests is
    end Configure_Policy;
 
    --  ------------------------------
+   --  Test the Get_Policy, Get_Role_Policy and Add_Policy operations.
+   --  ------------------------------
+   procedure Test_Get_Role_Policy (T : in out Test) is
+      use type Roles.Role_Policy_Access;
+
+      M           : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
+      P           : Security.Policies.Policy_Access;
+      R           : Security.Policies.Roles.Role_Policy_Access;
+   begin
+      P := M.Get_Policy (Security.Policies.Roles.NAME);
+      T.Assert (P = null, "Get_Policy succeeded");
+
+      R := Security.Policies.Roles.Get_Role_Policy (M);
+      T.Assert (R = null, "Get_Role_Policy succeeded");
+
+      R := new Roles.Role_Policy;
+      M.Add_Policy (R.all'Access);
+
+      P := M.Get_Policy (Security.Policies.Roles.NAME);
+      T.Assert (P /= null, "Role policy not found");
+      T.Assert (P.all in Roles.Role_Policy'Class, "Invalid role policy");
+
+      R := Security.Policies.Roles.Get_Role_Policy (M);
+      T.Assert (R /= null, "Get_Role_Policy should not return null");
+   end Test_Get_Role_Policy;
+
+   --  ------------------------------
    --  Test reading an empty policy file
    --  ------------------------------
    procedure Test_Read_Empty_Policy (T : in out Test) is
@@ -184,11 +219,7 @@ package body Security.Policies.Tests is
       Context.Set_Context (Manager   => M'Unchecked_Access,
                            Principal => User'Unchecked_Access);
 
-      P := M.Get_Policy (Security.Policies.Roles.NAME);
-      T.Assert (P /= null, "Role policy not found");
-      T.Assert (P.all in Roles.Role_Policy'Class, "Invalid role policy");
-
-      R := Roles.Role_Policy'Class (P.all)'Access;
+      R := Security.Policies.Roles.Get_Role_Policy (M);
       declare
          Admin : Policies.Roles.Role_Type;
       begin
@@ -218,19 +249,19 @@ package body Security.Policies.Tests is
    --  Test reading policy files
    --  ------------------------------
    procedure Test_Read_Policy (T : in out Test) is
-      M           : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
-      User        : aliased Test_Principal;
-      Admin_Perm  : Policies.Roles.Role_Type;
+      M            : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
+      User         : aliased Test_Principal;
+      Admin_Perm   : Policies.Roles.Role_Type;
       Manager_Perm : Policies.Roles.Role_Type;
-      Context     : aliased Security.Contexts.Security_Context;
+      Context      : aliased Security.Contexts.Security_Context;
       R            : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
    begin
       Configure_Policy (M, "simple-policy.xml");
+      Context.Set_Context (Manager   => M'Unchecked_Access,
+                           Principal => User'Unchecked_Access);
 
       User.Roles (Admin_Perm) := True;
 
-      Context.Set_Context (Manager   => M'Unchecked_Access,
-                           Principal => User'Unchecked_Access);
       declare
          use Security.Permissions.Tests;
 
@@ -289,11 +320,7 @@ package body Security.Policies.Tests is
       Context.Set_Context (Manager   => M'Unchecked_Access,
                            Principal => User'Unchecked_Access);
 
-      P := M.Get_Policy (Security.Policies.Roles.NAME);
-      T.Assert (P /= null, "Role policy not found");
-      T.Assert (P.all in Roles.Role_Policy'Class, "Invalid role policy");
-
-      R := Roles.Role_Policy'Class (P.all)'Access;
+      R := Security.Policies.Roles.Get_Role_Policy (M);
       Admin_Perm := R.Find_Role (Role);
 
       declare
