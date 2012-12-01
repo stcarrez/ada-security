@@ -149,6 +149,10 @@ package Security.Contexts is
    --  returned in <b>Result</b>.
    function Has_Permission (Permission : in String) return Boolean;
 
+   --  Check if the permission identified by <b>Permission</b> is allowed according to
+   --  the current security context.
+   function Has_Permission (Permission : in Security.Permissions.Permission'Class) return Boolean;
+
 private
 
 --     type Permission_Cache is record
