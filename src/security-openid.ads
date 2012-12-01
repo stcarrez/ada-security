@@ -49,7 +49,7 @@ with Ada.Finalization;
 --    Mgr   : Openid.Manager;
 --
 --  For the configuration, the <b>Initialize</b> procedure is called to configure
---  the OpenID realm and set the OpenID return callback CB.  The return callback
+--  the OpenID realm and set the OpenID return callback URL.  The return callback
 --  must be a valid URL that is based on the realm.  Example:
 --
 --    Mgr.Initialize (Name      => "http://app.site.com/auth",
@@ -60,8 +60,10 @@ with Ada.Finalization;
 --  === Discovery: creating the authentication URL ===
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenId manager, discover the OpenID provider,
---  do the association and get an <b>End_Point</b>.
+--  do the association and get an <b>End_Point</b>.  The OpenID provider is specified as an
+--  URL, below is an example for Google OpenID:
 --
+--    Provider : constant String := "https://www.google.com/accounts/o8/id";
 --    OP    : Openid.End_Point;
 --    Assoc : constant Association_Access := new Association;
 --
