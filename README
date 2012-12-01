@@ -12,6 +12,14 @@ To use Ada Security library, configure as follows:
    ./configure
    make
 
+The unit tests are built and executed with:
+
+   make test
+
+For the installation, use the following command:
+
+   make install
+
 Documentation
 
    The Ada Security sources as well as a wiki documentation is provided on:
