@@ -54,13 +54,12 @@ package body Security.Policies.Tests is
    end Add_Tests;
 
    --  ------------------------------
-   --  Returns true if the given permission is stored in the user principal.
+   --  Get the roles assigned to the user.
    --  ------------------------------
-   function Has_Role (User : in Test_Principal;
-                      Role : in Security.Policies.Roles.Role_Type) return Boolean is
+   function Get_Roles (User : in Test_Principal) return Roles.Role_Map is
    begin
-      return User.Roles (Role);
-   end Has_Role;
+      return User.Roles;
+   end Get_Roles;
 
    --  ------------------------------
    --  Get the principal name.
@@ -224,35 +223,38 @@ package body Security.Policies.Tests is
                            File  : in String;
                            Role  : in String;
                            URI : in String) is
-      M           : aliased Security.Policies.Policy_Manager (1);
+      M           : aliased Security.Policies.Policy_Manager (2);
       Dir         : constant String := "regtests/files/permissions/";
       Path        : constant String := Util.Tests.Get_Path (Dir);
       User        : aliased Test_Principal;
       Admin_Perm  : Roles.Role_Type;
       Context     : aliased Security.Contexts.Security_Context;
+      R           : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
+      U           : Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
    begin
+      M.Add_Policy (R.all'Access);
+      M.Add_Policy (U.all'Access);
       M.Read_Policy (Util.Files.Compose (Path, File));
---
---        Admin_Perm := M.Find_Role (Role);
---
---        Context.Set_Context (Manager   => M'Unchecked_Access,
---                             Principal => User'Unchecked_Access);
---
---        declare
---           P   : constant URI_Permission (URI'Length)
---             := URI_Permission '(Len => URI'Length, URI => URI);
---        begin
---           --  A user without the role should not have the permission.
---           T.Assert (not M.Has_Permission (Context    => Context'Unchecked_Access,
---                                           Permission => P),
---             "Permission was granted for user without role.  URI=" & URI);
---
---           --  Set the role.
---           User.Roles (Admin_Perm) := True;
---           T.Assert (M.Has_Permission (Context    => Context'Unchecked_Access,
---                                       Permission => P),
---             "Permission was not granted for user with role.  URI=" & URI);
---        end;
+
+      Admin_Perm := R.Find_Role (Role);
+      Context.Set_Context (Manager   => M'Unchecked_Access,
+                           Principal => User'Unchecked_Access);
+
+      declare
+         P   : constant URLs.URI_Permission (URI'Length)
+           := URLs.URI_Permission '(Len => URI'Length, URI => URI);
+      begin
+         --  A user without the role should not have the permission.
+         T.Assert (not U.Has_Permission (Context    => Context'Unchecked_Access,
+                                         Permission => P),
+           "Permission was granted for user without role.  URI=" & URI);
+
+         --  Set the role.
+         User.Roles (Admin_Perm) := True;
+         T.Assert (U.Has_Permission (Context    => Context'Unchecked_Access,
+                                     Permission => P),
+           "Permission was not granted for user with role.  URI=" & URI);
+      end;
    end Check_Policy;
 
    --  ------------------------------
