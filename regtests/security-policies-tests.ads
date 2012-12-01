@@ -19,9 +19,16 @@
 with Util.Tests;
 with Util.Strings;
 
+with Security.Permissions;
 with Security.Policies.Roles;
+with Security.Policies.Urls;
 
 package Security.Policies.Tests is
+
+   package P_Admin is new Permissions.Definition ("admin");
+   package P_Create is new Permissions.Definition ("create");
+   package P_Update is new Permissions.Definition ("update");
+   package P_Delete is new Permissions.Definition ("delete");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite);
 
@@ -52,14 +59,14 @@ package Security.Policies.Tests is
                            Role  : in String;
                            URI   : in String);
 
-   type Test_Principal is new Principal with record
+   type Test_Principal is new Principal and Roles.Role_Principal_Context with record
       Name  : Util.Strings.String_Ref;
       Roles : Security.Policies.Roles.Role_Map := (others => False);
    end record;
 
-   --  Returns true if the given permission is stored in the user principal.
-   function Has_Role (User : in Test_Principal;
-                      Role : in Security.Policies.Roles.Role_Type) return Boolean;
+   --  Get the roles assigned to the user.
+   overriding
+   function Get_Roles (User : in Test_Principal) return Roles.Role_Map;
 
    --  Get the principal name.
    function Get_Name (From : in Test_Principal) return String;
