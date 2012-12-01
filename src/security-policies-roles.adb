@@ -174,9 +174,7 @@ package body Security.Policies.Roles is
 
    type Config_Fields is (FIELD_NAME, FIELD_ROLE, FIELD_ROLE_PERMISSION, FIELD_ROLE_NAME);
 
-   type Controller_Config_Access is access all Controller_Config;
-
-   procedure Set_Member (Into  : in out Controller_Config;
+   procedure Set_Member (Into  : in out Role_Policy'Class;
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object);
 
@@ -185,7 +183,7 @@ package body Security.Policies.Roles is
    --  XML entities are found.  Create the new permission when the complete permission definition
    --  has been parsed and save the permission in the security manager.
    --  ------------------------------
-   procedure Set_Member (Into  : in out Controller_Config;
+   procedure Set_Member (Into  : in out Role_Policy'Class;
                          Field : in Config_Fields;
                          Value : in Util.Beans.Objects.Object) is
       use Security.Controllers.Roles;
@@ -198,7 +196,7 @@ package body Security.Policies.Roles is
             declare
                Role : constant String := Util.Beans.Objects.To_String (Value);
             begin
-               Into.Roles (Into.Count + 1) := Into.Manager.Find_Role (Role);
+               Into.Roles (Into.Count + 1) := Into.Find_Role (Role);
                Into.Count := Into.Count + 1;
 
             exception
@@ -225,14 +223,14 @@ package body Security.Policies.Roles is
                Name : constant String := Util.Beans.Objects.To_String (Value);
                Role : Role_Type;
             begin
-               Into.Manager.Add_Role_Type (Name, Role);
+               Into.Add_Role_Type (Name, Role);
             end;
       end case;
    end Set_Member;
 
    package Config_Mapper is
-     new Util.Serialize.Mappers.Record_Mapper (Element_Type        => Controller_Config,
-                                               Element_Type_Access => Controller_Config_Access,
+     new Util.Serialize.Mappers.Record_Mapper (Element_Type        => Role_Policy'Class,
+                                               Element_Type_Access => Role_Policy_Access,
                                                Fields              => Config_Fields,
                                                Set_Member          => Set_Member);
 
@@ -243,12 +241,10 @@ package body Security.Policies.Roles is
    --  ------------------------------
    procedure Prepare_Config (Policy : in out Role_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
-      Config : Controller_Config_Access := new Controller_Config;
    begin
       Reader.Add_Mapping ("policy-rules", Mapper'Access);
       Reader.Add_Mapping ("module", Mapper'Access);
-      Config.Manager := Policy'Unchecked_Access;
-      Config_Mapper.Set_Context (Reader, Config);
+      Config_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
    end Prepare_Config;
 
    --  ------------------------------
