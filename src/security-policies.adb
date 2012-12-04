@@ -204,9 +204,12 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
+      Manager.Prepare_Config (Reader);
+
       --  Read the configuration file.
       Reader.Parse (File);
 
+      Manager.Finish_Config (Reader);
    end Read_Policy;
 
    --  ------------------------------
