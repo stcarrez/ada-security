@@ -25,6 +25,8 @@ with Util.Serialize.IO.XML;
 
 with GNAT.Regexp;
 
+with Security.Contexts;
+
 --  == URL Security Policy ==
 --  The <tt>Security.Policies.Urls</tt> implements a security policy intended to be used
 --  in web servers.  It allows to protect an URL by defining permissions that must be granted
@@ -106,7 +108,7 @@ package Security.Policies.URLs is
 
    --  Returns True if the user has the permission to access the given URI permission.
    function Has_Permission (Manager    : in URL_Policy;
-                            Context    : in Security_Context_Access;
+                            Context    : in Contexts.Security_Context'Class;
                             Permission : in URL_Permission'Class) return Boolean;
 
    --  Grant the permission to access to the given <b>URI</b> to users having the <b>To</b>
