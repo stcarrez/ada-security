@@ -23,7 +23,7 @@ with Util.Beans.Objects.Vectors;
 with Util.Serialize.Mappers;
 with Util.Serialize.Mappers.Record_Mapper;
 
-with Security.Contexts;
+with Security.Controllers.URLs;
 
 package body Security.Policies.URLs is
 
@@ -41,7 +41,7 @@ package body Security.Policies.URLs is
    --  Returns True if the user has the permission to access the given URI permission.
    --  ------------------------------
    function Has_Permission (Manager    : in URL_Policy;
-                            Context    : in Security_Context_Access;
+                            Context    : in Contexts.Security_Context'Class;
                             Permission : in URL_Permission'Class) return Boolean is
       Name  : constant String_Ref := To_String_Ref (Permission.URL);
       Ref   : constant Rules_Ref.Ref := Manager.Cache.Get;
@@ -239,10 +239,15 @@ package body Security.Policies.URLs is
    overriding
    procedure Prepare_Config (Policy : in out URL_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
+      Perm : constant Security.Controllers.URLs.URL_Controller_Access
+        := new Security.Controllers.URLs.URL_Controller;
    begin
+      Perm.Manager := Policy'Unchecked_Access;
       Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
       Reader.Add_Mapping ("module", Policy_Mapping'Access);
-      Policy_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
+      Policy_Mapper.Set_Context (Reader, Perm.Manager);
+      Policy.Manager.Add_Permission (Name       => "url",
+                                     Permission => Perm.all'Access);
    end Prepare_Config;
 
    --  ------------------------------
