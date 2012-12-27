@@ -331,13 +331,13 @@ package body Security.Policies.Tests is
            := URLs.URL_Permission '(Len => URL'Length, URL => URL);
       begin
          --  A user without the role should not have the permission.
-         T.Assert (not U.Has_Permission (Context    => Context'Unchecked_Access,
+         T.Assert (not U.Has_Permission (Context    => Context,
                                          Permission => P),
            "Permission was granted for user without role.  URL=" & URL);
 
          --  Set the role.
          User.Roles (Admin) := True;
-         T.Assert (U.Has_Permission (Context    => Context'Unchecked_Access,
+         T.Assert (U.Has_Permission (Context    => Context,
                                      Permission => P),
            "Permission was not granted for user with role.  URL=" & URL);
       end;
