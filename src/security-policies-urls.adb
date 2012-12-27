@@ -25,11 +25,7 @@ with Util.Serialize.Mappers.Record_Mapper;
 
 with Security.Contexts;
 
-package body Security.Policies.Urls is
-
-   --  ------------------------------
-   --  URL policy
-   --  ------------------------------
+package body Security.Policies.URLs is
 
    --  ------------------------------
    --  Get the policy name.
@@ -41,11 +37,13 @@ package body Security.Policies.Urls is
       return NAME;
    end Get_Name;
 
+   --  ------------------------------
    --  Returns True if the user has the permission to access the given URI permission.
+   --  ------------------------------
    function Has_Permission (Manager    : in URL_Policy;
                             Context    : in Security_Context_Access;
-                            Permission : in URI_Permission'Class) return Boolean is
-      Name  : constant String_Ref := To_String_Ref (Permission.URI);
+                            Permission : in URL_Permission'Class) return Boolean is
+      Name  : constant String_Ref := To_String_Ref (Permission.URL);
       Ref   : constant Rules_Ref.Ref := Manager.Cache.Get;
       Rules : constant Rules_Access := Ref.Value;
       Pos   : constant Rules_Maps.Cursor := Rules.Map.Find (Name);
@@ -58,7 +56,7 @@ package body Security.Policies.Urls is
          declare
             New_Ref : constant Rules_Ref.Ref := Rules_Ref.Create;
          begin
-            Rule := Manager.Find_Access_Rule (Permission.URI);
+            Rule := Manager.Find_Access_Rule (Permission.URL);
             New_Ref.Value.all.Map := Rules.Map;
             New_Ref.Value.all.Map.Insert (Name, Rule);
             Manager.Cache.Set (New_Ref);
@@ -96,18 +94,11 @@ package body Security.Policies.Urls is
    --  ------------------------------
    --  Policy Configuration
    --  ------------------------------
-   type Policy_Config is record
-      Id          : Natural := 0;
-      Permissions : Util.Beans.Objects.Vectors.Vector;
-      Patterns    : Util.Beans.Objects.Vectors.Vector;
-      Manager     : URL_Policy_Access;
-   end record;
-   type Policy_Config_Access is access all Policy_Config;
 
-   --  Setup the XML parser to read the <b>policy</b> description.  For example:
-
+   --  ------------------------------
    --  Find the access rule of the policy that matches the given URI.
    --  Returns the No_Rule value (disable access) if no rule is found.
+   --  ------------------------------
    function Find_Access_Rule (Manager : in URL_Policy;
                               URI     : in String) return Access_Rule_Ref is
 
@@ -274,4 +265,4 @@ begin
    Policy_Mapping.Add_Mapping ("url-policy/@id", FIELD_ID);
    Policy_Mapping.Add_Mapping ("url-policy/permission", FIELD_PERMISSION);
    Policy_Mapping.Add_Mapping ("url-policy/url-pattern", FIELD_URL_PATTERN);
-end Security.Policies.Urls;
+end Security.Policies.URLs;
