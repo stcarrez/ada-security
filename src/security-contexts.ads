@@ -79,25 +79,22 @@ package Security.Contexts is
                         Name    : in String) return Security.Policies.Policy_Access;
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in Security.Permissions.Permission_Index;
-                             Result     : out Boolean);
+   --  the current security context.
+   --  Returns True if the permission is granted.
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in Security.Permissions.Permission_Index) return Boolean;
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in String;
-                             Result     : out Boolean);
+   --  the current security context.
+   --  Returns True if the permission is granted.
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in String) return Boolean;
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in Security.Permissions.Permission'Class;
-                             Result     : out Boolean);
+   --  the current security context.
+   --  Returns True if the permission is granted.
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in Security.Permissions.Permission'Class) return Boolean;
 
    --  Initializes the service context.  By creating the <b>Security_Context</b> variable,
    --  the instance will be associated with the current task attribute.  If the current task
@@ -140,13 +137,11 @@ package Security.Contexts is
    pragma Inline_Always (Current);
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
    function Has_Permission (Permission : in Security.Permissions.Permission_Index) return Boolean;
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
    function Has_Permission (Permission : in String) return Boolean;
 
    --  Check if the permission identified by <b>Permission</b> is allowed according to
@@ -154,11 +149,6 @@ package Security.Contexts is
    function Has_Permission (Permission : in Security.Permissions.Permission'Class) return Boolean;
 
 private
-
---     type Permission_Cache is record
---        Perm   : Security.Permissions.Permission_Type;
---        Result : Boolean;
---     end record;
 
    type Security_Context is new Ada.Finalization.Limited_Controlled with record
       Previous    : Security_Context_Access := null;

@@ -67,54 +67,50 @@ package body Security.Contexts is
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
+   --  Returns True if the permission is granted.
    --  ------------------------------
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in Security.Permissions.Permission_Index;
-                             Result     : out Boolean) is
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in Permissions.Permission_Index) return Boolean is
       use type Security.Policies.Policy_Manager_Access;
    begin
       if Context.Manager = null then
-         Result := False;
-         return;
+         return False;
       end if;
       declare
          Perm : Security.Permissions.Permission (Permission);
       begin
-         Result := Context.Manager.Has_Permission (Context, Perm);
+         return Context.Manager.Has_Permission (Context, Perm);
       end;
    end Has_Permission;
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
+   --  Returns True if the permission is granted.
    --  ------------------------------
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in String;
-                             Result     : out Boolean) is
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in String) return Boolean is
       Index : constant Permissions.Permission_Index
         := Permissions.Get_Permission_Index (Permission);
    begin
-      Security_Context'Class (Context).Has_Permission (Index, Result);
+      return Security_Context'Class (Context).Has_Permission (Index);
    end Has_Permission;
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
+   --  Returns True if the permission is granted.
    --  ------------------------------
-   procedure Has_Permission (Context    : in out Security_Context;
-                             Permission : in Security.Permissions.Permission'Class;
-                             Result     : out Boolean) is
+   function Has_Permission (Context    : in Security_Context;
+                            Permission : in Permissions.Permission'Class) return Boolean is
       use type Security.Policies.Policy_Manager_Access;
    begin
       if Context.Manager = null then
-         Result := False;
-         return;
+         return False;
+      else
+         return Context.Manager.Has_Permission (Context, Permission);
       end if;
-      Result := Context.Manager.Has_Permission (Context, Permission);
    end Has_Permission;
 
    --  ------------------------------
@@ -218,35 +214,29 @@ package body Security.Contexts is
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
    --  ------------------------------
    function Has_Permission (Permission : in Permissions.Permission_Index) return Boolean is
-      Result  : Boolean;
       Context : constant Security_Context_Access := Current;
    begin
       if Context = null then
          return False;
       else
-         Context.Has_Permission (Permission, Result);
-         return Result;
+         return Context.Has_Permission (Permission);
       end if;
    end Has_Permission;
 
    --  ------------------------------
    --  Check if the permission identified by <b>Permission</b> is allowed according to
-   --  the current security context.  The result is cached in the security context and
-   --  returned in <b>Result</b>.
+   --  the current security context.
    --  ------------------------------
    function Has_Permission (Permission : in String) return Boolean is
-      Result  : Boolean;
       Context : constant Security_Context_Access := Current;
    begin
       if Context = null then
          return False;
       else
-         Context.Has_Permission (Permission, Result);
-         return Result;
+         return Context.Has_Permission (Permission);
       end if;
    end Has_Permission;
 
@@ -255,14 +245,12 @@ package body Security.Contexts is
    --  the current security context.
    --  ------------------------------
    function Has_Permission (Permission : in Permissions.Permission'Class) return Boolean is
-      Result  : Boolean;
       Context : constant Security_Context_Access := Current;
    begin
       if Context = null then
          return False;
       else
-         Context.Has_Permission (Permission, Result);
-         return Result;
+         return Context.Has_Permission (Permission);
       end if;
    end Has_Permission;
 
