@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  security-openid -- Open ID 2.0 Support
---  Copyright (C) 2009, 2010, 2011 Stephane Carrez
+--  security-openid -- OpenID 2.0 Support
+--  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,20 +18,18 @@
 with Ada.Strings.Fixed;
 with Ada.Text_IO;
 
---  with ASF.Clients;
---  with ASF.Responses;
 with Util.Http.Clients;
 with Util.Strings;
 with Util.Encoders;
 with Util.Log.Loggers;
 with Util.Encoders.SHA1;
 with Util.Encoders.HMAC.SHA1;
-package body Security.Openid is
+package body Security.OpenID is
 
    use Ada.Strings.Fixed;
    use Util.Log;
 
-   Log : constant Util.Log.Loggers.Logger := Loggers.Create ("Security.Openid");
+   Log : constant Util.Log.Loggers.Logger := Loggers.Create ("Security.OpenID");
 
    procedure Extract_Profile (Prefix  : in String;
                               Request : in Parameters'Class;
@@ -155,7 +153,7 @@ package body Security.Openid is
    --  Create a principal with the given authentication results.
    --  ------------------------------
    function Create_Principal (Auth : in Authentication) return Principal_Access is
-      P : constant Openid.Principal_Access := new Openid.Principal;
+      P : constant OpenID.Principal_Access := new OpenID.Principal;
    begin
       P.Auth := Auth;
       return P;
@@ -569,4 +567,4 @@ package body Security.Openid is
         & "&mac_key=" & To_String (Assoc.Mac_Key);
    end To_String;
 
-end Security.Openid;
+end Security.OpenID;

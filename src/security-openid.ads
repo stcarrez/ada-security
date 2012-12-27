@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  security-openid -- Open ID 2.0 Support
+--  security-openid -- OpenID 2.0 Support
 --  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
@@ -20,7 +20,7 @@ with Ada.Calendar;
 with Ada.Finalization;
 
 --  == OpenID ==
---  The <b>Security.Openid</b> package implements an authentication framework based
+--  The <b>Security.OpenID</b> package implements an authentication framework based
 --  on OpenID 2.0.
 --
 --  See OpenID Authentication 2.0 - Final
@@ -46,7 +46,7 @@ with Ada.Finalization;
 --  The initialization process must be done before each two steps (discovery and verify).
 --  The OpenID manager must be declared and configured.
 --
---    Mgr   : Openid.Manager;
+--    Mgr   : Security.OpenID.Manager;
 --
 --  For the configuration, the <b>Initialize</b> procedure is called to configure
 --  the OpenID realm and set the OpenID return callback URL.  The return callback
@@ -59,13 +59,13 @@ with Ada.Finalization;
 --
 --  === Discovery: creating the authentication URL ===
 --  The first step is to create an authentication URL to which the user must be redirected.
---  In this step, we have to create an OpenId manager, discover the OpenID provider,
+--  In this step, we have to create an OpenID manager, discover the OpenID provider,
 --  do the association and get an <b>End_Point</b>.  The OpenID provider is specified as an
 --  URL, below is an example for Google OpenID:
 --
 --    Provider : constant String := "https://www.google.com/accounts/o8/id";
---    OP    : Openid.End_Point;
---    Assoc : constant Association_Access := new Association;
+--    OP       : Security.OpenID.End_Point;
+--    Assoc    : constant Security.OpenID.Association_Access := new Security.OpenID.Association;
 --
 --  The following steps are performed:
 --
@@ -89,7 +89,7 @@ with Ada.Finalization;
 --  URI parameters from the return callback.
 --
 --    Assoc   : Association_Access := ...;  --  Get the association saved in the session.
---    Auth    : Openid.Authentication;
+--    Auth    : OpenID.Authentication;
 --    Params  : Auth_Params;
 --
 --  The OpenID manager must be initialized and the <b>Verify</b> procedure is called with
@@ -97,11 +97,16 @@ with Ada.Finalization;
 --  must be used to check that the authentication succeeded.
 --
 --    Mgr.Verify (Assoc.all, Params, Auth);
---    if Openid.Get_Status (Auth) /= Openid.AUTHENTICATED then ...  -- Failure.
+--    if Security.OpenID.Get_Status (Auth) = Security.OpenID.AUTHENTICATED then ...  -- Success.
 --
+--  === Principal creation ===
+--  After the user is successfully authenticated, a user principal can be created and saved in
+--  the session.  The user principal can then be used to assign permissions to that user and
+--  enforce the application permissions using the security policy manger.
 --
+--    P : Security.OpenID.Principal_Access := Security.OpenID.Create_Principal (Auth);
 --
-package Security.Openid is
+package Security.OpenID is
 
    Invalid_End_Point : exception;
 
@@ -289,4 +294,4 @@ private
       Auth : Authentication;
    end record;
 
-end Security.Openid;
+end Security.OpenID;
