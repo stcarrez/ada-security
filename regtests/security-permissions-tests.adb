@@ -15,13 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Util.Tests;
-
-with Util.Files;
 with Util.Test_Caller;
-with Util.Measures;
 
-with Security.Contexts;
 package body Security.Permissions.Tests is
 
    use Util.Tests;
@@ -89,10 +84,11 @@ package body Security.Permissions.Tests is
    --  ------------------------------
    procedure Test_Get_Invalid_Permission (T : in out Test) is
       Index : Permission_Index;
+
+      pragma Unreferenced (Index);
    begin
       Index := Get_Permission_Index ("invalid");
-      T.Assert (Index = Index - 1,
-                "No exception raised by Get_Permission_Index for an invalid name");
+      Util.Tests.Fail (T, "No exception raised by Get_Permission_Index for an invalid name");
 
    exception
       when Invalid_Name =>

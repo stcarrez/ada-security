@@ -18,7 +18,7 @@
 
 with Util.Strings.Maps;
 with Util.Tests;
-package Security.Openid.Tests is
+package Security.OpenID.Tests is
 
    use Ada.Strings.Unbounded;
 
@@ -42,4 +42,4 @@ package Security.Openid.Tests is
                             Name   : in String;
                             Value  : in String);
 
-end Security.Openid.Tests;
+end Security.OpenID.Tests;

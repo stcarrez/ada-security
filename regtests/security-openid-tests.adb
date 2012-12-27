@@ -23,7 +23,7 @@ with Util.Http.Clients.Mockups;
 
 with Util.Test_Caller;
 with Ada.Text_IO;
-package body Security.Openid.Tests is
+package body Security.OpenID.Tests is
 
    use Util.Tests;
 
@@ -138,4 +138,4 @@ package body Security.Openid.Tests is
       Assert_Equals (T, "stephane.carrez@gmail.com", Get_Email (Result), "Invalid email");
    end Test_Verify_Signature;
 
-end Security.Openid.Tests;
+end Security.OpenID.Tests;
