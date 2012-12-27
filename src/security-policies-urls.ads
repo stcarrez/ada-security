@@ -27,7 +27,9 @@ with GNAT.Regexp;
 
 --  == URL Security Policy ==
 --  The <tt>Security.Policies.Urls</tt> implements a security policy intended to be used
---  in web servers.
+--  in web servers.  It allows to protect an URL by defining permissions that must be granted
+--  for a user to get access to the URL.  A typical example is a web server that has a set of
+--  administration pages, these pages should be accessed by users having some admin permission.
 --
 --  === Policy creation ===
 --  An instance of the <tt>URL_Policy</tt> must be created and registered in the policy manager.
@@ -63,6 +65,7 @@ with GNAT.Regexp;
 --  the URL is used to verify the permission.
 --
 --  The <tt>url-policy</tt> definition can contain several <tt>permission</tt>.
+--  The first permission that is granted gives access to the URL.
 --
 --  === Checking for permission ===
 --  To check a URL permission, you must declare a <tt>URI_Permission</tt> object with the URL.

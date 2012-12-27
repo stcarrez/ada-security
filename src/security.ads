@@ -46,11 +46,11 @@
 --
 --  == Overview ==
 --  An application will create a security policy manager and register one or several security
---  policies.  The framework defines a simple role based security policy and an URL security
---  policy intended to provide security in web applications.  The security policy manager reads
---  some security policy configuration file which allows the security policies to configure
+--  policies (yellow).  The framework defines a simple role based security policy and an URL
+--  security policy intended to provide security in web applications.  The security policy manager
+--  reads some security policy configuration file which allows the security policies to configure
 --  and create the security controllers.  These controllers will enforce the security according
---  to the application security rules.  All these components (yellow) are built only once when
+--  to the application security rules.  All these components are built only once when
 --  an application starts.
 --
 --  A user is authenticated through an authentication system which creates a <tt>Principal</tt>
@@ -60,8 +60,8 @@
 --  [http://ada-security.googlecode.com/svn/wiki/ModelOverview.png]
 --
 --  When a permission must be enforced, a security context is created and linked to the
---  <tt>Principal</tt> instance.  Additional security policy context can be added depending on
---  the application context.  To check the permission, the security policy manager is called
+--  <tt>Principal</tt> instance (blue).  Additional security policy context can be added depending
+--  on the application context.  To check the permission, the security policy manager is called
 --  and it will ask a security controller to verify the permission.
 --
 --  The framework allows an application to plug its own security policy, its own policy context,
