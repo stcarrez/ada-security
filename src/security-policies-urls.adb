@@ -68,12 +68,10 @@ package body Security.Policies.URLs is
       --  Check if the user has one of the required permission.
       declare
          P       : constant Access_Rule_Access := Rule.Value;
-         Granted : Boolean;
       begin
          if P /= null then
             for I in P.Permissions'Range loop
-               Context.Has_Permission (P.Permissions (I), Granted);
-               if Granted then
+               if Context.Has_Permission (P.Permissions (I)) then
                   return True;
                end if;
             end loop;
