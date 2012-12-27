@@ -176,10 +176,10 @@ private
      array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
 
    type Role_Policy is new Policy with record
-      Names     : Role_Name_Array;
+      Names     : Role_Name_Array := (others => null);
       Next_Role : Role_Type := Role_Type'First;
       Name      : Util.Beans.Objects.Object;
-      Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last));
+      Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last)) := (others => 0);
       Count     : Natural := 0;
    end record;
 
