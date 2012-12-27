@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Util.Tests;
 
 with Util.Files;
 with Util.Test_Caller;
@@ -23,7 +22,10 @@ with Util.Measures;
 
 with Security.Contexts;
 with Security.Policies.Roles;
+--  with Security.Permissions;
 with Security.Permissions.Tests;
+with Security.Policies.URLs;
+
 package body Security.Policies.Tests is
 
    use Util.Tests;
@@ -117,7 +119,7 @@ package body Security.Policies.Tests is
       M       : Security.Policies.Roles.Role_Policy;
       Admin   : Role_Type;
       Manager : Role_Type;
-      Map     : Role_Map := (others => False);
+      Map     : Role_Map;
    begin
       M.Create_Role (Name => "manager",
                      Role => Manager);
@@ -130,7 +132,6 @@ package body Security.Policies.Tests is
       T.Assert (Map (Admin), "The admin role is not set in the map");
       T.Assert (not Map (Manager), "The manager role must not be set in the map");
 
-      Map := (others => False);
       M.Set_Roles ("manager,admin", Map);
       T.Assert (Map (Admin), "The admin role is not set in the map");
       T.Assert (Map (Manager), "The manager role is not set in the map");
@@ -170,8 +171,8 @@ package body Security.Policies.Tests is
                                Name    : in String) is
       Dir         : constant String := "regtests/files/permissions/";
       Path        : constant String := Util.Tests.Get_Path (Dir);
-      R           : Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
-      U           : Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
+      R           : constant Security.Policies.Roles.Role_Policy_Access := new Roles.Role_Policy;
+      U           : constant Security.Policies.URLs.URL_Policy_Access := new URLs.URL_Policy;
    begin
       Manager.Add_Policy (R.all'Access);
       Manager.Add_Policy (U.all'Access);
@@ -254,7 +255,6 @@ package body Security.Policies.Tests is
       M            : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
       User         : aliased Test_Principal;
       Admin        : Policies.Roles.Role_Type;
-      Manager_Perm : Policies.Roles.Role_Type;
       Context      : aliased Security.Contexts.Security_Context;
       R            : Security.Policies.Roles.Role_Policy_Access;
    begin
@@ -285,17 +285,15 @@ package body Security.Policies.Tests is
          T.Assert (Result, "Permission not granted");
       end;
       declare
-         use Security.Permissions.Tests;
-
          S : Util.Measures.Stamp;
       begin
          for I in 1 .. 1_000 loop
             declare
-               URI : constant String := "/admin/home/list.html";
-               P   : constant URLs.URI_Permission (URI'Length)
-                 := URLs.URI_Permission '(Len => URI'Length, URI => URI);
+               URL : constant String := "/admin/list.html";
+               P   : constant URLs.URL_Permission (URL'Length)
+                 := URLs.URL_Permission '(Len => URL'Length, URL => URL);
             begin
-               T.Assert (Contexts.Has_Permission (Permission => P_Admin.Permission),
+               T.Assert (Contexts.Has_Permission (Permission => P),
                          "Permission not granted");
             end;
          end loop;
@@ -311,12 +309,11 @@ package body Security.Policies.Tests is
    procedure Check_Policy (T     : in out Test;
                            File  : in String;
                            Role  : in String;
-                           URI : in String) is
+                           URL   : in String) is
       M           : aliased Security.Policies.Policy_Manager (2);
       User        : aliased Test_Principal;
       Admin       : Roles.Role_Type;
       Context     : aliased Security.Contexts.Security_Context;
-      P           : Security.Policies.Policy_Access;
       R           : Security.Policies.Roles.Role_Policy_Access;
       U           : Security.Policies.URLs.URL_Policy_Access;
    begin
@@ -330,19 +327,19 @@ package body Security.Policies.Tests is
       Admin := R.Find_Role (Role);
 
       declare
-         P   : constant URLs.URI_Permission (URI'Length)
-           := URLs.URI_Permission '(Len => URI'Length, URI => URI);
+         P   : constant URLs.URL_Permission (URL'Length)
+           := URLs.URL_Permission '(Len => URL'Length, URL => URL);
       begin
          --  A user without the role should not have the permission.
          T.Assert (not U.Has_Permission (Context    => Context'Unchecked_Access,
                                          Permission => P),
-           "Permission was granted for user without role.  URI=" & URI);
+           "Permission was granted for user without role.  URL=" & URL);
 
          --  Set the role.
          User.Roles (Admin) := True;
          T.Assert (U.Has_Permission (Context    => Context'Unchecked_Access,
                                      Permission => P),
-           "Permission was not granted for user with role.  URI=" & URI);
+           "Permission was not granted for user with role.  URL=" & URL);
       end;
    end Check_Policy;
 
@@ -353,19 +350,19 @@ package body Security.Policies.Tests is
    begin
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "developer",
-                      URI  => "/developer/user-should-have-developer-role");
+                      URL  => "/developer/user-should-have-developer-role");
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "manager",
-                      URI  => "/developer/user-should-have-manager-role");
+                      URL  => "/developer/user-should-have-manager-role");
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "manager",
-                      URI  => "/manager/user-should-have-manager-role");
+                      URL  => "/manager/user-should-have-manager-role");
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "admin",
-                      URI  => "/manager/user-should-have-admin-role");
+                      URL  => "/manager/user-should-have-admin-role");
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "admin",
-                      URI  => "/admin/user-should-have-admin-role");
+                      URL  => "/admin/user-should-have-admin-role");
    end Test_Role_Policy;
 
 end Security.Policies.Tests;

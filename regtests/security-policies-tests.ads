@@ -19,9 +19,7 @@
 with Util.Tests;
 with Util.Strings;
 
-with Security.Permissions;
 with Security.Policies.Roles;
-with Security.Policies.Urls;
 
 package Security.Policies.Tests is
 
@@ -58,7 +56,7 @@ package Security.Policies.Tests is
    procedure Check_Policy (T     : in out Test;
                            File  : in String;
                            Role  : in String;
-                           URI   : in String);
+                           URL   : in String);
 
    type Test_Principal is new Principal and Roles.Role_Principal_Context with record
       Name  : Util.Strings.String_Ref;
