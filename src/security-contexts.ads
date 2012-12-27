@@ -27,20 +27,17 @@ with Security.Policies;
 --  This security context is used as follows:
 --
 --    * An instance of the security context is declared within a function/procedure as
---      a local variable.
---    * This instance will be associated with the current thread through a task attribute
+--      a local variable.  This instance will be associated internally with the current thread
+--      through a task attribute.
 --    * The security context is populated with information to identify the current user,
---      his roles, permissions and other information that could be used by security controllers
+--      his roles, permissions and other information that could be used by security controllers.
 --    * To verify a permission, the current security context is retrieved and the
---      <b>Has_Permission</b> operation is called,
---    * The <b>Has_Permission</b> will first look in a small cache stored in the security context.
---    * When not present in the cache, it will use the security manager to find the
---      security controller associated with the permission to verify
+--      <b>Has_Permission</b> operation is called.  This operation will use the security manager
+--      to find the security controller associated with the permission to verify.
 --    * The security controller will be called with the security context to check the permission.
---      The whole job of checking the permission is done by the security controller.
---      The security controller retrieves information from the security context to decide
---      whether the permission is granted or not.
---    * The result produced by the security controller is then saved in the local cache.
+--      The whole job of checking the permission is done by the security controller or its
+--      associated policy manager.  The security controller retrieves information from the
+--      security context to decide whether the permission is granted or not.
 --
 --  For example the security context is declared as follows:
 --
@@ -49,11 +46,15 @@ with Security.Policies;
 --  A security policy and a principal must be set in the security context.  The security policy
 --  defines the rules that govern the security and the principal identifies the current user.
 --
---    Context.Set_Context (Policy_Manager, User);
+--    Context.Set_Context (Policy_Manager, P);
 --
 --  A permission is checked by using the <tt>Has_Permission</tt> operation:
 --
---    if Security.Contexts.Has_Permission (Perm_Create_Workspace.Permission);
+--    if Security.Contexts.Has_Permission (Perm_Create_Workspace.Permission) then
+--      -- Granted
+--    else
+--      -- Denied
+--    end if;
 --
 package Security.Contexts is
 
