@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Security.Openid.Tests;
+with Security.OpenID.Tests;
 with Security.Permissions.Tests;
 with Security.Policies.Tests;
 package body Security.Testsuite is
@@ -25,7 +25,7 @@ package body Security.Testsuite is
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
-      Security.Openid.Tests.Add_Tests (Ret);
+      Security.OpenID.Tests.Add_Tests (Ret);
       Security.Permissions.Tests.Add_Tests (Ret);
       Security.Policies.Tests.Add_Tests (Ret);
       return Ret;
