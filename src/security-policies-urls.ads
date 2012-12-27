@@ -68,28 +68,28 @@ with GNAT.Regexp;
 --  The first permission that is granted gives access to the URL.
 --
 --  === Checking for permission ===
---  To check a URL permission, you must declare a <tt>URI_Permission</tt> object with the URL.
+--  To check a URL permission, you must declare a <tt>URL_Permission</tt> object with the URL.
 --
---     URI    : constant String := ...;
---     Perm   : constant Policies.URLs.URI_Permission (URI'Length)
---               := URI_Permission '(Len => URI'Length, URI => URI);
+--     URL    : constant String := ...;
+--     Perm   : constant Policies.URLs.URL_Permission (URL'Length)
+--               := URL_Permission '(Len => URI'Length, URL => URL);
 --
 --  Then, we can check the permission:
 --
 --     Result : Boolean := Security.Contexts.Has_Permission (Perm);
 --
-package Security.Policies.Urls is
+package Security.Policies.URLs is
 
    NAME : constant String := "URL-Policy";
 
    package P_URL is new Security.Permissions.Definition ("url");
 
    --  ------------------------------
-   --  URI Permission
+   --  URL Permission
    --  ------------------------------
-   --  Represents a permission to access a given URI.
-   type URI_Permission (Len : Natural) is new Permissions.Permission (P_URL.Permission) with record
-      URI : String (1 .. Len);
+   --  Represents a permission to access a given URL.
+   type URL_Permission (Len : Natural) is new Permissions.Permission (P_URL.Permission) with record
+      URL : String (1 .. Len);
    end record;
 
    --  ------------------------------
@@ -107,7 +107,7 @@ package Security.Policies.Urls is
    --  Returns True if the user has the permission to access the given URI permission.
    function Has_Permission (Manager    : in URL_Policy;
                             Context    : in Security_Context_Access;
-                            Permission : in URI_Permission'Class) return Boolean;
+                            Permission : in URL_Permission'Class) return Boolean;
 
    --  Grant the permission to access to the given <b>URI</b> to users having the <b>To</b>
    --  permissions.
@@ -194,4 +194,4 @@ private
       Patterns     : Util.Beans.Objects.Vectors.Vector;
    end record;
 
-end Security.Policies.Urls;
+end Security.Policies.URLs;
