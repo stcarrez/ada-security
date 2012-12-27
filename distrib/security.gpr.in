@@ -1,5 +1,4 @@
 with "util";
-with "el";
 
 project Security is
    Version := "@SECURITY_VERSION@";
