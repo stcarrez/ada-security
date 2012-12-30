@@ -30,7 +30,7 @@ package body Security.Policies is
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
-                                     Controller_Access);
+                                     Security.Controllers.Controller_Access);
 
    --  ------------------------------
    --  Get the policy index.
@@ -123,7 +123,19 @@ package body Security.Policies is
       --  If the permission has a controller, release it.
       if Manager.Permissions (Index) /= null then
          Log.Warn ("Permission {0} is redefined", Name);
-         Free (Manager.Permissions (Index));
+
+         --  SCz 2011-12-03: GNAT 2011 reports a compilation error:
+         --  'missing "with" clause on package "Security.Controllers"'
+         --  if we use the 'Security.Controller_Access' type, even if this "with"
+         --  clause exist.
+         --  gcc 4.4.3 under Ubuntu does not have this issue.
+         --  We use the 'Security.Controllers.Controller_Access' type to avoid the compiler
+         --  bug but we have to use a temporary variable and do some type conversion...
+         declare
+            P : Security.Controllers.Controller_Access := Manager.Permissions (Index).all'Access;
+         begin
+            Free (P);
+         end;
       end if;
 
       Manager.Permissions (Index) := Permission;
@@ -246,7 +258,7 @@ package body Security.Policies is
                --  We use the 'Security.Controllers.Controller_Access' type to avoid the compiler
                --  bug but we have to use a temporary variable and do some type conversion...
                declare
-                  P : Controller_Access := Manager.Permissions (I).all'Access;
+                  P : Security.Controllers.Controller_Access := Manager.Permissions (I).all'Access;
                begin
                   Free (P);
                   Manager.Permissions (I) := null;
