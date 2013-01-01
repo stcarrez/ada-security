@@ -244,8 +244,10 @@ package body Security.Policies.URLs is
       Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
       Reader.Add_Mapping ("module", Policy_Mapping'Access);
       Policy_Mapper.Set_Context (Reader, Perm.Manager);
-      Policy.Manager.Add_Permission (Name       => "url",
-                                     Permission => Perm.all'Access);
+      if not Policy.Manager.Has_Controller (P_URL.Permission) then
+         Policy.Manager.Add_Permission (Name       => "url",
+                                        Permission => Perm.all'Access);
+      end if;
    end Prepare_Config;
 
    --  ------------------------------
