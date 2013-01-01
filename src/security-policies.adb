@@ -25,6 +25,8 @@ with Security.Contexts;
 
 package body Security.Policies is
 
+   use type Permissions.Permission_Index;
+
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Policies");
 
@@ -99,8 +101,6 @@ package body Security.Policies is
    procedure Add_Permission (Manager    : in out Policy_Manager;
                              Name       : in String;
                              Permission : in Controller_Access) is
-      use type Permissions.Permission_Index;
-
       Index : Permission_Index;
    begin
       Log.Info ("Adding permission {0}", Name);
@@ -150,7 +150,6 @@ package body Security.Policies is
                             Context    : in Security.Contexts.Security_Context'Class;
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean is
-      use type Permissions.Permission_Index;
    begin
       if Permission.Id >= Manager.Last_Index then
          return False;
@@ -165,6 +164,15 @@ package body Security.Policies is
          end if;
       end;
    end Has_Permission;
+
+   --  ------------------------------
+   --  Returns True if the security controller is defined for the given permission index.
+   --  ------------------------------
+   function Has_Controller (Manager : in Policy_Manager;
+                            Index   : in Permissions.Permission_Index) return Boolean is
+   begin
+      return Index < Manager.Last_Index and then Manager.Permissions (Index) /= null;
+   end Has_Controller;
 
    --  ------------------------------
    --  Create the policy contexts to be associated with the security context.

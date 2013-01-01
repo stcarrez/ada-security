@@ -126,6 +126,10 @@ package Security.Policies is
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean;
 
+   --  Returns True if the security controller is defined for the given permission index.
+   function Has_Controller (Manager : in Policy_Manager;
+                            Index   : in Permissions.Permission_Index) return Boolean;
+
    --  Create the policy contexts to be associated with the security context.
    function Create_Policy_Contexts (Manager : in Policy_Manager)
                                     return Policy_Context_Array_Access;
