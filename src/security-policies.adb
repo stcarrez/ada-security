@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies -- Security Policies
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,8 @@
 with Ada.Unchecked_Deallocation;
 
 with Util.Log.Loggers;
+with Util.Serialize.Mappers;
+with Util.Serialize.Mappers.Record_Mapper;
 
 with Security.Controllers;
 with Security.Contexts;
@@ -33,6 +35,68 @@ package body Security.Policies is
    procedure Free is
      new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
                                      Security.Controllers.Controller_Access);
+
+   --  ------------------------------
+   --  Default Security Controllers
+   --  ------------------------------
+   --  The <b>Auth_Controller</b> grants the permission if there is a principal.
+   type Auth_Controller is limited new Security.Controllers.Controller with null record;
+
+   --  Returns true if the user associated with the security context <b>Context</b> was
+   --  authentified (ie, it has a principal).
+   overriding
+   function Has_Permission (Handler    : in Auth_Controller;
+                            Context    : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
+                            return Boolean;
+
+   --  The <b>Pass_Through_Controller</b> grants access to anybody.
+   type Pass_Through_Controller is limited new Security.Controllers.Controller with null record;
+
+   --  Returns true if the user associated with the security context <b>Context</b> has
+   --  the permission to access the URL defined in <b>Permission</b>.
+   overriding
+   function Has_Permission (Handler    : in Pass_Through_Controller;
+                            Context    : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
+                            return Boolean;
+
+   --  ------------------------------
+   --  Returns true if the user associated with the security context <b>Context</b> was
+   --  authentified (ie, it has a principal).
+   --  ------------------------------
+   overriding
+   function Has_Permission (Handler    : in Auth_Controller;
+                            Context    : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
+                            return Boolean is
+      pragma Unreferenced (Handler, Permission);
+      use type Security.Principal_Access;
+
+      P : constant Security.Principal_Access := Context.Get_User_Principal;
+   begin
+      if P /= null then
+         Log.Debug ("Grant permission because a principal exists");
+         return True;
+      else
+         return False;
+      end if;
+   end Has_Permission;
+
+   --  ------------------------------
+   --  Returns true if the user associated with the security context <b>Context</b> has
+   --  the permission to access the URL defined in <b>Permission</b>.
+   --  ------------------------------
+   overriding
+   function Has_Permission (Handler    : in Pass_Through_Controller;
+                            Context    : in Security.Contexts.Security_Context'Class;
+                            Permission : in Security.Permissions.Permission'Class)
+                            return Boolean is
+      pragma Unreferenced (Handler, Context, Permission);
+   begin
+      Log.Debug ("Pass through controller grants the permission");
+      return True;
+   end Has_Permission;
 
    --  ------------------------------
    --  Get the policy index.
@@ -210,6 +274,35 @@ package body Security.Policies is
       end loop;
    end Finish_Config;
 
+   type Policy_Fields is (FIELD_ALL_PERMISSION, FIELD_AUTH_PERMISSION);
+
+   procedure Set_Member (P     : in out Policy_Manager'Class;
+                         Field : in Policy_Fields;
+                         Value : in Util.Beans.Objects.Object);
+
+   procedure Set_Member (P     : in out Policy_Manager'Class;
+                         Field : in Policy_Fields;
+                         Value : in Util.Beans.Objects.Object) is
+      Name : constant String := Util.Beans.Objects.To_String (Value);
+   begin
+      case Field is
+         when FIELD_ALL_PERMISSION =>
+            P.Add_Permission (Name, new Pass_Through_Controller);
+
+         when FIELD_AUTH_PERMISSION =>
+            P.Add_Permission (Name, new Auth_Controller);
+
+      end case;
+   end Set_Member;
+
+   package Policy_Mapper is
+     new Util.Serialize.Mappers.Record_Mapper (Element_Type        => Policy_Manager'Class,
+                                               Element_Type_Access => Policy_Manager_Access,
+                                               Fields              => Policy_Fields,
+                                               Set_Member          => Set_Member);
+
+   Policy_Mapping        : aliased Policy_Mapper.Mapper;
+
    --  Read the policy file
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String) is
@@ -224,6 +317,8 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
+      Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
+      Policy_Mapper.Set_Context (Reader, Manager'Unchecked_Access);
       Manager.Prepare_Config (Reader);
 
       --  Read the configuration file.
@@ -284,4 +379,7 @@ package body Security.Policies is
 
    end Finalize;
 
+begin
+   Policy_Mapping.Add_Mapping ("all-permission/name", FIELD_ALL_PERMISSION);
+   Policy_Mapping.Add_Mapping ("auth-permission/name", FIELD_AUTH_PERMISSION);
 end Security.Policies;
