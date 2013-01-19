@@ -13,8 +13,22 @@
     <role>admin</role>
     <role>manager</role>
   </role-permission>
+  <all-permission>
+    <name>anonymous</name>
+  </all-permission>
+  <auth-permission>
+    <name>logged-user</name>
+  </auth-permission>
   <url-policy id='1'>
     <permission>admin</permission>
     <url-pattern>/admin/.*</url-pattern>
+  </url-policy>
+  <url-policy id='3'>
+    <permission>logged-user</permission>
+    <url-pattern>/user/.*</url-pattern>
+  </url-policy>
+  <url-policy id='2'>
+    <permission>anonymous</permission>
+    <url-pattern>/.*</url-pattern>
   </url-policy>
 </policy-rules>
