@@ -1,4 +1,4 @@
-Version 0.1     - Jan 2013
+Version 1.0     - Jan 2013
   - OpenID implementation based on Ada Server Faces
   - OAuth 2.0 client implementation
   - Security policy core implementation
