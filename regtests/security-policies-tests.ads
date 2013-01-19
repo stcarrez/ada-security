@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,12 +51,17 @@ package Security.Policies.Tests is
    --  Test reading policy files and using the <role-permission> controller
    procedure Test_Role_Policy (T : in out Test);
 
+   --  Test anonymous users and permissions.
+   procedure Test_Anonymous_Permission (T : in out Test);
+
       --  Read the policy file <b>File</b> and perform a test on the given URI
    --  with a user having the given role.
-   procedure Check_Policy (T     : in out Test;
-                           File  : in String;
-                           Role  : in String;
-                           URL   : in String);
+   procedure Check_Policy (T         : in out Test;
+                           File      : in String;
+                           Role      : in String;
+                           URL       : in String;
+                           Anonymous : in Boolean := False;
+                           Granted   : in Boolean := True);
 
    type Test_Principal is new Principal and Roles.Role_Principal_Context with record
       Name  : Util.Strings.String_Ref;
