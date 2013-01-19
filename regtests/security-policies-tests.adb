@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ with Util.Measures;
 
 with Security.Contexts;
 with Security.Policies.Roles;
---  with Security.Permissions;
 with Security.Permissions.Tests;
 with Security.Policies.URLs;
 
@@ -64,6 +63,10 @@ package body Security.Policies.Tests is
                        Test_Role_Policy'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Role_Policy",
                        Test_Role_Policy'Access);
+      Caller.Add_Test (Suite, "Test Security.Contexts.Has_Permission (all-permission)",
+                       Test_Anonymous_Permission'Access);
+      Caller.Add_Test (Suite, "Test Security.Contexts.Has_Permission (auth-permission)",
+                       Test_Anonymous_Permission'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -306,10 +309,12 @@ package body Security.Policies.Tests is
    --  Read the policy file <b>File</b> and perform a test on the given URI
    --  with a user having the given role.
    --  ------------------------------
-   procedure Check_Policy (T     : in out Test;
-                           File  : in String;
-                           Role  : in String;
-                           URL   : in String) is
+   procedure Check_Policy (T         : in out Test;
+                           File      : in String;
+                           Role      : in String;
+                           URL       : in String;
+                           Anonymous : in Boolean := False;
+                           Granted   : in Boolean := True) is
       M           : aliased Security.Policies.Policy_Manager (2);
       User        : aliased Test_Principal;
       Admin       : Roles.Role_Type;
@@ -319,8 +324,13 @@ package body Security.Policies.Tests is
    begin
       Configure_Policy (M, File);
 
-      Context.Set_Context (Manager   => M'Unchecked_Access,
-                           Principal => User'Unchecked_Access);
+      if Anonymous then
+         Context.Set_Context (Manager   => M'Unchecked_Access,
+                              Principal => null);
+      else
+         Context.Set_Context (Manager   => M'Unchecked_Access,
+                              Principal => User'Unchecked_Access);
+      end if;
 
       R := Security.Policies.Roles.Get_Role_Policy (M);
       U := Security.Policies.URLs.Get_URL_Policy (M);
@@ -330,16 +340,25 @@ package body Security.Policies.Tests is
          P   : constant URLs.URL_Permission (URL'Length)
            := URLs.URL_Permission '(Len => URL'Length, URL => URL);
       begin
-         --  A user without the role should not have the permission.
-         T.Assert (not U.Has_Permission (Context    => Context,
-                                         Permission => P),
-           "Permission was granted for user without role.  URL=" & URL);
+         if not Anonymous then
+            --  A user without the role should not have the permission.
+            T.Assert (not U.Has_Permission (Context    => Context,
+                                            Permission => P),
+              "Permission was granted for user without role.  URL=" & URL);
 
-         --  Set the role.
-         User.Roles (Admin) := True;
-         T.Assert (U.Has_Permission (Context    => Context,
-                                     Permission => P),
-           "Permission was not granted for user with role.  URL=" & URL);
+            --  Set the role.
+            User.Roles (Admin) := True;
+         end if;
+
+         if Granted then
+            T.Assert (U.Has_Permission (Context    => Context,
+                                        Permission => P),
+              "Permission was not granted for user with role.  URL=" & URL);
+         else
+            T.Assert (not U.Has_Permission (Context    => Context,
+                                            Permission => P),
+              "Permission was granted for user with role.  URL=" & URL);
+         end if;
       end;
    end Check_Policy;
 
@@ -363,6 +382,35 @@ package body Security.Policies.Tests is
       T.Check_Policy (File => "policy-with-role.xml",
                       Role => "admin",
                       URL  => "/admin/user-should-have-admin-role");
+
+      T.Check_Policy (File => "policy-with-role.xml",
+                      Role => "developer",
+                      URL  => "/admin/user-with-developer-role-should-not-access-admin",
+                      Granted => False);
    end Test_Role_Policy;
+
+   --  ------------------------------
+   --  Test anonymous users and permissions.
+   --  ------------------------------
+   procedure Test_Anonymous_Permission (T : in out Test) is
+   begin
+      T.Check_Policy (File      => "simple-policy.xml",
+                      Role      => "admin",
+                      URL       => "/admin/page.html",
+                      Anonymous => True,
+                      Granted   => False);
+      T.Check_Policy (File      => "simple-policy.xml",
+                      Role      => "admin",
+                      URL       => "/user/totopage.html",
+                      Anonymous => True,
+                      Granted   => False);
+
+      --  Anonymous users can access the page.
+      T.Check_Policy (File      => "simple-policy.xml",
+                      Role      => "admin",
+                      URL       => "/page.html",
+                      Anonymous => True,
+                      Granted   => True);
+   end Test_Anonymous_Permission;
 
 end Security.Policies.Tests;
