@@ -274,7 +274,7 @@ package body Security.Policies is
       end loop;
    end Finish_Config;
 
-   type Policy_Fields is (FIELD_ALL_PERMISSION, FIELD_AUTH_PERMISSION);
+   type Policy_Fields is (FIELD_GRANT_PERMISSION, FIELD_AUTH_PERMISSION);
 
    procedure Set_Member (P     : in out Policy_Manager'Class;
                          Field : in Policy_Fields;
@@ -286,7 +286,7 @@ package body Security.Policies is
       Name : constant String := Util.Beans.Objects.To_String (Value);
    begin
       case Field is
-         when FIELD_ALL_PERMISSION =>
+         when FIELD_GRANT_PERMISSION =>
             P.Add_Permission (Name, new Pass_Through_Controller);
 
          when FIELD_AUTH_PERMISSION =>
@@ -380,6 +380,6 @@ package body Security.Policies is
    end Finalize;
 
 begin
-   Policy_Mapping.Add_Mapping ("all-permission/name", FIELD_ALL_PERMISSION);
+   Policy_Mapping.Add_Mapping ("grant-permission/name", FIELD_GRANT_PERMISSION);
    Policy_Mapping.Add_Mapping ("auth-permission/name", FIELD_AUTH_PERMISSION);
 end Security.Policies;
