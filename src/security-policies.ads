@@ -39,9 +39,35 @@ limited with Security.Contexts;
 --  successful initialization, the <tt>Policy_Manager</tt> contains a list of securiy
 --  controllers which are associated with each permission defined by the application.
 --
+--  === Authenticated Permission ===
+--  The `auth-permission` is a pre-defined permission that can be configured in the XML
+--  configuration.  Basically the permission is granted if the security context has a principal.
+--  Otherwise the permission is denied.  The permission is assigned a name and is declared
+--  as follows:
+--
+--    <policy-rules>
+--      <auth-permission>
+--        <name>view-profile</name>
+--      </auth-permission>
+--    </policy-rules>
+--
+--  This example defines the `view-profile` permission.
+--
+--  === Grant Permission ===
+--  The `grant-permission` is another pre-defined permission that gives the permission whatever
+--  the security context.  The permission is defined as follows:
+--
+--    <policy-rules>
+--      <grant-permission>
+--        <name>anonymous</name>
+--      </grant-permission>
+--    </policy-rules>
+--
+--  This example defines the `anonymous` permission.
+--
 --  @include security-policies-roles.ads
 --  @include security-policies-urls.ads
---  @include security-controllers.ads
+---  @include security-controllers.ads
 package Security.Policies is
 
    type Security_Context_Access is access all Contexts.Security_Context'Class;
