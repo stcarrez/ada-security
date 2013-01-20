@@ -122,7 +122,7 @@ package body Security.Policies.Tests is
       M       : Security.Policies.Roles.Role_Policy;
       Admin   : Role_Type;
       Manager : Role_Type;
-      Map     : Role_Map;
+      Map     : Role_Map := (others => false);
    begin
       M.Create_Role (Name => "manager",
                      Role => Manager);
@@ -216,7 +216,6 @@ package body Security.Policies.Tests is
       M           : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
       User        : aliased Test_Principal;
       Context     : aliased Security.Contexts.Security_Context;
-      P           : Security.Policies.Policy_Access;
       R           : Security.Policies.Roles.Role_Policy_Access;
    begin
       Configure_Policy (M, "empty.xml");
