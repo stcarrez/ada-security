@@ -247,33 +247,7 @@ package body Security.Policies is
       return new Policy_Context_Array (1 .. Manager.Max_Policies);
    end Create_Policy_Contexts;
 
-   --  ------------------------------
-   --  Prepare the XML parser to read the policy configuration.
-   --  ------------------------------
-   procedure Prepare_Config (Manager : in out Policy_Manager;
-                             Reader  : in out Util.Serialize.IO.XML.Parser) is
-   begin
-      --  Prepare the reader to parse the policy configuration.
-      for I in Manager.Policies'Range loop
-         exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Prepare_Config (Reader);
-      end loop;
-   end Prepare_Config;
-
-   --  ------------------------------
-   --  Finish reading the XML policy configuration.  The security policy implementation can use
-   --  this procedure to perform any configuration setup after the configuration is parsed.
-   --  ------------------------------
-   procedure Finish_Config (Manager : in out Policy_Manager;
-                            Reader  : in out Util.Serialize.IO.XML.Parser) is
-   begin
-      --  Finish the policy configuration.
-      for I in Manager.Policies'Range loop
-         exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Finish_Config (Reader);
-      end loop;
-   end Finish_Config;
-
+   --  ----
    type Policy_Fields is (FIELD_GRANT_PERMISSION, FIELD_AUTH_PERMISSION);
 
    procedure Set_Member (P     : in out Policy_Manager'Class;
@@ -303,7 +277,40 @@ package body Security.Policies is
 
    Policy_Mapping        : aliased Policy_Mapper.Mapper;
 
+   --------------------------
+   --  Prepare the XML parser to read the policy configuration.
+   --  ------------------------------
+   procedure Prepare_Config (Manager : in out Policy_Manager;
+                             Reader  : in out Util.Serialize.IO.XML.Parser) is
+   begin
+      Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
+      Reader.Add_Mapping ("module", Policy_Mapping'Access);
+      Policy_Mapper.Set_Context (Reader, Manager'Unchecked_Access);
+
+      --  Prepare the reader to parse the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Prepare_Config (Reader);
+      end loop;
+   end Prepare_Config;
+
+   --  ------------------------------
+   --  Finish reading the XML policy configuration.  The security policy implementation can use
+   --  this procedure to perform any configuration setup after the configuration is parsed.
+   --  ------------------------------
+   procedure Finish_Config (Manager : in out Policy_Manager;
+                            Reader  : in out Util.Serialize.IO.XML.Parser) is
+   begin
+      --  Finish the policy configuration.
+      for I in Manager.Policies'Range loop
+         exit when Manager.Policies (I) = null;
+         Manager.Policies (I).Finish_Config (Reader);
+      end loop;
+   end Finish_Config;
+
+   --------------------------
    --  Read the policy file
+   --------------------------
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String) is
 
@@ -317,8 +324,6 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
-      Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
-      Policy_Mapper.Set_Context (Reader, Manager'Unchecked_Access);
       Manager.Prepare_Config (Reader);
 
       --  Read the configuration file.
