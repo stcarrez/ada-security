@@ -130,6 +130,7 @@ dist:
 	-rm -f $(distdir)/bin/*
 	-rm -rf $(distdir)/obj/*
 	-rm -rf $(distdir)/lib/*
+	-rm -rf $(distdir)/regtests/result
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
