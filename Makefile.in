@@ -6,7 +6,8 @@ LIBRARY_TYPE=static
 # You may edit this makefile as long as you keep these original 
 # target names defined.
 MODE=distrib
-GNATMAKE=@GNATMAKE@ -XMODE=${MODE} -XPROCESSORS=4
+PROCESSORS=2
+GNATMAKE=@GNATMAKE@ -XMODE=${MODE} -XPROCESSORS=${PROCESSORS}
 GNATCLEAN=gnatclean
 SVN=svn
 INSTALL=@INSTALL@
@@ -103,9 +104,9 @@ doc:
 	$(DYNAMO) build-doc wiki
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt CHANGES ChangeLog config.guess configure config.sub \
+DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-security.gpr.in tests.gpr.in config.gpr NEWS \
+security.gpr.in tests.gpr.in config.gpr \
 src regtests \
 bin obj lib doc distrib
 
@@ -127,8 +128,8 @@ dist:
 	  fi; \
 	done
 	-rm -f $(distdir)/bin/*
-	-rm -f $(distdir)/obj/*
-	-rm -f $(distdir)/lib/*
+	-rm -rf $(distdir)/obj/*
+	-rm -rf $(distdir)/lib/*
 	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
 	    --exclude="*.log" --exclude="*.a" \
 	    -cvzf $(DIST_FILE) $(distdir)
