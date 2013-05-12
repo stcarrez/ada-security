@@ -49,6 +49,8 @@ private package Security.Auth.OAuth is
                         OP     : in End_Point;
                         Result : out Association);
 
+   --  Get the authentication URL to which the user must be redirected for authentication
+   --  by the authentication server.
    overriding
    function Get_Authentication_URL (Realm : in Manager;
                                     OP    : in End_Point;
