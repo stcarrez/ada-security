@@ -43,16 +43,12 @@ package body Security.Auth.OpenID is
                             Request : in Parameters'Class;
                             Name    : in String);
 
-   procedure Set_Result (Result  : in out Authentication;
-                         Status  : in Auth_Result;
-                         Message : in String);
-
    function Get_Association_Query return String;
 
    --  ------------------------------
-   --  Initialize the OpenID realm.
+   --  Initialize the OpenID authentication realm.  Get the <tt>openid.realm</tt>
+   --  and <tt>openid.callback_url</tt> parameters to configure the realm.
    --  ------------------------------
-   --  Initialize the authentication realm.
    overriding
    procedure Initialize (Realm     : in out Manager;
                          Params    : in Parameters'Class;
@@ -210,6 +206,10 @@ package body Security.Auth.OpenID is
       Log.Debug ("Received end point {0}", To_String (Output));
    end Associate;
 
+   --  ------------------------------
+   --  Get the authentication URL to which the user must be redirected for authentication
+   --  by the authentication server.
+   --  ------------------------------
    overriding
    function Get_Authentication_URL (Realm : in Manager;
                                     OP    : in End_Point;
@@ -246,18 +246,6 @@ package body Security.Auth.OpenID is
       Append (Result, Realm.Realm);
       return To_String (Result);
    end Get_Authentication_URL;
-
-   procedure Set_Result (Result  : in out Authentication;
-                         Status  : in Auth_Result;
-                         Message : in String) is
-   begin
-      if Status /= AUTHENTICATED then
-         Log.Error ("OpenID verification failed: {0}", Message);
-      else
-         Log.Info ("OpenID verification: {0}", Message);
-      end if;
-      Result.Status := Status;
-   end Set_Result;
 
    procedure Extract_Value (Into    : in out Unbounded_String;
                             Request : in Parameters'Class;
@@ -438,13 +426,5 @@ package body Security.Auth.OpenID is
       Result.Claimed_Id := To_Unbounded_String (Request.Get_Parameter ("openid.claimed_id"));
       Result.Identity   := To_Unbounded_String (Request.Get_Parameter ("openid.identity"));
    end Verify_Discovered;
-
-   function To_String (Assoc : Association) return String is
-   begin
-      return "session_type=" & To_String (Assoc.Session_Type)
-        & "&assoc_type=" & To_String (Assoc.Assoc_Type)
-        & "&assoc_handle=" & To_String (Assoc.Assoc_Handle)
-        & "&mac_key=" & To_String (Assoc.Mac_Key);
-   end To_String;
 
 end Security.Auth.OpenID;
