@@ -43,6 +43,9 @@ package Security.OAuth.Clients is
    --  application (client id and secret key).
    type Application is tagged private;
 
+   --  Get the application identifier.
+   function Get_Application_Identifier (App : in Application) return String;
+
    --  Set the application identifier used by the OAuth authorization server
    --  to identify the application (for example, the App ID in Facebook).
    procedure Set_Application_Identifier (App    : in out Application;
