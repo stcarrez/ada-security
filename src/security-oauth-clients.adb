@@ -79,6 +79,14 @@ package body Security.OAuth.Clients is
    end Get_Name;
 
    --  ------------------------------
+   --  Get the application identifier.
+   --  ------------------------------
+   function Get_Application_Identifier (App : in Application) return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (App.Client_Id);
+   end Get_Application_Identifier;
+
+   --  ------------------------------
    --  Set the application identifier used by the OAuth authorization server
    --  to identify the application (for example, the App ID in Facebook).
    --  ------------------------------
