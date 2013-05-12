@@ -27,7 +27,9 @@ package body Security.Auth.OAuth is
    --  ------------------------------
    --  The <b>Manager</b> provides the core operations for the OAuth authorization process.
 
+   --  ------------------------------
    --  Initialize the authentication realm.
+   --  ------------------------------
    overriding
    procedure Initialize (Realm     : in out Manager;
                          Params    : in Parameters'Class;
@@ -41,11 +43,13 @@ package body Security.Auth.OAuth is
       Realm.Scope := To_Unbounded_String (Params.Get_Parameter (Provider & ".scope"));
    end Initialize;
 
+   --  ------------------------------
    --  Discover the OpenID provider that must be used to authenticate the user.
    --  The <b>Name</b> can be an URL or an alias that identifies the provider.
    --  A cached OpenID provider can be returned.
    --  Read the XRDS document from the URI and initialize the OpenID provider end point.
    --  (See OpenID Section 7.3 Discovery)
+   --  ------------------------------
    overriding
    procedure Discover (Realm  : in out Manager;
                        Name   : in String;
@@ -54,9 +58,11 @@ package body Security.Auth.OAuth is
       Result.URL := To_Unbounded_String (Name);
    end Discover;
 
+   --  ------------------------------
    --  Associate the application (relying party) with the OpenID provider.
    --  The association can be cached.
    --  (See OpenID Section 8 Establishing Associations)
+   --  ------------------------------
    overriding
    procedure Associate (Realm  : in out Manager;
                         OP     : in End_Point;
@@ -65,6 +71,10 @@ package body Security.Auth.OAuth is
       null;
    end Associate;
 
+   --  ------------------------------
+   --  Get the authentication URL to which the user must be redirected for authentication
+   --  by the authentication server.
+   --  ------------------------------
    overriding
    function Get_Authentication_URL (Realm : in Manager;
                                     OP    : in End_Point;
@@ -84,7 +94,9 @@ package body Security.Auth.OAuth is
       return To_String (Result);
    end Get_Authentication_URL;
 
+   --  ------------------------------
    --  Verify the authentication result
+   --  ------------------------------
    overriding
    procedure Verify (Realm   : in out Manager;
                      Assoc   : in Association;
