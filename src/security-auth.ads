@@ -71,6 +71,9 @@ with Ada.Finalization;
 --  After this initialization, the authentication manager can be used in the authentication
 --  process.
 --
+--  @include security-auth-openid.ads
+--  @include security-auth-oauth.ads
+--
 --  === Discovery: creating the authentication URL ===
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenID manager, discover the OpenID provider,
