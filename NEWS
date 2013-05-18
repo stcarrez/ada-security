@@ -1,5 +1,6 @@
 Version 1.1     -
   - New authentication framework that supports OpenID, OAuth, Facebook login
+  - AWS demo for a Google, Yahoo!, Facebook authentication
 
 Version 1.0     - Jan 2013
   - OpenID implementation based on Ada Server Faces
