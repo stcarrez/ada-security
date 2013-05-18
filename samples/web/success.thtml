@@ -1,0 +1,36 @@
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <link media="screen" type="text/css" rel="stylesheet" href="/atlas/css/grids/reset.css"></link>
+    <link media="screen" type="text/css" rel="stylesheet" href="/atlas/css/grids/fluid_grid.css"></link>
+    <link media="screen" type="text/css" rel="stylesheet" href="/atlas/css/redmond/jquery-ui-1.9.2.custom.css"></link>
+    <link media="screen" type="text/css" rel="stylesheet" href="/atlas/css/awa.css"></link>
+    <link media="screen" type="text/css" rel="stylesheet" href="/atlas/css/users.css"></link>
+    <title>Success</title>
+<body>
+  <div id="awa-page" class="container_12">
+    <div id="awa-content">
+      <div class="awa-side1 container_6">
+        <div class="awa-login ui-widget ui-widget-content ui-corner-all">
+          <h2>Successfully authentified as</h2>
+          <p>ID:@_ID_@</p>
+          <p>EMAIL:@_EMAIL_@</p>
+          <h2></h2>
+          <a href="/atlas/login.html">Login again</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id="awa-footer">
+    <div id="blk_footer">
+        <div id="awa-copyright">
+            <span>Copyfree 2012, 2013 Stephane Carrez</span>
+        </div>
+        <div id="awa-footer_content">
+            <span>Served by</span>
+            <a href="http://libre.adacore.com/libre/tools/aws/">AWS</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
