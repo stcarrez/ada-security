@@ -68,7 +68,7 @@ package body Security.Auth.OAuth is
                         OP     : in End_Point;
                         Result : out Association) is
    begin
-      null;
+      Result.Assoc_Handle := To_Unbounded_String ("nonce-generator");
    end Associate;
 
    --  ------------------------------
@@ -89,6 +89,9 @@ package body Security.Auth.OAuth is
          Append (Result, "?");
       end if;
       Append (Result, Params);
+      Append (Result, "&");
+      Append (Result, Security.OAuth.Response_Type);
+      Append (Result, "=code");
 
       Log.Debug ("Params = {0}", Params);
       return To_String (Result);
