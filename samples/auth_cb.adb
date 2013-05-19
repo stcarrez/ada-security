@@ -72,17 +72,16 @@ package body Auth_CB is
    --  ------------------------------
    function Get_Authorization (Request : in AWS.Status.Data) return AWS.Response.Data is
       Name     : constant String := Get_Auth_Name (Request);
-      Provider : constant String := Config.Get_Parameter ("auth.provider." & Name);
       URL      : constant String := Config.Get_Parameter ("auth.url." & Name);
       Mgr      : Security.Auth.Manager;
       OP       : Security.Auth.End_Point;
       Assoc    : Security.Auth.Association;
    begin
-      if URL'Length = 0 or Provider'Length = 0 then
+      if URL'Length = 0 or Name'Length = 0 then
          return AWS.Response.URL (Location => "/login.html");
       end if;
 
-      Mgr.Initialize (Config, Provider);
+      Mgr.Initialize (Config, Name);
 
       --  Yadis discovery (get the XRDS file).  This step does nothing for OAuth.
       Mgr.Discover (URL, OP);
@@ -146,8 +145,8 @@ package body Auth_CB is
       --  Cleanup the session and drop the association end point.
       AWS.Session.Remove (SID, OPENID_ASSOC_ATTRIBUTE);
 
-      Mgr.Initialize (Provider => Security.Auth.Get_Provider (Assoc),
-                      Params   => Config);
+      Mgr.Initialize (Name   => Security.Auth.Get_Provider (Assoc),
+                      Params => Config);
 
       --  Verify that what we receive through the callback matches the association key.
       Mgr.Verify (Assoc, Params, Credential);
