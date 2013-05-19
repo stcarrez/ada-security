@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,12 @@ package Security.OAuth.Clients is
 
    --  Get the principal name.  This is the OAuth access token.
    function Get_Name (From : in Access_Token) return String;
+
+   type OpenID_Token (Len, Id_Len, Refresh_Len : Natural) is new Access_Token with private;
+   type OpenID_Token_Access is access all OpenID_Token'Class;
+
+   --  Get the id_token that was returned by the authentication process.
+   function Get_Id_Token (From : in OpenID_Token) return String;
 
    --  ------------------------------
    --  Application
@@ -98,14 +104,21 @@ package Security.OAuth.Clients is
                                   Code : in String) return Access_Token_Access;
 
    --  Create the access token
-   function Create_Access_Token (App     : in Application;
-                                 Token   : in String;
-                                 Expires : in Natural) return Access_Token_Access;
+   function Create_Access_Token (App      : in Application;
+                                 Token    : in String;
+                                 Refresh  : in String;
+                                 Id_Token : in String;
+                                 Expires  : in Natural) return Access_Token_Access;
 
 private
 
    type Access_Token (Len : Natural) is new Security.Principal with record
       Access_Id : String (1 .. Len);
+   end record;
+
+   type OpenID_Token (Len, Id_Len, Refresh_Len : Natural) is new Access_Token (Len) with record
+      Id_Token      : String (1 .. Id_Len);
+      Refresh_Token : String (1 .. Refresh_Len);
    end record;
 
    type Application is tagged record
