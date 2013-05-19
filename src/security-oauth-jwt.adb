@@ -21,6 +21,7 @@ with Interfaces.C;
 
 with Util.Encoders;
 with Util.Strings;
+with Util.Serialize.IO;
 with Util.Properties.JSON;
 with Util.Log.Loggers;
 package body Security.OAuth.JWT is
@@ -167,6 +168,10 @@ package body Security.OAuth.JWT is
       Decode_Part (Result.Header, "header", Content (Content'First .. Pos1 - 1));
       Decode_Part (Result.Claims, "claims", Content (Pos1 + 1 .. Pos2 - 1));
       return Result;
+
+   exception
+      when Util.Serialize.IO.Parse_Error =>
+         raise Invalid_Token with "Invalid JSON content";
    end Decode;
 
 end Security.OAuth.JWT;
