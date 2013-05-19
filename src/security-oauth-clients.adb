@@ -80,6 +80,14 @@ package body Security.OAuth.Clients is
    end Get_Name;
 
    --  ------------------------------
+   --  Get the id_token that was returned by the authentication process.
+   --  ------------------------------
+   function Get_Id_Token (From : in OpenID_Token) return String is
+   begin
+      return From.Id_Token;
+   end Get_Id_Token;
+
+   --  ------------------------------
    --  Get the application identifier.
    --  ------------------------------
    function Get_Application_Identifier (App : in Application) return String is
@@ -253,6 +261,7 @@ package body Security.OAuth.Clients is
             end if;
             Expires := Natural'Value (Content (Last + 9 .. Content'Last));
             return Application'Class (App).Create_Access_Token (Content (Pos + 1 .. Last - 1),
+                                                                "", "",
                                                                 Expires);
 
          elsif Content_Type (Content_Type'First .. Pos) = "application/json" then
@@ -262,6 +271,8 @@ package body Security.OAuth.Clients is
                Util.Properties.JSON.Parse_JSON (P, Content);
                Expires := Natural'Value (P.Get ("expires_in"));
                return Application'Class (App).Create_Access_Token (P.Get ("access_token"),
+                                                                   P.Get ("refresh_token", ""),
+                                                                   P.Get ("id_token", ""),
                                                                    Expires);
             end;
          else
@@ -275,14 +286,30 @@ package body Security.OAuth.Clients is
    --  ------------------------------
    --  Create the access token
    --  ------------------------------
-   function Create_Access_Token (App     : in Application;
-                                 Token   : in String;
-                                 Expires : in Natural) return Access_Token_Access is
+   function Create_Access_Token (App      : in Application;
+                                 Token    : in String;
+                                 Refresh  : in String;
+                                 Id_Token : in String;
+                                 Expires  : in Natural) return Access_Token_Access is
       pragma Unreferenced (App, Expires);
 
    begin
-      return new Access_Token '(Len => Token'Length,
-                                Access_Id => Token);
+      if Id_Token'Length > 0 then
+         declare
+            Result : constant OpenID_Token_Access
+              := new OpenID_Token '(Len         => Token'Length,
+                                    Id_Len      => Id_Token'Length,
+                                    Refresh_Len => Refresh'Length,
+                                    Access_Id   => Token,
+                                    Id_Token    => Id_Token,
+                                    Refresh_Token => Refresh);
+         begin
+            return Result.all'Access;
+         end;
+      else
+         return new Access_Token '(Len => Token'Length,
+                                   Access_Id => Token);
+      end if;
    end Create_Access_Token;
 
 end Security.OAuth.Clients;
