@@ -20,6 +20,7 @@ with Util.Log.Loggers;
 
 with Security.Auth.OpenID;
 with Security.Auth.OAuth.Facebook;
+with Security.Auth.OAuth.Googleplus;
 package body Security.Auth is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Auth");
@@ -156,6 +157,9 @@ package body Security.Auth is
 
       elsif Provider = PROVIDER_FACEBOOK then
          Impl := new Security.Auth.OAuth.Facebook.Manager;
+
+      elsif Provider = PROVIDER_GOOGLE_PLUS then
+         Impl := new Security.Auth.OAuth.Googleplus.Manager;
 
       else
          Log.Error ("Authentication provider {0} not recognized", Provider);
