@@ -118,10 +118,11 @@ package body Security.OAuth.JWT is
    --  ------------------------------
    --  Get the claim with the given name from the token.
    --  ------------------------------
-   function Get_Claim (From : in Token;
-                       Name : in String) return String is
+   function Get_Claim (From    : in Token;
+                       Name    : in String;
+                       Default : in String := "") return String is
    begin
-      return From.Claims.Get (Name);
+      return From.Claims.Get (Name, Default);
    end Get_Claim;
 
    --  ------------------------------
