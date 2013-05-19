@@ -8,7 +8,6 @@ div.awa-side1, div.awa-side2 {
 }
 div.awa-side1 {
     padding-right: 1%;
-    width: 48%;
 }
 div.awa-side2 {
     padding-left: 1%;
@@ -99,6 +98,7 @@ ul.openid-login a {
 a.openid-orange em,
 a.openid-yahoo em,
 a.openid-facebook em,
+a.openid-google-plus em,
 a.openid-google em {
 	display: block;
 	float: left;
@@ -121,15 +121,30 @@ a.openid-orange em {
 a.openid-facebook em {
   margin-top: 3px;
   margin-left: 3px;
-  background-position: 0 -282px;
-  height: 35px;
+  background-position: 0 -280px;
+  height: 33px;
   width: 40px;
+}
+a.openid-google-plus em {
+  margin-left: 3px;
+  margin-right: 10px;
+  background-position: 0 -312px;
+  height: 33px;
+  width: 37px;
+  border-right: 1px solid #bb3f30;
 }
 a.openid-facebook {
   font-weight: bold;
   color: #424242;
   text-decoration: none;
   padding-right: 3px;
+}
+a.openid-google-plus {
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  padding-right: 3px;
+  background-color: #dd4b39;
 }
 div.openid-info {
     float: left;
