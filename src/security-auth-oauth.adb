@@ -41,6 +41,7 @@ package body Security.Auth.OAuth is
       Realm.App.Set_Provider_URI (Params.Get_Parameter (Provider & ".request_url"));
       Realm.Realm := To_Unbounded_String (Params.Get_Parameter (Provider & ".realm"));
       Realm.Scope := To_Unbounded_String (Params.Get_Parameter (Provider & ".scope"));
+      Realm.Issuer := To_Unbounded_String (Params.Get_Parameter (Provider & ".issuer"));
    end Initialize;
 
    --  ------------------------------
