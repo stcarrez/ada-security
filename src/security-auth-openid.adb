@@ -54,8 +54,8 @@ package body Security.Auth.OpenID is
                          Params    : in Parameters'Class;
                          Provider  : in String := PROVIDER_OPENID) is
    begin
-      Realm.Realm     := To_Unbounded_String (Params.Get_Parameter (Provider & ".realm"));
-      Realm.Return_To := To_Unbounded_String (Params.Get_Parameter (Provider & ".callback_url"));
+      Realm.Realm     := To_Unbounded_String (Params.Get_Parameter ("openid.realm"));
+      Realm.Return_To := To_Unbounded_String (Params.Get_Parameter ("openid.callback_url"));
    end Initialize;
 
    --  ------------------------------
