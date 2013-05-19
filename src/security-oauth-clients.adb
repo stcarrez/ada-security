@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ with Ada.Streams;
 with Util.Log.Loggers;
 with Util.Strings;
 with Util.Http.Clients;
+with Util.Properties.JSON;
 with Util.Encoders.HMAC.SHA1;
 
 --  The <b>Security.OAuth.Clients</b> package implements the client OAuth 2.0 authorization.
@@ -209,8 +210,8 @@ package body Security.OAuth.Clients is
                    Data  => Data,
                    Reply => Response);
       if Response.Get_Status /= Util.Http.SC_OK then
-         Log.Warn ("Cannot get access token from {0}: status is {1}",
-                   URI, Natural'Image (Response.Get_Status));
+         Log.Warn ("Cannot get access token from {0}: status is {1} Body {2}",
+                   URI, Natural'Image (Response.Get_Status), Response.Get_Body);
          return null;
       end if;
 
@@ -224,12 +225,14 @@ package body Security.OAuth.Clients is
       begin
          if Pos = 0 then
             Pos := Content_Type'Last;
+         else
+            Pos := Pos - 1;
          end if;
          Log.Debug ("Content type: {0}", Content_Type);
          Log.Debug ("Data: {0}", Content);
 
          --  Facebook sends the access token as a 'text/plain' content.
-         if Content_Type (Content_Type'First .. Pos) = "text/plain;" then
+         if Content_Type (Content_Type'First .. Pos) = "text/plain" then
             Pos := Util.Strings.Index (Content, '=');
             if Pos = 0 then
                Log.Error ("Invalid access token response: '{0}'", Content);
@@ -252,6 +255,15 @@ package body Security.OAuth.Clients is
             return Application'Class (App).Create_Access_Token (Content (Pos + 1 .. Last - 1),
                                                                 Expires);
 
+         elsif Content_Type (Content_Type'First .. Pos) = "application/json" then
+            declare
+               P : Util.Properties.Manager;
+            begin
+               Util.Properties.JSON.Parse_JSON (P, Content);
+               Expires := Natural'Value (P.Get ("expires_in"));
+               return Application'Class (App).Create_Access_Token (P.Get ("access_token"),
+                                                                   Expires);
+            end;
          else
             Log.Error ("Content type {0} not supported for access token response", Content_Type);
             Log.Error ("Response: {0}", Content);
