@@ -145,10 +145,11 @@ package body Security.Auth is
    --  ------------------------------
    --  Initialize the OpenID realm.
    --  ------------------------------
-   procedure Initialize (Realm     : in out Manager;
-                         Params    : in Parameters'Class;
-                         Provider  : in String := PROVIDER_OPENID) is
-      Impl : Manager_Access;
+   procedure Initialize (Realm  : in out Manager;
+                         Params : in Parameters'Class;
+                         Name   : in String := PROVIDER_OPENID) is
+      Provider : constant String := Params.Get_Parameter ("auth.provider." & Name);
+      Impl     : Manager_Access;
    begin
       if Provider = PROVIDER_OPENID then
          Impl := new Security.Auth.OpenID.Manager;
@@ -160,9 +161,9 @@ package body Security.Auth is
          Log.Error ("Authentication provider {0} not recognized", Provider);
          raise Service_Error with "Authentication provider not supported";
       end if;
-      Impl.Initialize (Params, Provider);
       Realm.Delegate := Impl;
-      Realm.Provider := To_Unbounded_String (Provider);
+      Impl.Initialize (Params, Name);
+      Realm.Provider := To_Unbounded_String (Name);
    end Initialize;
 
    --  ------------------------------
