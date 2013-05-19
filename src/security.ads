@@ -70,11 +70,11 @@
 --  @include security-permissions.ads
 --
 --  == Principal ==
---  A principal is created by using either the [Security_OpenID OpenID],
+--  A principal is created by using either the [Security_Auth OpenID],
 --  the [Security_OAuth OAuth] or another authentication mechanism.  The authentication produces
 --  an object that must implement the <tt>Principal</tt> interface.  For example:
 --
---    P : Security.OpenID.Principal_Access := Security.OpenID.Create_Principal (Auth);
+--    P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Auth);
 --
 --  or
 --
@@ -85,7 +85,7 @@
 --  @include security-contexts.ads
 --
 --  [Security_Policies Security Policies]
---  [Security_OpenID OpenID]
+--  [Security_Auth OpenID]
 --  [Security_OAuth OAuth]
 --
 package Security is
