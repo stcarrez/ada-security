@@ -224,9 +224,9 @@ package Security.Auth is
    type Manager is tagged limited private;
 
    --  Initialize the authentication realm.
-   procedure Initialize (Realm     : in out Manager;
-                         Params    : in Parameters'Class;
-                         Provider  : in String := PROVIDER_OPENID);
+   procedure Initialize (Realm  : in out Manager;
+                         Params : in Parameters'Class;
+                         Name   : in String := PROVIDER_OPENID);
 
    --  Discover the authentication provider that must be used to authenticate the user.
    --  The <b>Name</b> can be an URL or an alias that identifies the provider.
