@@ -23,6 +23,7 @@
 package Security.OAuth is
 
    --  OAuth 2.0: Section 10.2.2. Initial Registry Contents
+   --  RFC 6749: 11.2.2.  Initial Registry Contents
    Client_Id         : constant String := "client_id";
    Client_Secret     : constant String := "client_secret";
    Response_Type     : constant String := "response_type";
