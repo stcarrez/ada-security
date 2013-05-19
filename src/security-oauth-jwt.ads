@@ -68,8 +68,9 @@ package Security.OAuth.JWT is
    function Get_Authorized_Presenters (From : in Token) return String;
 
    --  Get the claim with the given name from the token.
-   function Get_Claim (From : in Token;
-                       Name : in String) return String;
+   function Get_Claim (From    : in Token;
+                       Name    : in String;
+                       Default : in String := "") return String;
 
    --  Decode a string representing an encoded JWT token according to the JWT specification:
    --
