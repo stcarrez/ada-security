@@ -131,6 +131,9 @@ package Security.Auth is
    --  Use the Facebook OAuth 2.0 - draft 12 authentication server.
    PROVIDER_FACEBOOK : constant String := "facebook";
 
+   --  Use the Google+ OpenID Connect Basic Client
+   PROVIDER_GOOGLE_PLUS : constant String := "google-plus";
+
    Invalid_End_Point : exception;
 
    Service_Error     : exception;
