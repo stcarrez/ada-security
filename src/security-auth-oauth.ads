@@ -76,6 +76,7 @@ private
       Return_To : Unbounded_String;
       Realm     : Unbounded_String;
       Scope     : Unbounded_String;
+      Issuer    : Unbounded_String;
       App       : Security.OAuth.Clients.Application;
    end record;
 
