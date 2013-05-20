@@ -23,6 +23,7 @@ with Util.Log.Loggers;
 with Util.Strings;
 with Util.Http.Clients;
 with Util.Properties.JSON;
+with Util.Encoders.Base64;
 with Util.Encoders.HMAC.SHA1;
 
 --  The <b>Security.OAuth.Clients</b> package implements the client OAuth 2.0 authorization.
@@ -45,9 +46,6 @@ package body Security.OAuth.Clients is
    private
       --  Random number generator used for ID generation.
       Random       : Id_Random.Generator;
-
-      --  Number of 32-bit random numbers used for the ID generation.
-      Id_Size      : Ada.Streams.Stream_Element_Offset := 8;
    end Random;
 
    protected body Random is
@@ -55,9 +53,11 @@ package body Security.OAuth.Clients is
       procedure Generate (Into : out Ada.Streams.Stream_Element_Array) is
          use Ada.Streams;
          use Interfaces;
+
+         Size : constant Ada.Streams.Stream_Element_Offset := Into'Last / 4;
       begin
          --  Generate the random sequence.
-         for I in 0 .. Id_Size - 1 loop
+         for I in 0 .. Size loop
             declare
                Value : constant Unsigned_32 := Id_Random.Random (Random);
             begin
@@ -70,6 +70,42 @@ package body Security.OAuth.Clients is
       end Generate;
 
    end Random;
+
+   Random_Generator : Random;
+
+   --  ------------------------------
+   --  Generate a random nonce with at last the number of random bits.
+   --  The number of bits is rounded up to a multiple of 32.
+   --  The random bits are then converted to base64url in the returned string.
+   --  ------------------------------
+   function Create_Nonce (Bits : in Positive := 256) return String is
+      use type Ada.Streams.Stream_Element_Offset;
+
+      Rand_Count : constant Ada.Streams.Stream_Element_Offset
+        := Ada.Streams.Stream_Element_Offset (4 * ((Bits + 31) / 32));
+
+      Rand    : Ada.Streams.Stream_Element_Array (0 .. Rand_Count - 1);
+      Buffer  : Ada.Streams.Stream_Element_Array (0 .. Rand_Count * 3);
+      Encoder : Util.Encoders.Base64.Encoder;
+      Last    : Ada.Streams.Stream_Element_Offset;
+      Encoded : Ada.Streams.Stream_Element_Offset;
+   begin
+      --  Generate the random sequence.
+      Random_Generator.Generate (Rand);
+
+      --  Encode the random stream in base64url and save it into the result string.
+      Encoder.Set_URL_Mode (True);
+      Encoder.Transform (Data => Rand, Into => Buffer,
+                         Last => Last, Encoded => Encoded);
+      declare
+         Result : String (1 .. Natural (Encoded + 1));
+      begin
+         for I in 0 .. Encoded loop
+            Result (Natural (I + 1)) := Character'Val (Buffer (I));
+         end loop;
+         return Result;
+      end;
+   end Create_Nonce;
 
    --  ------------------------------
    --  Get the principal name.  This is the OAuth access token.
