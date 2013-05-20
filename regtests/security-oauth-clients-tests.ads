@@ -27,4 +27,10 @@ package Security.OAuth.Clients.Tests is
    --  Test Create_Nonce operation.
    procedure Test_Create_Nonce (T : in out Test);
 
+   --  Test the Get_State operation.
+   procedure Test_Get_State (T : in out Test);
+
+   --  Test the Is_Valid_State operation.
+   procedure Test_Is_Valid_State (T : in out Test);
+
 end Security.OAuth.Clients.Tests;

@@ -28,6 +28,10 @@ package body Security.OAuth.Clients.Tests is
    begin
       Caller.Add_Test (Suite, "Test Security.OAuth.Clients.Create_Nonce",
                        Test_Create_Nonce'Access);
+      Caller.Add_Test (Suite, "Test Security.OAuth.Clients.Get_State",
+                       Test_Get_State'Access);
+      Caller.Add_Test (Suite, "Test Security.OAuth.Clients.Is_Valid_State",
+                       Test_Is_Valid_State'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -60,5 +64,53 @@ package body Security.OAuth.Clients.Tests is
          Util.Measures.Report (S, "128 bits nonce generation (1000 calls)");
       end;
    end Test_Create_Nonce;
+
+   --  ------------------------------
+   --  Test the Get_State operation.
+   --  ------------------------------
+   procedure Test_Get_State (T : in out Test) is
+      App   : Application;
+      Nonce : constant String := Create_Nonce (128);
+   begin
+      App.Set_Application_Identifier ("test");
+      Util.Tests.Assert_Equals (T, "test", App.Get_Application_Identifier, "Invalid application");
+
+      App.Set_Application_Secret ("my-secret");
+      App.Set_Application_Callback ("my-callback");
+      App.Set_Provider_URI ("http://my-provider");
+
+      declare
+         State : constant String := App.Get_State (Nonce);
+      begin
+         T.Assert (State'Length > 25, "State is too small: " & State);
+      end;
+   end Test_Get_State;
+
+   --  ------------------------------
+   --  Test the Is_Valid_State operation.
+   --  ------------------------------
+   procedure Test_Is_Valid_State (T : in out Test) is
+      App   : Application;
+   begin
+      App.Set_Application_Identifier ("test");
+      Util.Tests.Assert_Equals (T, "test", App.Get_Application_Identifier, "Invalid application");
+
+      App.Set_Application_Secret ("my-secret");
+      App.Set_Application_Callback ("my-callback");
+      App.Set_Provider_URI ("http://my-provider");
+
+      for I in 1 .. 100 loop
+         declare
+            Nonce : constant String := Create_Nonce (128);
+            State : constant String := App.Get_State (Nonce);
+         begin
+            T.Assert (State'Length > 25, "State is too small: " & State);
+            T.Assert (App.Is_Valid_State (Nonce, State), "Invalid state: " & State);
+            T.Assert (not App.Is_Valid_State ("", State), "State was valid with invalid nonce");
+            T.Assert (not App.Is_Valid_State (State, State), "State must be invalid");
+            T.Assert (not App.Is_Valid_State (Nonce, State & "d"), "State must be invalid");
+         end;
+      end loop;
+   end Test_Is_Valid_State;
 
 end Security.OAuth.Clients.Tests;
