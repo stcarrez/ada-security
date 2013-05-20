@@ -110,6 +110,7 @@ package body Security.Auth.OAuth.Facebook is
                                   Request : in Parameters'Class;
                                   Token   : in Security.OAuth.Clients.Access_Token_Access;
                                   Result  : in out Authentication) is
+      pragma Unreferenced (Assoc, Request);
       use type Ada.Calendar.Time;
 
       T    : constant String := Token.Get_Name;
