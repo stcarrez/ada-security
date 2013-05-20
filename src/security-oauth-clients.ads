@@ -40,6 +40,11 @@ package Security.OAuth.Clients is
    --  Get the id_token that was returned by the authentication process.
    function Get_Id_Token (From : in OpenID_Token) return String;
 
+   --  Generate a random nonce with at last the number of random bits.
+   --  The number of bits is rounded up to a multiple of 32.
+   --  The random bits are then converted to base64url in the returned string.
+   function Create_Nonce (Bits : in Positive := 256) return String;
+
    --  ------------------------------
    --  Application
    --  ------------------------------
