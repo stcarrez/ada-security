@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Strings.Fixed;
 with Util.Test_Caller;
 with Util.Measures;
 with Util.Strings.Sets;
@@ -83,6 +83,39 @@ package body Security.OAuth.Clients.Tests is
          State : constant String := App.Get_State (Nonce);
       begin
          T.Assert (State'Length > 25, "State is too small: " & State);
+         T.Assert (Ada.Strings.Fixed.Index (State, Nonce) = 0,
+                   "The state must not contain the nonce");
+
+         --  Calling Get_State with the same nonce should produce the same result.
+         Util.Tests.Assert_Equals (T, State, App.Get_State (Nonce), "Invalid state");
+
+         App.Set_Application_Secret ("second-secret");
+         declare
+            State2 : constant String := App.Get_State (Nonce);
+         begin
+            T.Assert (State /= State2,
+                      "Changing the application key should produce a different state");
+         end;
+
+         --  Restore the secret and change the callback.
+         App.Set_Application_Secret ("my-secret");
+         App.Set_Application_Callback ("my-callback2");
+         declare
+            State2 : constant String := App.Get_State (Nonce);
+         begin
+            T.Assert (State /= State2,
+                      "Changing the application callback should produce a different state");
+         end;
+
+         --  Restore the callback and change the client Id.
+         App.Set_Application_Callback ("my-callback");
+         App.Set_Application_Identifier ("test2");
+         declare
+            State2 : constant String := App.Get_State (Nonce);
+         begin
+            T.Assert (State /= State2,
+                      "Changing the application identifier should produce a different state");
+         end;
       end;
    end Test_Get_State;
 
