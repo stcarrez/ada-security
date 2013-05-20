@@ -33,4 +33,7 @@ package Security.OAuth.Clients.Tests is
    --  Test the Is_Valid_State operation.
    procedure Test_Is_Valid_State (T : in out Test);
 
+   --  Test the Get_Auth_Params operation.
+   procedure Test_Get_Auth_Params (T : in out Test);
+
 end Security.OAuth.Clients.Tests;

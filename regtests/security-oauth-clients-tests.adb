@@ -32,6 +32,8 @@ package body Security.OAuth.Clients.Tests is
                        Test_Get_State'Access);
       Caller.Add_Test (Suite, "Test Security.OAuth.Clients.Is_Valid_State",
                        Test_Is_Valid_State'Access);
+      Caller.Add_Test (Suite, "Test Security.OAuth.Clients.Get_Auth_Params",
+                       Test_Get_Auth_Params'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -145,5 +147,24 @@ package body Security.OAuth.Clients.Tests is
          end;
       end loop;
    end Test_Is_Valid_State;
+
+   --  Test the Get_Auth_Params operation.
+   procedure Test_Get_Auth_Params (T : in out Test) is
+      App   : Application;
+   begin
+      App.Set_Application_Identifier ("test");
+      Util.Tests.Assert_Equals (T, "test", App.Get_Application_Identifier, "Invalid application");
+
+      App.Set_Application_Secret ("my-secret");
+      App.Set_Application_Callback ("my-callback");
+      App.Set_Provider_URI ("http://my-provider");
+      declare
+         P : constant String := App.Get_Auth_Params ("the-state", "the-scope");
+      begin
+         Util.Tests.Assert_Equals (T, "client_id=test&redirect_uri=my-callback&"
+                                   & "scope=the-scope&state=the-state", P,
+                                   "Invalid auth params");
+      end;
+   end Test_Get_Auth_Params;
 
 end Security.OAuth.Clients.Tests;
