@@ -1,6 +1,6 @@
 Version 1.1     -
-  - New authentication framework that supports OpenID, OAuth, Facebook login
-  - AWS demo for a Google, Yahoo!, Facebook authentication
+  - New authentication framework that supports OpenID, OpenID Connect, OAuth, Facebook login
+  - AWS demo for a Google, Yahoo!, Facebook, Google+ authentication
   - Support to extract JSON Web Token (JWT)
 
 Version 1.0     - Jan 2013
