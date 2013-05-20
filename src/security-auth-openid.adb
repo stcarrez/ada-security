@@ -50,9 +50,10 @@ package body Security.Auth.OpenID is
    --  and <tt>openid.callback_url</tt> parameters to configure the realm.
    --  ------------------------------
    overriding
-   procedure Initialize (Realm     : in out Manager;
-                         Params    : in Parameters'Class;
-                         Provider  : in String := PROVIDER_OPENID) is
+   procedure Initialize (Realm  : in out Manager;
+                         Params : in Parameters'Class;
+                         Name   : in String := PROVIDER_OPENID) is
+      pragma Unreferenced (Name);
    begin
       Realm.Realm     := To_Unbounded_String (Params.Get_Parameter ("openid.realm"));
       Realm.Return_To := To_Unbounded_String (Params.Get_Parameter ("openid.callback_url"));
