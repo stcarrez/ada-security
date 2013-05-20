@@ -17,7 +17,6 @@
 -----------------------------------------------------------------------
 
 with Util.Log.Loggers;
-with Security.OAuth.Clients;
 package body Security.Auth.OAuth is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Auth.OAuth");
@@ -55,6 +54,7 @@ package body Security.Auth.OAuth is
    procedure Discover (Realm  : in out Manager;
                        Name   : in String;
                        Result : out End_Point) is
+      pragma Unreferenced (Realm);
    begin
       Result.URL := To_Unbounded_String (Name);
    end Discover;
@@ -68,8 +68,9 @@ package body Security.Auth.OAuth is
    procedure Associate (Realm  : in out Manager;
                         OP     : in End_Point;
                         Result : out Association) is
+      pragma Unreferenced (Realm, OP);
    begin
-      Result.Assoc_Handle := To_Unbounded_String ("nonce-generator");
+      Result.Assoc_Handle := To_Unbounded_String (Security.OAuth.Clients.Create_Nonce (128));
    end Associate;
 
    --  ------------------------------
