@@ -33,9 +33,9 @@ private package Security.Auth.OpenID is
    --  Initialize the OpenID authentication realm.  Get the <tt>openid.realm</tt>
    --  and <tt>openid.callback_url</tt> parameters to configure the realm.
    overriding
-   procedure Initialize (Realm     : in out Manager;
-                         Params    : in Parameters'Class;
-                         Provider  : in String := PROVIDER_OPENID);
+   procedure Initialize (Realm  : in out Manager;
+                         Params : in Parameters'Class;
+                         Name   : in String := PROVIDER_OPENID);
 
    --  Discover the OpenID provider that must be used to authenticate the user.
    --  The <b>Name</b> can be an URL or an alias that identifies the provider.
