@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid - Tests for OpenID
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 with Util.Strings.Maps;
 with Util.Tests;
-package Security.OpenID.Tests is
+package Security.Auth.OpenID.Tests is
 
    use Ada.Strings.Unbounded;
 
@@ -30,7 +30,7 @@ package Security.OpenID.Tests is
 
    procedure Test_Verify_Signature (T : in out Test);
 
-   type Test_Parameters is new Security.Openid.Parameters with record
+   type Test_Parameters is new Security.Auth.Parameters with record
       Params : Util.Strings.Maps.Map;
    end record;
 
@@ -42,4 +42,4 @@ package Security.OpenID.Tests is
                             Name   : in String;
                             Value  : in String);
 
-end Security.OpenID.Tests;
+end Security.Auth.OpenID.Tests;

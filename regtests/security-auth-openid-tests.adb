@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid - Tests for OpenID
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ with Util.Http.Clients.Mockups;
 
 with Util.Test_Caller;
 with Ada.Text_IO;
-package body Security.OpenID.Tests is
+package body Security.Auth.OpenID.Tests is
 
    use Util.Tests;
 
@@ -138,4 +138,4 @@ package body Security.OpenID.Tests is
       Assert_Equals (T, "stephane.carrez@gmail.com", Get_Email (Result), "Invalid email");
    end Test_Verify_Signature;
 
-end Security.OpenID.Tests;
+end Security.Auth.OpenID.Tests;
