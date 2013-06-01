@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Security.Auth.OpenID.Tests;
+with Security.Auth.Tests;
 with Security.Permissions.Tests;
 with Security.Policies.Tests;
 with Security.OAuth.JWT.Tests;
@@ -28,7 +28,7 @@ package body Security.Testsuite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
       Security.OAuth.JWT.Tests.Add_Tests (Ret);
-      Security.Auth.OpenID.Tests.Add_Tests (Ret);
+      Security.Auth.Tests.Add_Tests (Ret);
       Security.Permissions.Tests.Add_Tests (Ret);
       Security.Policies.Tests.Add_Tests (Ret);
       Security.OAuth.Clients.Tests.Add_Tests (Ret);

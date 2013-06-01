@@ -23,7 +23,7 @@ with Util.Http.Clients.Mockups;
 
 with Util.Test_Caller;
 with Ada.Text_IO;
-package body Security.Auth.OpenID.Tests is
+package body Security.Auth.Tests is
 
    use Util.Tests;
 
@@ -59,6 +59,17 @@ package body Security.Auth.OpenID.Tests is
       Params.Params.Include (Name, Value);
    end Set_Parameter;
 
+   procedure Setup (M : in out Manager;
+                    Name : in String) is
+      Params : Test_Parameters;
+   begin
+      Params.Set_Parameter ("auth.provider.google", "openid");
+      Params.Set_Parameter ("auth.provider.openid", "openid");
+      Params.Set_Parameter ("openid.realm", "http://localhost/verify");
+      Params.Set_Parameter ("openid.callback_url", "http://localhost/openId");
+      M.Initialize (Params, Name);
+   end Setup;
+
    procedure Check_Discovery (T    : in out Test;
                               Name : in String;
                               URI  : in String) is
@@ -69,6 +80,7 @@ package body Security.Auth.OpenID.Tests is
       Path   : constant String := Util.Tests.Get_Path (Dir);
       Result : End_Point;
    begin
+      Setup (M, "openid");
       Util.Http.Clients.Mockups.Register;
       Util.Http.Clients.Mockups.Set_File (Path & Name & ".xrds");
       M.Discover (Name   => Name,
@@ -101,7 +113,9 @@ package body Security.Auth.OpenID.Tests is
       M      : Manager;
       Result : Authentication;
    begin
-      M.Return_To := To_Unbounded_String ("http://localhost/openId");
+      Setup (M, "openid");
+
+--        M.Return_To := To_Unbounded_String ("http://localhost/openId");
 
       --  Below is a part of the authentication process on Google OpenId.
       --  In theory, you cannot use the following information to authenticate again...
@@ -138,4 +152,4 @@ package body Security.Auth.OpenID.Tests is
       Assert_Equals (T, "stephane.carrez@gmail.com", Get_Email (Result), "Invalid email");
    end Test_Verify_Signature;
 
-end Security.Auth.OpenID.Tests;
+end Security.Auth.Tests;
