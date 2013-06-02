@@ -90,6 +90,8 @@
 --
 package Security is
 
+   pragma Preelaborate;
+
    --  ------------------------------
    --  Principal
    --  ------------------------------
