@@ -6,8 +6,8 @@ LIBRARY_TYPE=static
 # You may edit this makefile as long as you keep these original 
 # target names defined.
 MODE=distrib
-PROCESSORS=2
-GNATMAKE=@GNATMAKE@ -XMODE=${MODE} -XPROCESSORS=${PROCESSORS}
+CPUS := $(shell getconf _NPROCESSORS_ONLN)
+GNATMAKE=@GNATMAKE@ -XMODE=${MODE}
 GNATCLEAN=gnatclean
 SVN=svn
 INSTALL=@INSTALL@
@@ -47,7 +47,7 @@ bindir=${prefix}/bin
 libdir=${prefix}/lib
 alidir=${libdir}/ada/adalib/
 
-MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=4
+MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=${CPUS}
 
 GPRPATH=security.gpr
 
@@ -142,12 +142,12 @@ install_shared:
 	$(MAKE) LIBRARY_TYPE=relocatable install_lib
 
 install_lib:
-	$(MKDIR) -p ${includedir}/security
+	$(MKDIR) -p ${includedir}/ada-security
 	$(MKDIR) -p ${projectdir}/
-	${MKDIR} -p ${alidir}/security/$(LIBRARY_TYPE)
-	${CP} -p src/*.ad[bs] ${includedir}/security
+	${MKDIR} -p ${alidir}/ada-security
+	${CP} -p src/*.ad[bs] ${includedir}/ada-security
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
-	${CP} -p lib/security/$(LIBRARY_TYPE)/*.ali ${alidir}/security/$(LIBRARY_TYPE)/
+	${CP} -p lib/security/$(LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
 ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/security/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
 else
