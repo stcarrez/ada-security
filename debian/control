@@ -1,0 +1,43 @@
+Source: libada-security
+Priority: extra
+Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, gnat, gnat-4.6,
+ libada-util1.7-dev, libada-testutil1.7-dev
+Standards-Version: 3.9.2
+Section: libs
+Homepage: http://code.google.com/p/ada-security/
+#Vcs-Git: git://git.debian.org/collab-maint/libada-security.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/libada-security.git;a=summary
+
+Package: libada-security1.1
+Section: libs
+Architecture: any
+Pre-Depends: multiarch-support
+Depends: ${shlibs:Depends}, libada-util1.7, ${misc:Depends}
+Description: OAuth and OpenID security frameworks for Ada
+ The library provides some security framework needed by some applications.
+ It includes the OpenID client authentication and the OAuth 2.0 client
+ authentication.  The library also provides a security framework to
+ protect resources in the application.
+
+Package: libada-security1.1-dev
+Section: libdevel
+Architecture: any
+Depends: libada-security1.1 (= ${binary:Version}), libada-util1.7-dev, ${misc:Depends}
+Description: OAuth and OpenID security frameworks for Ada (Development)
+ The package contains the Ada development files to develop application
+ using the libada-security library.
+
+Package: libada-security1.1-dbg
+Section: debug
+Architecture: any
+Depends: libada-security1.1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Debugging symbols for the Ada Security Library
+ The library provides some security framework needed by some applications.
+ It includes the OpenID client authentication and the OAuth 2.0 client
+ authentication.  The library also provides a security framework to
+ protect resources in the application.
+ .
+ This is the library containing debugging symbols for the Ada Security
+ library.
+
