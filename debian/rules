@@ -56,6 +56,7 @@ libada-security$(aliversion)-dev:
 		usr/lib/ada/adalib/ada-security
 	dh_install -p$@ usr/lib/libada-security.a /usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -p$@ usr/lib/ada/adalib/ada-security/*.ali /usr/lib/ada/adalib/ada-security
+	dh_install -p$@ usr/share/ada/adainclude/ada-security/*.ad[bs] /usr/share/ada/adainclude/ada-security
 	dh_install -p$@ usr/share/ada/adainclude/security.gpr /usr/share/ada/adainclude
 	dh_install -p$@ samples/*.ads usr/share/doc/$@/samples
 	dh_install -p$@ samples/*.adb usr/share/doc/$@/samples
