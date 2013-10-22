@@ -7,7 +7,7 @@ LIBRARY_TYPE=static
 # target names defined.
 MODE=distrib
 CPUS := $(shell getconf _NPROCESSORS_ONLN)
-GNATMAKE=@GNATMAKE@ -XMODE=${MODE}
+GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
 SVN=svn
 INSTALL=@INSTALL@
@@ -74,7 +74,7 @@ shared:
 # Analyzes only on those sources that have changed.
 # Does not build executables.
 autobuild:
-	$(GNATMAKE) -gnatc -c -k  -P "$(GPRPATH)"
+	$(GNATMAKE) $(MAKE_ARGS) -gnatc -c -k  -P "$(GPRPATH)"
 
 # Clean the root project of all build products.
 clean:
@@ -90,14 +90,14 @@ clean_tree:
 # Check *all* sources for errors, even those not changed.
 # Does not build executables.
 analyze:
-	$(GNATMAKE) -f  -gnatc -c -k  -P "$(GPRPATH)"
+	$(GNATMAKE) $(MAKE_ARGS) -f  -gnatc -c -k  -P "$(GPRPATH)"
 
 # Clean, then build executables for all mains defined by the project.
 rebuild: clean build
 
 # Build and run the unit tests
 check test:	build
-	$(GNATMAKE) -p -Ptests
+	$(GNATMAKE) $(MAKE_ARGS) -p -Ptests
 	bin/security_harness -xml security-aunit.xml
 
 doc:
@@ -106,7 +106,7 @@ doc:
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-security.gpr.in tests.gpr.in config.gpr samples.properties \
+security.gpr.in tests.gpr.in config.gpr samples.properties samples.gpr \
 src regtests samples \
 bin obj lib doc distrib debian
 
