@@ -107,7 +107,7 @@ doc:
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
 security.gpr.in tests.gpr.in config.gpr \
-src regtests \
+src regtests samples \
 bin obj lib doc distrib debian
 
 dist:
