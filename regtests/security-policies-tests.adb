@@ -29,6 +29,9 @@ package body Security.Policies.Tests is
 
    use Util.Tests;
 
+   procedure Configure_Policy (Manager : in out Security.Policies.Policy_Manager;
+                               Name    : in String);
+
    package Caller is new Util.Test_Caller (Test, "Security.Policies");
 
    procedure Add_Tests (Suite : in Util.Tests.Access_Test_Suite) is
@@ -225,6 +228,7 @@ package body Security.Policies.Tests is
       R := Security.Policies.Roles.Get_Role_Policy (M);
       declare
          Admin : Policies.Roles.Role_Type;
+         pragma Unreferenced (Admin);
       begin
          Admin := R.Find_Role ("admin");
          T.Fail ("'admin' role was returned");
@@ -282,7 +286,7 @@ package body Security.Policies.Tests is
          for I in 1 .. 1_000 loop
             Result := Contexts.Has_Permission (Permission => P_Admin.Permission);
          end loop;
-         Util.Measures.Report (S, "Has_Permission role based (1000 calls)");
+         Util.Measures.Report (S, "Has_Permission role based", 1_000);
 
          T.Assert (Result, "Permission not granted");
       end;
@@ -299,7 +303,7 @@ package body Security.Policies.Tests is
                          "Permission not granted");
             end;
          end loop;
-         Util.Measures.Report (S, "Has_Permission (1000 calls, cache hit)");
+         Util.Measures.Report (S, "Has_Permission (cache hit)", 1_000);
       end;
 
    end Test_Read_Policy;
