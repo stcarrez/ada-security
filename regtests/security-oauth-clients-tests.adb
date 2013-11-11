@@ -63,7 +63,7 @@ package body Security.OAuth.Clients.Tests is
                null;
             end;
          end loop;
-         Util.Measures.Report (S, "128 bits nonce generation (1000 calls)");
+         Util.Measures.Report (S, "128 bits nonce generation", 1_000);
       end;
    end Test_Create_Nonce;
 
