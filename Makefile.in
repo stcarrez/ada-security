@@ -6,7 +6,6 @@ LIBRARY_TYPE=static
 # You may edit this makefile as long as you keep these original 
 # target names defined.
 MODE=distrib
-CPUS := $(shell getconf _NPROCESSORS_ONLN)
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
 SVN=svn
@@ -46,7 +45,9 @@ projectdir=${prefix}/share/ada/adainclude
 bindir=${prefix}/bin
 libdir=${prefix}/lib
 alidir=${libdir}/ada/adalib/
+libname=libada_security
 
+CPUS := @NR_CPUS@
 MAKE_ARGS=-XMODE=${MODE} -XLIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=${CPUS}
 
 GPRPATH=security.gpr
@@ -149,18 +150,18 @@ install_lib:
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
 	${CP} -p lib/security/$(LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
 ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/security/$(LIBRARY_TYPE)/libada-security.a ${libdir}/
+	${CP} lib/security/$(LIBRARY_TYPE)/$(libname).a ${libdir}/
 else
-	${CP} -p lib/security/$(LIBRARY_TYPE)/libada-security.$(LIBVER) ${libdir}/
+	${CP} -p lib/security/$(LIBRARY_TYPE)/$(libname).$(LIBVER) ${libdir}/
 	cd ${libdir} && \
-	   rm -f libada-security.$(LIBEXT) && \
-	   ${LN} libada-security.$(LIBVER) libada-security.$(LIBEXT)
+	   rm -f $(libname).$(LIBEXT) && \
+	   ${LN} $(libname).$(LIBVER) $(libname).$(LIBEXT)
 endif
 
 uninstall:
 	rm -rf ${includedir}/security
-	rm -f ${libdir}/libada-security.a
-	rm -f ${libdir}/libada-security.$(LIBEXT)
+	rm -f ${libdir}/$(libname).a
+	rm -f ${libdir}/$(libname).$(LIBEXT)
 	rm -f ${projectdir}/security.gpr
 
 # prepare before releasing a new version of the package
