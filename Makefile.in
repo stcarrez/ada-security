@@ -144,7 +144,7 @@ install_shared:
 
 install_lib:
 	$(MKDIR) -p ${includedir}/ada-security
-	$(MKDIR) -p ${projectdir}/
+	$(MKDIR) -p ${projectdir}/ ${bindir}/
 	${MKDIR} -p ${alidir}/ada-security
 	${CP} -p src/*.ad[bs] ${includedir}/ada-security
 	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
@@ -153,13 +153,17 @@ ifeq ($(LIBRARY_TYPE),static)
 	${CP} lib/security/$(LIBRARY_TYPE)/$(libname).a ${libdir}/
 else
 	${CP} -p lib/security/$(LIBRARY_TYPE)/$(libname).$(LIBVER) ${libdir}/
+ifneq (${OS},Windows_NT)
 	cd ${libdir} && \
 	   rm -f $(libname).$(LIBEXT) && \
 	   ${LN} $(libname).$(LIBVER) $(libname).$(LIBEXT)
+else
+	${CP} -p lib/security/$(LIBRARY_TYPE)/$(libname).$(LIBVER) ${bindir}/
+endif
 endif
 
 uninstall:
-	rm -rf ${includedir}/security
+	rm -rf ${includedir}/ada-security ${alidir}/ada-security
 	rm -f ${libdir}/$(libname).a
 	rm -f ${libdir}/$(libname).$(LIBEXT)
 	rm -f ${projectdir}/security.gpr
