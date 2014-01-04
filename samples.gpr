@@ -1,5 +1,6 @@
 with "config";
 with "util";
+with "util_http";
 with "security";
 with "aws";
 
