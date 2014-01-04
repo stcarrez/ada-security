@@ -19,6 +19,8 @@ with Ada.Strings.Unbounded;
 with Ada.Calendar;
 with Ada.Finalization;
 
+with Security.Auth;
+
 --  == OpenID ==
 --  The <b>Security.OpenID</b> package implements an authentication framework based
 --  on OpenID 2.0.
@@ -108,23 +110,20 @@ with Ada.Finalization;
 --
 package Security.OpenID is
 
+   pragma Obsolescent ("Use the Security.Auth package instead");
+
    Invalid_End_Point : exception;
 
    Service_Error     : exception;
 
-   type Parameters is limited interface;
-
-   function Get_Parameter (Params : in Parameters;
-                           Name   : in String) return String is abstract;
+   subtype Parameters is Security.Auth.Parameters;
 
    --  ------------------------------
    --  OpenID provider
    --  ------------------------------
    --  The <b>End_Point</b> represents the OpenID provider that will authenticate
    --  the user.
-   type End_Point is private;
-
-   function To_String (OP : End_Point) return String;
+   subtype End_Point is Security.Auth.End_Point;
 
    --  ------------------------------
    --  Association
@@ -133,165 +132,40 @@ package Security.OpenID is
    --  and the OpenID provider.  The association can be cached and reused to authenticate
    --  different users using the same OpenID provider.  The association also has an
    --  expiration date.
-   type Association is private;
+   subtype Association is Security.Auth.End_Point;
 
-   --  Dump the association as a string (for debugging purposes)
-   function To_String (Assoc : Association) return String;
-
-   type Auth_Result is (AUTHENTICATED, CANCEL, SETUP_NEEDED, UNKNOWN, INVALID_SIGNATURE);
+   subtype Auth_Result is Security.Auth.Auth_Result;
 
    --  ------------------------------
    --  OpenID provider
    --  ------------------------------
    --
-   type Authentication is private;
-
-   --  Get the email address
-   function Get_Email (Auth : in Authentication) return String;
-
-   --  Get the user first name.
-   function Get_First_Name (Auth : in Authentication) return String;
-
-   --  Get the user last name.
-   function Get_Last_Name (Auth : in Authentication) return String;
-
-   --  Get the user full name.
-   function Get_Full_Name (Auth : in Authentication) return String;
-
-   --  Get the user identity.
-   function Get_Identity (Auth : in Authentication) return String;
-
-   --  Get the user claimed identity.
-   function Get_Claimed_Id (Auth : in Authentication) return String;
-
-   --  Get the user language.
-   function Get_Language (Auth : in Authentication) return String;
-
-   --  Get the user country.
-   function Get_Country (Auth : in Authentication) return String;
-
-   --  Get the result of the authentication.
-   function Get_Status (Auth : in Authentication) return Auth_Result;
+   subtype Authentication is Security.Auth.Authentication;
 
    --  ------------------------------
    --  OpenID Default principal
    --  ------------------------------
-   type Principal is new Security.Principal with private;
-   type Principal_Access is access all Principal'Class;
-
-   --  Get the principal name.
-   function Get_Name (From : in Principal) return String;
-
-   --  Get the user email address.
-   function Get_Email (From : in Principal) return String;
-
-   --  Get the authentication data.
-   function Get_Authentication (From : in Principal) return Authentication;
-
-   --  Create a principal with the given authentication results.
-   function Create_Principal (Auth : in Authentication) return Principal_Access;
+   subtype Principal is Security.Auth.Principal;
+   subtype Principal_Access is Security.Auth.Principal_Access;
 
    --  ------------------------------
    --  OpenID Manager
    --  ------------------------------
    --  The <b>Manager</b> provides the core operations for the OpenID process.
-   type Manager is tagged limited private;
+   subtype Manager is Security.Auth.Manager;
 
    --  Initialize the OpenID realm.
    procedure Initialize (Realm     : in out Manager;
                          Name      : in String;
                          Return_To : in String);
 
-   --  Discover the OpenID provider that must be used to authenticate the user.
-   --  The <b>Name</b> can be an URL or an alias that identifies the provider.
-   --  A cached OpenID provider can be returned.
-   --  (See OpenID Section 7.3 Discovery)
-   procedure Discover (Realm  : in out Manager;
-                       Name   : in String;
-                       Result : out End_Point);
-
-   --  Associate the application (relying party) with the OpenID provider.
-   --  The association can be cached.
-   --  (See OpenID Section 8 Establishing Associations)
-   procedure Associate (Realm  : in out Manager;
-                        OP     : in End_Point;
-                        Result : out Association);
-
-   function Get_Authentication_URL (Realm : in Manager;
-                                    OP    : in End_Point;
-                                    Assoc : in Association) return String;
-
-   --  Verify the authentication result
-   procedure Verify (Realm   : in out Manager;
-                     Assoc   : in Association;
-                     Request : in Parameters'Class;
-                     Result  : out Authentication);
-
-   --  Verify the authentication result
-   procedure Verify_Discovered (Realm   : in out Manager;
-                                Assoc   : in Association;
-                                Request : in Parameters'Class;
-                                Result  : out Authentication);
-
-   --  Verify the signature part of the result
-   procedure Verify_Signature (Realm   : in Manager;
-                               Assoc   : in Association;
-                               Request : in Parameters'Class;
-                               Result  : in out Authentication);
-
-   --  Read the XRDS document from the URI and initialize the OpenID provider end point.
-   procedure Discover_XRDS (Realm  : in out Manager;
-                            URI    : in String;
-                            Result : out End_Point);
-
-   --  Extract from the XRDS content the OpenID provider URI.
-   --  The default implementation is very basic as it returns the first <URI>
-   --  available in the stream without validating the XRDS document.
-   --  Raises the <b>Invalid_End_Point</b> exception if the URI cannot be found.
-   procedure Extract_XRDS (Realm   : in out Manager;
-                           Content : in String;
-                           Result  : out End_Point);
-
 private
 
    use Ada.Strings.Unbounded;
-
-   type Association is record
-      Session_Type : Unbounded_String;
-      Assoc_Type   : Unbounded_String;
-      Assoc_Handle : Unbounded_String;
-      Mac_Key      : Unbounded_String;
-      Expired      : Ada.Calendar.Time;
-   end record;
-
-   type Authentication is record
-      Status     : Auth_Result;
-      Identity   : Unbounded_String;
-      Claimed_Id : Unbounded_String;
-      Email      : Unbounded_String;
-      Full_Name  : Unbounded_String;
-      First_Name : Unbounded_String;
-      Last_Name  : Unbounded_String;
-      Language   : Unbounded_String;
-      Country    : Unbounded_String;
-      Gender     : Unbounded_String;
-      Timezone   : Unbounded_String;
-      Nickname   : Unbounded_String;
-   end record;
-
-   type End_Point is record
-      URL        : Unbounded_String;
-      Alias      : Unbounded_String;
-      Expired    : Ada.Calendar.Time;
-   end record;
-
-   type Manager is new Ada.Finalization.Limited_Controlled with record
-      Realm     : Unbounded_String;
-      Return_To : Unbounded_String;
-   end record;
-
-   type Principal is new Security.Principal with record
-      Auth : Authentication;
-   end record;
+--
+--     type Manager is new Ada.Finalization.Limited_Controlled with record
+--        Realm     : Unbounded_String;
+--        Return_To : Unbounded_String;
+--     end record;
 
 end Security.OpenID;
