@@ -1,10 +1,13 @@
 Ada Security Library
 
 This Ada05 library provides some security frameworks needed by some Web applications.
-This includes:
+It allows a web application to integrate easily with Google, Yahoo!, Facebook and
+Google+ authentication systems.
+The library includes:
 
- o An OpenID client authentication
- o An OAuth 2.0 client authentication
+ o An OpenID client authentication,
+ o An OAuth 2.0 client authentication,
+ o An OpenID Connect authentication framework,
  o A policy based security framework to protect the resources
 
 To use Ada Security library, configure as follows:
@@ -19,6 +22,23 @@ The unit tests are built and executed with:
 For the installation, use the following command:
 
    make install
+
+The package provides a simple AWS server that illustrates the OpenID and OpenConnect
+authentication.  Build it as follows:
+
+   gnatmake -Psamples
+
+Before launching the demo server, you must update the 'samples.properties' file
+and change the lines that contain PUT-HERE-YOUR-FACEBOOK-xxx and
+PUT-HERE-GOOGLE-xxx with your client ID and client secrets.  These two changes
+are required by the OAuth and OpenID Connect framework only.
+Then, run the server:
+
+   bin/auth_demo
+
+and redirect your browser to:
+
+   http://localhost:8080/atlas/login.html
 
 Documentation
 
