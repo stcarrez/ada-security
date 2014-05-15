@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-oauth-facebook -- Facebook OAuth based authentication
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,12 @@ package Security.Auth.OAuth.Facebook is
    --  The <b>Manager</b> provides the core operations for the OAuth authorization process.
    type Manager is new Security.Auth.OAuth.Manager with private;
 
+   --  Initialize the authentication realm.
+   overriding
+   procedure Initialize (Realm     : in out Manager;
+                         Params    : in Parameters'Class;
+                         Provider  : in String := PROVIDER_OPENID);
+
    --  Verify the OAuth access token and retrieve information about the user.
    overriding
    procedure Verify_Access_Token (Realm   : in Manager;
@@ -35,6 +41,8 @@ package Security.Auth.OAuth.Facebook is
 
 private
 
-   type Manager is new Security.Auth.OAuth.Manager with null record;
+   type Manager is new Security.Auth.OAuth.Manager with record
+      App_Access_Token : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
 end Security.Auth.OAuth.Facebook;
