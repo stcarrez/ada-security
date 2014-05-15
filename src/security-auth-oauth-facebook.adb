@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-oauth-facebook -- Facebook OAuth based authentication
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2014 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,6 +102,20 @@ package body Security.Auth.OAuth.Facebook is
    Token_Info_Map : aliased Token_Info_Mapper.Mapper;
 
    --  ------------------------------
+   --  Initialize the authentication realm.
+   --  ------------------------------
+   overriding
+   procedure Initialize (Realm     : in out Manager;
+                         Params    : in Parameters'Class;
+                         Provider  : in String := PROVIDER_OPENID) is
+      Client : constant String := Params.Get_Parameter (Provider & ".client_id");
+      Secret : constant String := Params.Get_Parameter (Provider & ".secret");
+   begin
+      Security.Auth.OAuth.Manager (Realm).Initialize (Params, Provider);
+      Realm.App_Access_Token := To_Unbounded_String (Client & "|" & Secret);
+   end Initialize;
+
+   --  ------------------------------
    --  Verify the OAuth access token and retrieve information about the user.
    --  ------------------------------
    overriding
@@ -117,7 +131,8 @@ package body Security.Auth.OAuth.Facebook is
       Info : aliased Token_Info;
       Now  : constant Ada.Calendar.Time := Ada.Calendar.Clock;
    begin
-      Get_Token_Info ("https://graph.facebook.com/debug_token?access_token=" & T
+      Get_Token_Info ("https://graph.facebook.com/debug_token?access_token="
+                      & To_String (Realm.App_Access_Token)
                       & "&input_token=" & T,
                       Token_Info_Map'Access,
                       "/data",
