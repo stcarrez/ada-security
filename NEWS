@@ -1,3 +1,6 @@
+Version 1.1.1   -
+  - Fix minor configuration issue with GNAT 2014
+
 Version 1.1     - Mar 2014
   - New authentication framework that supports OpenID, OpenID Connect, OAuth, Facebook login
   - AWS demo for a Google, Yahoo!, Facebook, Google+ authentication
