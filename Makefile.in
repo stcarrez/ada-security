@@ -1,7 +1,7 @@
 ## The type of library we want to build. Possible values:
 ##   relocatable
 ##   static
-LIBRARY_TYPE=static
+SECURITY_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
@@ -48,7 +48,7 @@ alidir=${libdir}/ada/adalib/
 libname=libada_security
 
 CPUS := @NR_CPUS@
-MAKE_ARGS=-XMODE=${MODE} -XSECURITY_LIBRARY_TYPE=${LIBRARY_TYPE} -XPROCESSORS=${CPUS}
+MAKE_ARGS=-XMODE=${MODE} -XSECURITY_LIBRARY_TYPE=${SECURITY_LIBRARY_TYPE} -XPROCESSORS=${CPUS}
 
 GPRPATH=security.gpr
 
@@ -65,10 +65,10 @@ build:
 	$(GNATMAKE) -m -p -P"$(GPRPATH)" $(MAKE_ARGS)
 
 static:
-	$(MAKE) LIBRARY_TYPE=static build
+	$(MAKE) SECURITY_LIBRARY_TYPE=static build
 
 shared:
-	$(MAKE) LIBRARY_TYPE=relocatable build
+	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable build
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
@@ -137,28 +137,28 @@ dist:
 	    -cvzf $(DIST_FILE) $(distdir)
 
 install_static:
-	$(MAKE) LIBRARY_TYPE=static install_lib
+	$(MAKE) SECURITY_LIBRARY_TYPE=static install_lib
 
 install_shared:
-	$(MAKE) LIBRARY_TYPE=relocatable install_lib
+	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable install_lib
 
 install_lib:
 	$(MKDIR) -p ${includedir}/ada-security
 	$(MKDIR) -p ${projectdir}/ ${bindir}/
 	${MKDIR} -p ${alidir}/ada-security
 	${CP} -p src/*.ad[bs] ${includedir}/ada-security
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
-	${CP} -p lib/security/$(LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
-ifeq ($(LIBRARY_TYPE),static)
-	${CP} lib/security/$(LIBRARY_TYPE)/$(libname).a ${libdir}/
+	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(SECURITY_LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
+	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
+ifeq ($(SECURITY_LIBRARY_TYPE),static)
+	${CP} lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).a ${libdir}/
 else
-	${CP} -p lib/security/$(LIBRARY_TYPE)/$(libname).$(LIBVER) ${libdir}/
+	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).$(LIBVER) ${libdir}/
 ifneq (${OS},Windows_NT)
 	cd ${libdir} && \
 	   rm -f $(libname).$(LIBEXT) && \
 	   ${LN} $(libname).$(LIBVER) $(libname).$(LIBEXT)
 else
-	${CP} -p lib/security/$(LIBRARY_TYPE)/$(libname).$(LIBVER) ${bindir}/
+	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).$(LIBVER) ${bindir}/
 endif
 endif
 
