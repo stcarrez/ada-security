@@ -40,11 +40,25 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 top_builddir = .
 
-includedir=${prefix}/share/ada/adainclude
-projectdir=${prefix}/share/ada/adainclude
+# share/ada/adainclude
+infix_inc=@ADA_INC_BASE@
+
+# share/ada/adainclude
+infix_prj=@ADA_PRJ_BASE@
+
+# lib
+infix_lib=@ADA_LIB_BASE@
+
+# lib/ada/adalib
+infix_ali=@ADA_ALI_BASE@
+
+includedir=${prefix}/${infix_inc}
+projectdir=${prefix}/${infix_prj}
 bindir=${prefix}/bin
 libdir=${prefix}/lib
-alidir=${libdir}/ada/adalib/
+libdir=${prefix}/${infix_lib}
+alidir=${prefix}/${infix_ali}
+
 libname=libada_security
 
 CPUS := @NR_CPUS@
@@ -147,7 +161,7 @@ install_lib:
 	$(MKDIR) -p ${projectdir}/ ${bindir}/
 	${MKDIR} -p ${alidir}/ada-security
 	${CP} -p src/*.ad[bs] ${includedir}/ada-security
-	sed -e "s,INSTALL,${prefix},g" -e "s,LIBRARY_TYPE,$(SECURITY_LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
+	sed -e "s,LIBRARY_TYPE,$(SECURITY_LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
 	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
 ifeq ($(SECURITY_LIBRARY_TYPE),static)
 	${CP} lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).a ${libdir}/
