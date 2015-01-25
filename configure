@@ -584,6 +584,10 @@ PACKAGE_URL=
 ac_unique_file="src/security.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+ADA_PRJ_BASE
+ADA_ALI_BASE
+ADA_LIB_BASE
+ADA_INC_BASE
 UTIL_DIR
 BUILDS_SHARED
 NR_CPUS
@@ -3006,6 +3010,111 @@ $as_echo "no" >&6; }
     ADA_PROJECT_PATH=$ADA_PROJECT_PATH
 " "$LINENO" 5
   fi
+
+
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether util_config project exists" >&5
+$as_echo_n "checking whether util_config project exists... " >&6; }
+  echo "with \"util_config\"; project t is for Source_Dirs use (); end t;" > t.gpr
+  $GNATMAKE -p -Pt >/dev/null 2>/dev/null
+  if test $? -eq 0; then
+    gnat_project_util_config=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    gnat_project_with_util_config="with \"util_config\";";
+  else
+    gnat_project_util_config=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  fi;
+  rm -f t.gpr
+
+
+  # Search in the GNAT project path.
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for util_config.gpr installation" >&5
+$as_echo_n "checking for util_config.gpr installation... " >&6; }
+  # echo "D:${gnat_project_with_util_config}"
+  echo "${gnat_project_with_util_config} project t is for Source_Dirs use (); end t;" > t.gpr
+  # cat t.gpr
+  # $GNATMAKE -vP1 -Pt 2>&1
+  gnat_util_config_path=`$GNATMAKE -vP1 -Pt 2>&1 | awk '/Parsing.*util_config.gpr/ {print $2}' | sed -e 's,",,g'`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${gnat_util_config_path}" >&5
+$as_echo "${gnat_util_config_path}" >&6; }
+
+  gnat_inc_dir=
+  gnat_ali_dir=
+  gnat_prj_dir=
+  gnat_lib_dir=
+  if test x${gnat_util_config_path} != x; then
+    if test -f ${gnat_util_config_path}; then
+      gnat_inc_dir=`awk '/Includedir/ {print $3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
+      gnat_lib_dir=`awk '/Libdir/ {print $3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
+      gnat_ali_dir=`awk '/Alidir/ {print $3}' ${gnat_util_config_path} | sed -e 's,",,g' -e 's,;,,'`
+      gnat_prj_dir=`dirname ${gnat_util_config_path}`
+    fi
+  fi
+
+  gnat_prefix=
+  for dir in ${gnat_inc_dir} ${gnat_ali_dir} ${gnat_lib_dir} ${gnat_prj_dir}; do
+    # If we have a valid path, try to identify the common path prefix.
+    if test x$gnat_prefix = x; then
+      gnat_prefix=$dir
+    else
+	  # echo "Dir=$dir"
+	  gnat_old_ifs=$IFS
+	  path=
+	  IFS=/
+	  for c in $dir; do
+	    if test x"$path" = x"/"; then
+		  try="/$c"
+		else
+          try="$path/$c"
+		fi
+		# echo "gnat_prefix=$gnat_prefix try=$try path=$path c=$c"
+		case $gnat_prefix in
+		  $try*)
+			;;
+		  *)
+			break
+			;;
+		esac
+		  path=$try
+	  done
+	  IFS=$gnat_old_ifs
+	  gnat_prefix=$path
+    fi
+  done
+  ADA_INC_BASE=`echo ${gnat_inc_dir} | sed -e s,^$gnat_prefix/,,`
+  ADA_ALI_BASE=`echo ${gnat_ali_dir} | sed -e s,^$gnat_prefix/,,`
+  ADA_LIB_BASE=`echo ${gnat_lib_dir} | sed -e s,^$gnat_prefix/,,`
+  ADA_PRJ_BASE=`echo ${gnat_prj_dir} | sed -e s,^$gnat_prefix/,,`
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of Ada source files" >&5
+$as_echo_n "checking installation of Ada source files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_INC_BASE}" >&5
+$as_echo "<prefix>/${ADA_INC_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of Ada ALI files" >&5
+$as_echo_n "checking installation of Ada ALI files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_ALI_BASE}" >&5
+$as_echo "<prefix>/${ADA_ALI_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of library files" >&5
+$as_echo_n "checking installation of library files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_LIB_BASE}" >&5
+$as_echo "<prefix>/${ADA_LIB_BASE}" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking installation of GNAT project files" >&5
+$as_echo_n "checking installation of GNAT project files... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: <prefix>/${ADA_PRJ_BASE}" >&5
+$as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
+
+
+
+
+
 
 
 
