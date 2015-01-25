@@ -65,6 +65,8 @@ AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
   ])
 AC_SUBST(UTIL_DIR)
 
+AM_UTIL_CHECK_INSTALL
+
 AC_OUTPUT(
 Makefile security.gpr tests.gpr distrib/security.gpr
 )
