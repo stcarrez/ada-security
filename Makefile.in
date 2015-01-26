@@ -95,7 +95,7 @@ autobuild:
 clean:
 	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XSECURITY_LIBRARY_TYPE=static
 	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XSECURITY_LIBRARY_TYPE=relocatable
-	-$(GNATCLEAN) -q -Ptests
+	-$(GNATCLEAN) -q -Psecurity_tests
 	-rm -f lib/*.a lib/*.$(DLLEXT)
 
 # Clean root project and all imported projects too.
@@ -112,7 +112,7 @@ rebuild: clean build
 
 # Build and run the unit tests
 check test:	build
-	$(GNATMAKE) $(MAKE_ARGS) -p -Ptests
+	$(GNATMAKE) $(MAKE_ARGS) -p -Psecurity_tests
 	bin/security_harness -xml security-aunit.xml
 
 doc:
@@ -121,7 +121,7 @@ doc:
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh \
-security.gpr.in tests.gpr.in config.gpr samples.properties samples.gpr \
+security.gpr.in security_tests.gpr.in config.gpr samples.properties samples.gpr \
 src regtests samples \
 bin obj lib doc distrib debian
 

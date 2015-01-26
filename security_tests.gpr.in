@@ -2,7 +2,7 @@ with "@UTIL_DIR@config";
 with "@UTIL_DIR@util_unit";
 with "security";
 
-project Tests is
+project Security_Tests is
 
    for Languages use ("Ada", "Project file");
 
@@ -20,4 +20,4 @@ project Tests is
    package Compiler renames Config.Compiler;
    package Linker renames Config.Linker;
 
-end Tests;
+end Security_Tests;

@@ -68,5 +68,5 @@ AC_SUBST(UTIL_DIR)
 AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
-Makefile security.gpr tests.gpr distrib/security.gpr
+Makefile security.gpr security_tests.gpr distrib/security.gpr
 )
