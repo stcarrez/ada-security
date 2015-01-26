@@ -3118,7 +3118,7 @@ $as_echo "<prefix>/${ADA_PRJ_BASE}" >&6; }
 
 
 
-ac_config_files="$ac_config_files Makefile security.gpr tests.gpr distrib/security.gpr"
+ac_config_files="$ac_config_files Makefile security.gpr security_tests.gpr distrib/security.gpr"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3828,7 +3828,7 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "security.gpr") CONFIG_FILES="$CONFIG_FILES security.gpr" ;;
-    "tests.gpr") CONFIG_FILES="$CONFIG_FILES tests.gpr" ;;
+    "security_tests.gpr") CONFIG_FILES="$CONFIG_FILES security_tests.gpr" ;;
     "distrib/security.gpr") CONFIG_FILES="$CONFIG_FILES distrib/security.gpr" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
