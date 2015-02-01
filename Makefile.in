@@ -116,7 +116,7 @@ check test:	build
 	bin/security_harness -xml security-aunit.xml
 
 doc:
-	$(DYNAMO) build-doc wiki
+	$(DYNAMO) build-doc -markdown wiki
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
