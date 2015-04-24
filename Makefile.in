@@ -120,7 +120,7 @@ doc:
 
 # Files to package in source distribution
 DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
-configure.in Makefile.in install-sh \
+configure.in Makefile.in install-sh aclocal.m4 \
 security.gpr.in security_tests.gpr.in config.gpr samples.properties samples.gpr \
 src regtests samples \
 bin obj lib doc distrib debian
