@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies -- Security Policies
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -222,7 +222,7 @@ private
 
    type Policy is abstract new Ada.Finalization.Limited_Controlled with record
       Manager : Policy_Manager_Access;
-      Index   : Policy_Index;
+      Index   : Policy_Index := Policy_Index'First;
    end record;
 
    type Policy_Manager (Max_Policies : Policy_Index) is
