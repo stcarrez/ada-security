@@ -21,7 +21,6 @@ with Util.Test_Caller;
 with Util.Measures;
 
 with Security.Contexts;
-with Security.Policies.Roles;
 with Security.Permissions.Tests;
 with Security.Policies.URLs;
 
@@ -125,7 +124,7 @@ package body Security.Policies.Tests is
       M       : Security.Policies.Roles.Role_Policy;
       Admin   : Role_Type;
       Manager : Role_Type;
-      Map     : Role_Map := (others => false);
+      Map     : Role_Map := (others => False);
    begin
       M.Create_Role (Name => "manager",
                      Role => Manager);
@@ -152,12 +151,13 @@ package body Security.Policies.Tests is
 
       M       : Security.Policies.Roles.Role_Policy;
       Map     : Role_Map := (others => False);
+      pragma Unreferenced (Map);
    begin
       M.Set_Roles ("manager,admin", Map);
       T.Assert (False, "No exception was raised");
 
    exception
-      when E : Security.Policies.Roles.Invalid_Name =>
+      when Security.Policies.Roles.Invalid_Name =>
          null;
    end Test_Set_Invalid_Roles;
 
@@ -165,12 +165,11 @@ package body Security.Policies.Tests is
    --  Test Has_Permission
    --  ------------------------------
    procedure Test_Has_Permission (T : in out Test) is
-      M    : Security.Policies.Policy_Manager (1);
---        Perm : Permissions.Permission_Type;
-      User : Test_Principal;
+      M       : Security.Policies.Policy_Manager (1);
+      Perm    : Permissions.Permission (Permissions.Tests.P_Admin.Permission);
+      Context : aliased Security.Contexts.Security_Context;
    begin
-      --        T.Assert (not M.Has_Permission (User, 1), "User has a non-existing permission");
-      null;
+      T.Assert (not M.Has_Permission (Context, Perm), "User has a non-existing permission");
    end Test_Has_Permission;
 
    procedure Configure_Policy (Manager : in out Security.Policies.Policy_Manager;
