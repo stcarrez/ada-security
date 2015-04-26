@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Unbounded;
-with Ada.Calendar;
-with Ada.Finalization;
-
 with Security.Auth;
 
 --  == OpenID ==
@@ -158,14 +154,5 @@ package Security.OpenID is
    procedure Initialize (Realm     : in out Manager;
                          Name      : in String;
                          Return_To : in String);
-
-private
-
-   use Ada.Strings.Unbounded;
---
---     type Manager is new Ada.Finalization.Limited_Controlled with record
---        Realm     : Unbounded_String;
---        Return_To : Unbounded_String;
---     end record;
 
 end Security.OpenID;
