@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,8 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Fixed;
-with Ada.Text_IO;
 
-with Util.Http.Clients;
-with Util.Strings;
-with Util.Encoders;
-with Util.Log.Loggers;
-with Util.Encoders.SHA1;
-with Util.Encoders.HMAC.SHA1;
 package body Security.OpenID is
-
-   use Ada.Strings.Fixed;
-   use Util.Log;
-
-   Log : constant Util.Log.Loggers.Logger := Loggers.Create ("Security.OpenID");
 
    --  ------------------------------
    --  Initialize the OpenID realm.
