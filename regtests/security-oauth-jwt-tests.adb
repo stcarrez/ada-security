@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-oayth-jwt-tests - Unit tests for JSON Web Token
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,6 +95,7 @@ package body Security.OAuth.JWT.Tests is
         & "_N7fiz1CgttJcwbmMVwhag3ox2WE9C1KwXhrjwT8eigZ0WkDys5WO1dYs2G1QbDZPnsYYMyHK9XpycaDMEKtVZ"
         & "C4C6DkB1SrBHbN0Tv6ExWpszzp1JEL8nZnHd3T_AA3paqONnkvQw_yx";
       R : Token;
+      pragma Unreferenced (R);
    begin
       R := Decode (K);
       T.Fail ("No exception raised");
