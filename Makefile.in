@@ -8,9 +8,12 @@ SECURITY_LIBRARY_TYPE=static
 MODE=distrib
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
+GPRINSTALL=@GPRINSTALL@
 SVN=svn
 INSTALL=@INSTALL@
 DYNAMO=dynamo
+
+GPRPATH=security.gpr
 
 BUILDS_SHARED=@BUILDS_SHARED@
 
@@ -55,7 +58,6 @@ infix_ali=@ADA_ALI_BASE@
 includedir=${prefix}/${infix_inc}
 projectdir=${prefix}/${infix_prj}
 bindir=${prefix}/bin
-libdir=${prefix}/lib
 libdir=${prefix}/${infix_lib}
 alidir=${prefix}/${infix_ali}
 
@@ -67,8 +69,6 @@ ifeq ($(SECURITY_LIBRARY_TYPE),relocatable)
 MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
 MAKE_ARGS += -XXMLADA_BUILD=relocatable
 endif
-
-GPRPATH=security.gpr
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
@@ -161,6 +161,10 @@ install_shared:
 	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable install_lib
 
 install_lib:
+ifneq (${GPRINSTALL},)
+	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
+		--build-name=$(SECURITY_LIBRARY_TYPE) $(GPRPATH)
+else
 	$(MKDIR) -p ${includedir}/ada-security
 	$(MKDIR) -p ${projectdir}/ ${bindir}/
 	${MKDIR} -p ${alidir}/ada-security
@@ -179,6 +183,7 @@ else
 	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).$(LIBVER) ${bindir}/
 endif
 endif
+endif
 
 install-info:
 	@echo "Installation directories:"
@@ -190,10 +195,14 @@ install-info:
 	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
 
 uninstall:
+ifneq (${GPRINSTALL},)
+	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(GPRPATH)
+else
 	rm -rf ${includedir}/ada-security ${alidir}/ada-security
 	rm -f ${libdir}/$(libname).a
 	rm -f ${libdir}/$(libname).$(LIBEXT)
 	rm -f ${projectdir}/security.gpr
+endif
 
 # prepare before releasing a new version of the package
 # (collect information about changes and SVN repository)
