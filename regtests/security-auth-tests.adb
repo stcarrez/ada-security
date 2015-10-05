@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid - Tests for OpenID
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@
 
 with Ada.Strings.Unbounded;
 
-with Util.Http.Mockups;
 with Util.Http.Clients.Mockups;
 
 with Util.Test_Caller;
