@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security -- Security
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@
 --  instance that identifies the user (green).  The security framework provides two authentication
 --  systems: OpenID and OAuth.
 --
---  [http://ada-security.googlecode.com/svn/wiki/ModelOverview.png]
+--  [images/ModelOverview.png]
 --
 --  When a permission must be enforced, a security context is created and linked to the
 --  <tt>Principal</tt> instance (blue).  Additional security policy context can be added depending
