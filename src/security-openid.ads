@@ -30,7 +30,7 @@ with Security.Auth;
 --      provider authentication form.
 --    * <b>Verify</b>: to decode the authentication and check its result.
 --
---  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
+--  [[images/OpenID.png]]
 --
 --  The authentication process is the following:
 --

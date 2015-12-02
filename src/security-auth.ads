@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth -- Authentication Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ with Ada.Finalization;
 --      provider authentication form.
 --    * <b>Verify</b>: to decode the authentication and check its result.
 --
---  [http://ada-security.googlecode.com/svn/wiki/OpenID.png]
+--  [[images/OpenID.png]]
 --
 --  The authentication process is the following:
 --
