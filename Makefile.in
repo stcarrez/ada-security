@@ -80,7 +80,7 @@ install: install_static install-info
 endif
 
 # Build executables for all mains defined by the project.
-build:
+build: setup
 	$(GNATMAKE) -m -p -P"$(GPRPATH)" $(MAKE_ARGS)
 
 static:
@@ -88,6 +88,11 @@ static:
 
 shared:
 	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable build
+
+setup: obj/security/static lib/static
+
+obj/security/static lib/static:
+	$(MKDIR) -p $@
 
 # Not intended for manual invocation.
 # Invoked if automatic builds are enabled.
