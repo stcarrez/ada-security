@@ -89,9 +89,9 @@ static:
 shared:
 	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable build
 
-setup: obj/security/static lib/static
+setup: obj/security/static lib/security/static
 
-obj/security/static lib/static:
+obj/security/static lib/security/static:
 	$(MKDIR) -p $@
 
 # Not intended for manual invocation.
