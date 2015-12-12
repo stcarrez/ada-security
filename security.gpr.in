@@ -14,7 +14,6 @@ project Security is
   
    for Library_Dir use Library_Dir & "/security/" & Project'Library_Kind;
    for Object_Dir use "./" & Config'Object_Dir & "/obj/security/" & Project'Library_Kind;
-   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
 
    package Binder renames Config.Binder;
    package Builder renames Config.Builder;
