@@ -32,7 +32,7 @@ limited with Security.Contexts;
 --  the security policies.  These policies are registered when an application starts,
 --  before reading the policy configuration files.
 --
---  [http://ada-security.googlecode.com/svn/wiki/PolicyModel.png]
+--  [[images/PolicyModel.png]]
 --
 --  While the policy configuration files are processed, the policy instances that have been
 --  registered will create a security controller and bind it to a given permission.  After
