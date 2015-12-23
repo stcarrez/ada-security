@@ -129,7 +129,7 @@ doc:
 	$(DYNAMO) build-doc -markdown wiki
 
 # Files to package in source distribution
-DISTFILES=README LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
+DISTFILES=README.md LICENSE.txt NOTICE.txt NEWS CHANGES ChangeLog config.guess configure config.sub \
 configure.in Makefile.in install-sh aclocal.m4 \
 security.gpr.in security_tests.gpr.in config.gpr samples.properties samples.gpr \
 src regtests samples \
@@ -192,13 +192,16 @@ endif
 endif
 
 install-info:
+ifeq (${GPRINSTALL},)
 	@echo "Installation directories:"
 	@echo "  Ada source files:    ${includedir}"
 	@echo "  ALI files:           ${alidir}"
 	@echo "  Libraries:           ${libdir}"
 	@echo "  GNAT project:        ${projectdir}"
+else
 	@echo "Environment setup:"
 	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
+endif
 
 uninstall:
 ifneq (${GPRINSTALL},)
