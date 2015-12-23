@@ -2,9 +2,9 @@
 
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Security.svg)](http://jenkins.vacs.fr/job/Ada-Security/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Security.svg)](http://jenkins.vacs.fr/job/Ada-Security/)
-[![Download](https://img.shields.io/badge/download-1.1.0-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.1.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.1.2-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.1.2.tar.gz)
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/v1.1.1.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/v1.1.2.svg)
 
 This Ada05 library provides some security frameworks needed by some Web applications.
 It allows a web application to integrate easily with Google, Yahoo!, Facebook and
