@@ -104,7 +104,8 @@ autobuild:
 # Clean the root project of all build products.
 clean:
 	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XSECURITY_LIBRARY_TYPE=static
-	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XSECURITY_LIBRARY_TYPE=relocatable
+	-$(GNATCLEAN) -q -P "$(GPRPATH)" -XSECURITY_LIBRARY_TYPE=relocatable \
+	  -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
 	-$(GNATCLEAN) -q -Psecurity_tests
 	-rm -f lib/*.a lib/*.$(DLLEXT)
 
