@@ -12,7 +12,7 @@ ChangeLog
 configure.lineno
 Makefile
 security.gpr
-tests.gpr
+security_tests.gpr
 tests.xml
 security-tests.xml
 autom4te.cache
