@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-contexts -- Context to provide security information and verify permissions
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -123,6 +123,12 @@ package body Security.Contexts is
    procedure Initialize (Context : in out Security_Context) is
    begin
       Context.Previous := Task_Context.Value;
+
+      --  If we already have a security context, setup the manager and user principal.
+      if Context.Previous /= null then
+         Context.Manager   := Context.Previous.Manager;
+         Context.Principal := Context.Previous.Principal;
+      end if;
       Task_Context.Set_Value (Context'Unchecked_Access);
    end Initialize;
 
@@ -198,9 +204,18 @@ package body Security.Contexts is
    procedure Set_Context (Context   : in out Security_Context;
                           Manager   : in Security.Policies.Policy_Manager_Access;
                           Principal : in Security.Principal_Access) is
+      use type Security.Policies.Policy_Manager_Access;
+      use type Security.Principal_Access;
    begin
-      Context.Manager   := Manager;
-      Context.Principal := Principal;
+      if Manager /= null then
+         Context.Manager   := Manager;
+      end if;
+      if Principal /= null then
+         Context.Principal := Principal;
+      end if;
+      if Manager = null and Principal = null then
+         raise Invalid_Context with "There is no policy manager and no user principal";
+      end if;
    end Set_Context;
 
    --  ------------------------------
