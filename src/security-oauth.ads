@@ -49,4 +49,10 @@ package Security.OAuth is
    UNSUPPORTED_GRANT_TYPE : aliased constant String := "unsupported_grant_type";
    INVALID_SCOPE          : aliased constant String := "invalid_scope";
 
+   --  RFC 6749: 4.1.2.1.  Error Response
+   ACCESS_DENIED             : aliased constant String := "access_denied";
+   UNSUPPORTED_RESPONSE_TYPE : aliased constant String := "unsupported_response_type";
+   SERVER_ERROR              : aliased constant String := "server_error";
+   TEMPORARILY_UNAVAILABLE   : aliased constant String := "temporarily_unavailable";
+
 end Security.OAuth;
