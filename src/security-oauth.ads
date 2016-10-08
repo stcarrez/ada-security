@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012 Stephane Carrez
+--  Copyright (C) 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,21 +24,29 @@ package Security.OAuth is
 
    --  OAuth 2.0: Section 10.2.2. Initial Registry Contents
    --  RFC 6749: 11.2.2.  Initial Registry Contents
-   Client_Id         : constant String := "client_id";
-   Client_Secret     : constant String := "client_secret";
-   Response_Type     : constant String := "response_type";
-   Redirect_Uri      : constant String := "redirect_uri";
-   Scope             : constant String := "scope";
-   State             : constant String := "state";
-   Code              : constant String := "code";
-   Error_Description : constant String := "error_description";
-   Error_Uri         : constant String := "error_uri";
-   Grant_Type        : constant String := "grant_type";
-   Access_Token      : constant String := "access_token";
-   Token_Type        : constant String := "token_type";
-   Expires_In        : constant String := "expires_in";
-   Username          : constant String := "username";
-   Password          : constant String := "password";
-   Refresh_Token     : constant String := "refresh_token";
+   CLIENT_ID         : constant String := "client_id";
+   CLIENT_SECRET     : constant String := "client_secret";
+   RESPONSE_TYPE     : constant String := "response_type";
+   REDIRECT_URI      : constant String := "redirect_uri";
+   SCOPE             : constant String := "scope";
+   STATE             : constant String := "state";
+   CODE              : constant String := "code";
+   ERROR_DESCRIPTION : constant String := "error_description";
+   ERROR_URI         : constant String := "error_uri";
+   GRANT_TYPE        : constant String := "grant_type";
+   ACCESS_TOKEN      : constant String := "access_token";
+   TOKEN_TYPE        : constant String := "token_type";
+   EXPIRES_IN        : constant String := "expires_in";
+   USERNAME          : constant String := "username";
+   PASSWORD          : constant String := "password";
+   REFRESH_TOKEN     : constant String := "refresh_token";
+
+   --  RFC 6749: 5.2.  Error Response
+   INVALID_REQUEST        : aliased constant String := "invalid_request";
+   INVALID_CLIENT         : aliased constant String := "invalid_client";
+   INVALID_GRANT          : aliased constant String := "invalid_grant";
+   UNAUTHORIZED_CLIENT    : aliased constant String := "unauthorized_client";
+   UNSUPPORTED_GRANT_TYPE : aliased constant String := "unsupported_grant_type";
+   INVALID_SCOPE          : aliased constant String := "invalid_scope";
 
 end Security.OAuth;
