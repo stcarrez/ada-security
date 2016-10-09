@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Strings.Unbounded;
 
 --  == OAuth ==
 --  The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authorization
@@ -54,5 +55,22 @@ package Security.OAuth is
    UNSUPPORTED_RESPONSE_TYPE : aliased constant String := "unsupported_response_type";
    SERVER_ERROR              : aliased constant String := "server_error";
    TEMPORARILY_UNAVAILABLE   : aliased constant String := "temporarily_unavailable";
+
+   --  ------------------------------
+   --  Application
+   --  ------------------------------
+   --  The <b>Application</b> holds the necessary information to let a user
+   --  grant access to its protected resources on the resource server.  It contains
+   --  information that allows the OAuth authorization server to identify the
+   --  application (client id and secret key).
+   type Application is tagged private;
+
+private
+
+   type Application is tagged record
+      Client_Id   : Ada.Strings.Unbounded.Unbounded_String;
+      Secret      : Ada.Strings.Unbounded.Unbounded_String;
+      Callback    : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
 end Security.OAuth;
