@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,7 @@ package Security.OAuth.Clients is
    --  grant access to its protected resources on the resource server.  It contains
    --  information that allows the OAuth authorization server to identify the
    --  application (client id and secret key).
-   type Application is tagged private;
+   type Application is new Security.OAuth.Application with private;
 
    --  Get the application identifier.
    function Get_Application_Identifier (App : in Application) return String;
@@ -126,10 +126,7 @@ private
       Refresh_Token : String (1 .. Refresh_Len);
    end record;
 
-   type Application is tagged record
-      Client_Id   : Ada.Strings.Unbounded.Unbounded_String;
-      Secret      : Ada.Strings.Unbounded.Unbounded_String;
-      Callback    : Ada.Strings.Unbounded.Unbounded_String;
+   type Application is new Security.OAuth.Application with record
       Request_URI : Ada.Strings.Unbounded.Unbounded_String;
       Protect     : Ada.Strings.Unbounded.Unbounded_String;
       Key         : Ada.Strings.Unbounded.Unbounded_String;
