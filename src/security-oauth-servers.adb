@@ -28,18 +28,6 @@ package body Security.OAuth.Servers is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Servers");
 
-   --  <expiration>.<client_id>.<auth-ident>.hmac(<public>.<private-key>)
-   type Token_Validity is record
-      Status       : Grant_Status := Invalid_Grant;
-      Ident_Start  : Natural := 0;
-      Ident_End    : Natural := 0;
-      Expire       : Ada.Calendar.Time;
-   end record;
-
-   function Validate (Realm     : in Auth_Manager;
-                      Client_Id : in String;
-                      Token     : in String) return Token_Validity;
-
    protected body Token_Cache is
 
       procedure Authenticate (Token : in String;
