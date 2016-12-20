@@ -1,3 +1,6 @@
+Version 1.2.0   -
+  - OAuth 2.0 server implementation (RFC 6749)
+
 Version 1.1.2   - Dec 2015
   - Improvement of configure and installation process with gprinstall (if available)
 
