@@ -14,6 +14,7 @@ The library includes:
 * An OpenID client authentication,
 * An OAuth 2.0 client authentication,
 * An OpenID Connect authentication framework,
+* An OAuth 2.0 server authentication framework,
 * A policy based security framework to protect the resources
 
 To use Ada Security library, configure as follows:
@@ -50,4 +51,9 @@ and redirect your browser to:
 
 The Ada Security sources as well as a wiki documentation is provided on:
 
-   https://github.com/stcarrez/ada-security
+- [Overview](https://github.com/stcarrez/ada-security/wiki)
+- [Security Overview](https://github.com/stcarrez/ada-security/wiki/Security)
+- [Security Policies](https://github.com/stcarrez/ada-security/wiki/Security_Policies)
+- [Security Authorization](https://github.com/stcarrez/ada-security/wiki/Security_Auth)
+- [Security OAuth Client](https://github.com/stcarrez/ada-security/wiki/Security_OAuth)
+- [Security OAuth Server](https://github.com/stcarrez/ada-security/wiki/Security_OAuth_Servers)
