@@ -28,6 +28,15 @@ package body Security.OAuth.Servers is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Servers");
 
+   --  ------------------------------
+   --  Check if the application has the given permission.
+   --  ------------------------------
+   function Has_Permission (App        : in Application;
+                            Permission : in Permissions.Permission_Index) return Boolean is
+   begin
+      return Security.Permissions.Has_Permission (App.Permissions, Permission);
+   end Has_Permission;
+
    protected body Token_Cache is
 
       procedure Authenticate (Token : in String;
