@@ -34,7 +34,7 @@ package Security.Permissions is
    Invalid_Name   : exception;
 
    --  Max number of permissions supported by the implementation.
-   MAX_PERMISSION : constant Natural := 256;
+   MAX_PERMISSION : constant Natural := 255;
 
    type Permission_Index is new Natural range 0 .. MAX_PERMISSION;
 
@@ -67,6 +67,9 @@ package Security.Permissions is
    procedure Add_Permission (Set   : in out Permission_Index_Set;
                              Index : in Permission_Index);
 
+   --  The empty set of permission indexes.
+   EMPTY_SET : constant Permission_Index_Set;
+
 private
 
    --  Get the last permission index registered in the global permission map.
@@ -74,6 +77,8 @@ private
 
    INDEX_SET_SIZE : constant Natural := (MAX_PERMISSION + 7) / 8;
 
-   type Permission_Index_Set is array (1 .. INDEX_SET_SIZE) of Interfaces.Unsigned_8;
+   type Permission_Index_Set is array (0 .. INDEX_SET_SIZE - 1) of Interfaces.Unsigned_8;
+
+   EMPTY_SET : constant Permission_Index_Set := (others => 0);
 
 end Security.Permissions;
