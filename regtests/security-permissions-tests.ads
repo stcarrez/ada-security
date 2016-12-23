@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-permissions-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ package Security.Permissions.Tests is
 
    type Test is new Util.Tests.Test with null record;
 
-   --  Test Add_Permission and Get_Permission_Index
+   --  Test Add_Permission and Get_Permission_Index.
    procedure Test_Add_Permission (T : in out Test);
 
    --  Test the permission created by the Definition package.
@@ -37,5 +37,8 @@ package Security.Permissions.Tests is
 
    --  Test Get_Permission on invalid permission name.
    procedure Test_Get_Invalid_Permission (T : in out Test);
+
+   --  Test operations on the Permission_Index_Set.
+   procedure Test_Add_Permission_Set (T : in out Test);
 
 end Security.Permissions.Tests;
