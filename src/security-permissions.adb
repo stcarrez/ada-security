@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -116,6 +116,16 @@ package body Security.Permissions is
    begin
       Permission_Indexes.Add_Permission (Name, Index);
    end Add_Permission;
+
+   --  ------------------------------
+   --  Check if the permission index set contains the given permission index.
+   --  ------------------------------
+   function Has_Permission (Set   : in Permission_Index_Set;
+                            Index : in Permission_Index) return Boolean is
+      use Interfaces;
+   begin
+      return (Set (Natural (Index / 8)) and Shift_Left (1, Natural (Index mod 8))) /= 0;
+   end Has_Permission;
 
    package body Definition is
       P : Permission_Index;
