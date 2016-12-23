@@ -127,6 +127,17 @@ package body Security.Permissions is
       return (Set (Natural (Index / 8)) and Shift_Left (1, Natural (Index mod 8))) /= 0;
    end Has_Permission;
 
+   --  ------------------------------
+   --  Add the permission index to the set.
+   --  ------------------------------
+   procedure Add_Permission (Set   : in out Permission_Index_Set;
+                             Index : in Permission_Index) is
+      use Interfaces;
+      Pos : constant Natural := Natural (Index / 8);
+   begin
+      Set (Pos) := Set (Pos) or Shift_Left (1, Natural (Index mod 8));
+   end Add_Permission;
+
    package body Definition is
       P : Permission_Index;
 
