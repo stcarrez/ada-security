@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+private with Interfaces;
 
 --  == Permission ==
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
@@ -30,9 +31,12 @@
 --
 package Security.Permissions is
 
-   Invalid_Name : exception;
+   Invalid_Name   : exception;
 
-   type Permission_Index is new Natural;
+   --  Max number of permissions supported by the implementation.
+   MAX_PERMISSION : constant Natural := 256;
+
+   type Permission_Index is new Natural range 0 .. MAX_PERMISSION;
 
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
@@ -53,9 +57,19 @@ package Security.Permissions is
    procedure Add_Permission (Name  : in String;
                              Index : out Permission_Index);
 
+   type Permission_Index_Set is private;
+
+   --  Check if the permission index set contains the given permission index.
+   function Has_Permission (Set   : in Permission_Index_Set;
+                            Index : in Permission_Index) return Boolean;
+
 private
 
    --  Get the last permission index registered in the global permission map.
    function Get_Last_Permission_Index return Permission_Index;
+
+   INDEX_SET_SIZE : constant Natural := (MAX_PERMISSION + 7) / 8;
+
+   type Permission_Index_Set is array (1 .. INDEX_SET_SIZE) of Interfaces.Unsigned_8;
 
 end Security.Permissions;
