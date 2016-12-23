@@ -63,6 +63,10 @@ package Security.Permissions is
    function Has_Permission (Set   : in Permission_Index_Set;
                             Index : in Permission_Index) return Boolean;
 
+   --  Add the permission index to the set.
+   procedure Add_Permission (Set   : in out Permission_Index_Set;
+                             Index : in Permission_Index);
+
 private
 
    --  Get the last permission index registered in the global permission map.
