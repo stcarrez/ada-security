@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-permissions-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,8 @@ package body Security.Permissions.Tests is
                        Test_Define_Permission'Access);
       Caller.Add_Test (Suite, "Test Security.Permissions.Get_Permission_Index (invalid name)",
                        Test_Get_Invalid_Permission'Access);
+      Caller.Add_Test (Suite, "Test Security.Permissions.Add_Permission (Set)",
+                       Test_Add_Permission_Set'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -94,5 +96,18 @@ package body Security.Permissions.Tests is
       when Invalid_Name =>
          null;
    end Test_Get_Invalid_Permission;
+
+   --  ------------------------------
+   --  Test operations on the Permission_Index_Set.
+   --  ------------------------------
+   procedure Test_Add_Permission_Set (T : in out Test) is
+      Set : Permission_Index_Set := EMPTY_SET;
+   begin
+      T.Assert (not Has_Permission (Set, P_Update.Permission),
+                "The update permission is not in the set");
+      Add_Permission (Set, P_Update.Permission);
+      T.Assert (Has_Permission (Set, P_Update.Permission),
+                "The update permission is in the set");
+   end Test_Add_Permission_Set;
 
 end Security.Permissions.Tests;
