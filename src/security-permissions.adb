@@ -25,14 +25,12 @@ with Util.Log.Loggers;
 --  checked by the access control manager.
 package body Security.Permissions is
 
-   use Util.Log;
-
    --  ------------------------------
    --  Permission Manager
    --  ------------------------------
 
    --  The logger
-   Log : constant Loggers.Logger := Loggers.Create ("Security.Permissions");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Permissions");
 
    --  A global map to translate a string to a permission index.
    package Permission_Maps is
@@ -84,7 +82,12 @@ package body Security.Permissions is
             Log.Debug ("Creating permission index {1} for {0}",
                        Name, Permission_Index'Image (Index));
             Map.Insert (Name, Index);
-            Next_Index := Next_Index + 1;
+            if Next_Index = Permission_Index'Last then
+               Log.Error ("Too many permission instantiated. "
+                          & "Increase Security.Permissions.MAX_PERMISSION");
+            else
+               Next_Index := Next_Index + 1;
+            end if;
          end if;
       end Add_Permission;
 
