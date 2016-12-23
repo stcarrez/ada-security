@@ -24,6 +24,7 @@ with Ada.Containers.Indefinite_Hashed_Maps;
 with Util.Strings;
 
 with Security.Auth;
+with Security.Permissions;
 
 --  == OAuth Server ==
 --  OAuth server side is provided by the <tt>Security.OAuth.Servers</tt> package.
@@ -93,6 +94,10 @@ package Security.OAuth.Servers is
    Invalid_Application : exception;
 
    type Application is new Security.OAuth.Application with private;
+
+   --  Check if the application has the given permission.
+   function Has_Permission (App        : in Application;
+                            Permission : in Security.Permissions.Permission_Index) return Boolean;
 
    --  Define the status of the grant.
    type Grant_Status is (Invalid_Grant, Expired_Grant, Revoked_Grant,
@@ -262,6 +267,7 @@ private
 
    type Application is new Security.OAuth.Application with record
       Expire_Timeout : Duration;
+      Permissions    : Security.Permissions.Permission_Index_Set := Security.Permissions.EMPTY_SET;
    end record;
 
    type Cache_Entry is record
