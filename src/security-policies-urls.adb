@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -145,11 +145,6 @@ package body Security.Policies.URLs is
                                         Rules_Ref_Access);
    begin
       Free (Manager.Cache);
---        for I in Manager.Names'Range loop
---           exit when Manager.Names (I) = null;
---           Ada.Strings.Unbounded.Free (Manager.Names (I));
---        end loop;
-
    end Finalize;
 
    type Policy_Fields is (FIELD_ID, FIELD_PERMISSION, FIELD_URL_PATTERN, FIELD_POLICY);
@@ -237,14 +232,14 @@ package body Security.Policies.URLs is
    overriding
    procedure Prepare_Config (Policy : in out URL_Policy;
                              Reader : in out Util.Serialize.IO.XML.Parser) is
-      Perm : constant Security.Controllers.URLs.URL_Controller_Access
-        := new Security.Controllers.URLs.URL_Controller;
+      Perm : Security.Controllers.URLs.URL_Controller_Access;
    begin
-      Perm.Manager := Policy'Unchecked_Access;
       Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
       Reader.Add_Mapping ("module", Policy_Mapping'Access);
-      Policy_Mapper.Set_Context (Reader, Perm.Manager);
+      Policy_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
       if not Policy.Manager.Has_Controller (P_URL.Permission) then
+         Perm := new Security.Controllers.URLs.URL_Controller;
+         Perm.Manager := Policy'Unchecked_Access;
          Policy.Manager.Add_Permission (Name       => "url",
                                         Permission => Perm.all'Access);
       end if;
