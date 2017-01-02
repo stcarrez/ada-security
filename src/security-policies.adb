@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies -- Security Policies
---  Copyright (C) 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,10 @@ package body Security.Policies is
    procedure Free is
      new Ada.Unchecked_Deallocation (Security.Controllers.Controller'Class,
                                      Security.Controllers.Controller_Access);
+
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Controller_Access_Array,
+                                     Controller_Access_Array_Access);
 
    --  ------------------------------
    --  Default Security Controllers
@@ -179,6 +183,7 @@ package body Security.Policies is
             if Manager.Permissions /= null then
                Perms (Manager.Permissions'Range) := Manager.Permissions.all;
             end if;
+            Free (Manager.Permissions);
             Manager.Permissions := Perms;
             Manager.Last_Index := Count;
          end;
@@ -346,9 +351,6 @@ package body Security.Policies is
    --  ------------------------------
    overriding
    procedure Finalize (Manager : in out Policy_Manager) is
-      procedure Free is
-        new Ada.Unchecked_Deallocation (Controller_Access_Array,
-                                        Controller_Access_Array_Access);
       procedure Free is
         new Ada.Unchecked_Deallocation (Policy'Class,
                                         Policy_Access);
