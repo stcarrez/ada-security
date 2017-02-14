@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -178,6 +178,7 @@ package Security.OAuth.Servers is
                      Auth  : in Principal_Access) is abstract;
 
    type Auth_Manager is abstract tagged limited private;
+   type Auth_Manager_Access is access all Auth_Manager'Class;
 
    --  Set the auth private key.
    procedure Set_Private_Key (Manager : in out Auth_Manager;
