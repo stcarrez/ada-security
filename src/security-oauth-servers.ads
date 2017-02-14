@@ -177,7 +177,7 @@ package Security.OAuth.Servers is
    procedure Revoke (Realm : in Realm_Manager;
                      Auth  : in Principal_Access) is abstract;
 
-   type Auth_Manager is abstract tagged limited private;
+   type Auth_Manager is tagged limited private;
    type Auth_Manager_Access is access all Auth_Manager'Class;
 
    --  Set the auth private key.
@@ -302,7 +302,7 @@ private
       Entries : Cache_Map.Map;
    end Token_Cache;
 
-   type Auth_Manager is abstract new Ada.Finalization.Limited_Controlled with record
+   type Auth_Manager is new Ada.Finalization.Limited_Controlled with record
       --  The repository of applications.
       Repository  : Application_Manager_Access;
 
