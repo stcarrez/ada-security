@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security testsuite - Ada Security Test suite
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with Security.Permissions.Tests;
 with Security.Policies.Tests;
 with Security.OAuth.JWT.Tests;
 with Security.OAuth.Clients.Tests;
+with Security.Random.Tests;
 package body Security.Testsuite is
 
    Tests : aliased Util.Tests.Test_Suite;
@@ -27,6 +28,7 @@ package body Security.Testsuite is
    function Suite return Util.Tests.Access_Test_Suite is
       Ret : constant Util.Tests.Access_Test_Suite := Tests'Access;
    begin
+      Security.Random.Tests.Add_Tests (Ret);
       Security.OAuth.JWT.Tests.Add_Tests (Ret);
       Security.Auth.Tests.Add_Tests (Ret);
       Security.Permissions.Tests.Add_Tests (Ret);
