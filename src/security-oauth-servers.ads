@@ -174,7 +174,7 @@ package Security.OAuth.Servers is
                      Token : in String;
                      Auth  : out Principal_Access) is abstract;
 
-   procedure Revoke (Realm : in Realm_Manager;
+   procedure Revoke (Realm : in out Realm_Manager;
                      Auth  : in Principal_Access) is abstract;
 
    type Auth_Manager is tagged limited private;
