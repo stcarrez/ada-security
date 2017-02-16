@@ -59,7 +59,7 @@ private
       Rand  : Id_Random.Generator;
    end Raw_Generator;
 
-   type Generator is new Ada.Finalization.Limited_Controlled with record
+   type Generator is limited new Ada.Finalization.Limited_Controlled with record
       Rand : Raw_Generator;
    end record;
 
