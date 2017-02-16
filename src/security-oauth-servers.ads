@@ -165,12 +165,12 @@ package Security.OAuth.Servers is
                        Scope : in String;
                        Auth  : in Principal_Access) return String is abstract;
 
-   procedure Verify (Realm    : in Realm_Manager;
+   procedure Verify (Realm    : in out Realm_Manager;
                      Username : in String;
                      Password : in String;
                      Auth     : out Principal_Access) is abstract;
 
-   procedure Verify (Realm : in Realm_Manager;
+   procedure Verify (Realm : in out Realm_Manager;
                      Token : in String;
                      Auth  : out Principal_Access) is abstract;
 
