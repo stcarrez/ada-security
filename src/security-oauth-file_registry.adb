@@ -16,6 +16,7 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Strings;
+with Util.Encoders.HMAC.SHA1;
 
 package body Security.OAuth.File_Registry is
 
@@ -35,13 +36,22 @@ package body Security.OAuth.File_Registry is
    overriding
    function Find_Application (Realm     : in File_Application_Manager;
                               Client_Id : in String) return Servers.Application'Class is
-      Pos : Application_Maps.Cursor := Realm.Applications.Find (Client_Id);
+      Pos : constant Application_Maps.Cursor := Realm.Applications.Find (Client_Id);
    begin
       if not Application_Maps.Has_Element (Pos) then
          raise Servers.Invalid_Application;
       end if;
       return Application_Maps.Element (Pos);
    end Find_Application;
+
+   --  ------------------------------
+   --  Add the application to the application repository.
+   --  ------------------------------
+   procedure Add_Application (Realm : in out File_Application_Manager;
+                              App   : in Servers.Application) is
+   begin
+      Realm.Applications.Include (App.Get_Application_Identifier, App);
+   end Add_Application;
 
    --  ------------------------------
    --  Authenticate the token and find the associated authentication principal.
@@ -97,12 +107,27 @@ package body Security.OAuth.File_Registry is
          Auth := null;
          return;
       end if;
-      if Password /= User_Maps.Element (Pos) then
-         Auth := null;
-         return;
-      end if;
-      Result := new File_Principal;
-      Realm.Tokens.Insert (To_String (Result.Token), Result);
+
+      --  Verify that the crypt password with the recorded salt are the same.
+      declare
+         Expect : constant String := User_Maps.Element (Pos);
+         Hash   : constant String := Realm.Crypt_Password (Expect, Password);
+      begin
+         if Hash /= Expect then
+            Auth := null;
+            return;
+         end if;
+      end;
+
+      --  Generate a random token and make the principal to record it.
+      declare
+         Token : constant String := Realm.Random.Generate (Realm.Token_Bits);
+      begin
+         Result := new File_Principal;
+         Ada.Strings.Unbounded.Append (Result.Token, Token);
+         Ada.Strings.Unbounded.Append (Result.Name, Username);
+         Realm.Tokens.Insert (Token, Result);
+      end;
       Auth := Result.all'Access;
    end Verify;
 
@@ -122,5 +147,36 @@ package body Security.OAuth.File_Registry is
          Realm.Tokens.Delete (To_String (File_Principal (Auth.all).Token));
       end if;
    end Revoke;
+
+   --  ------------------------------
+   --  Crypt the password using the given salt and return the string composed with
+   --  the salt in clear text and the crypted password.
+   --  ------------------------------
+   function Crypt_Password (Realm    : in File_Realm_Manager;
+                            Salt     : in String;
+                            Password : in String) return String is
+      Pos : Natural := Util.Strings.Index (Salt, ' ');
+   begin
+      if Pos = 0 then
+         Pos := Salt'Last;
+      else
+         Pos := Pos - 1;
+      end if;
+      return Salt (Salt'First .. Pos) & " "
+         & Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => Salt (Salt'First .. Pos),
+                                                Data => Password,
+                                                URL  => True);
+   end Crypt_Password;
+
+   --  ------------------------------
+   --  Add a username with the associated password.
+   --  ------------------------------
+   procedure Add_User (Realm    : in out File_Realm_Manager;
+                       Username : in String;
+                       Password : in String) is
+      Salt : constant String := Realm.Random.Generate (Realm.Token_Bits);
+   begin
+      Realm.Users.Include (Username, Realm.Crypt_Password (Salt, Password));
+   end Add_User;
 
 end Security.OAuth.File_Registry;
