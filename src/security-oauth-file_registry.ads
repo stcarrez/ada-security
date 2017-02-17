@@ -23,6 +23,7 @@ with Util.Strings;
 
 with Security.OAuth.Servers;
 private with Util.Strings.Maps;
+private with Security.Random;
 package Security.OAuth.File_Registry is
 
    type File_Principal is new Security.Principal with private;
@@ -40,7 +41,11 @@ package Security.OAuth.File_Registry is
    function Find_Application (Realm     : in File_Application_Manager;
                               Client_Id : in String) return Servers.Application'Class;
 
-   type File_Realm_Manager is new Servers.Realm_Manager with private;
+   --  Add the application to the application repository.
+   procedure Add_Application (Realm : in out File_Application_Manager;
+                              App   : in Servers.Application);
+
+   type File_Realm_Manager is limited new Servers.Realm_Manager with private;
 
    --  Authenticate the token and find the associated authentication principal.
    --  The access token has been verified and the token represents the identifier
@@ -83,6 +88,17 @@ package Security.OAuth.File_Registry is
    procedure Revoke (Realm : in out File_Realm_Manager;
                      Auth  : in Principal_Access);
 
+   --  Crypt the password using the given salt and return the string composed with
+   --  the salt in clear text and the crypted password.
+   function Crypt_Password (Realm    : in File_Realm_Manager;
+                            Salt     : in String;
+                            Password : in String) return String;
+
+   --  Add a username with the associated password.
+   procedure Add_User (Realm    : in out File_Realm_Manager;
+                       Username : in String;
+                       Password : in String);
+
 private
 
    use Ada.Strings.Unbounded;
@@ -112,9 +128,11 @@ private
       Applications : Application_Maps.Map;
    end record;
 
-   type File_Realm_Manager is new Servers.Realm_Manager with record
-      Users  : User_Maps.Map;
-      Tokens : Token_Maps.Map;
+   type File_Realm_Manager is limited new Servers.Realm_Manager with record
+      Users      : User_Maps.Map;
+      Tokens     : Token_Maps.Map;
+      Random     : Security.Random.Generator;
+      Token_Bits : Positive := 256;
    end record;
 
 end Security.OAuth.File_Registry;
