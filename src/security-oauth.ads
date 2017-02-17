@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2016 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,6 +64,24 @@ package Security.OAuth is
    --  information that allows the OAuth authorization server to identify the
    --  application (client id and secret key).
    type Application is tagged private;
+
+   --  Get the application identifier.
+   function Get_Application_Identifier (App : in Application) return String;
+
+   --  Set the application identifier used by the OAuth authorization server
+   --  to identify the application (for example, the App ID in Facebook).
+   procedure Set_Application_Identifier (App    : in out Application;
+                                         Client : in String);
+
+   --  Set the application secret defined in the OAuth authorization server
+   --  for the application (for example, the App Secret in Facebook).
+   procedure Set_Application_Secret (App    : in out Application;
+                                     Secret : in String);
+
+   --  Set the redirection callback that will be used to redirect the user
+   --  back to the application after the OAuth authorization is finished.
+   procedure Set_Application_Callback (App : in out Application;
+                                       URI : in String);
 
 private
 
