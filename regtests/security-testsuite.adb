@@ -20,6 +20,7 @@ with Security.Permissions.Tests;
 with Security.Policies.Tests;
 with Security.OAuth.JWT.Tests;
 with Security.OAuth.Clients.Tests;
+with Security.OAuth.Servers.Tests;
 with Security.Random.Tests;
 package body Security.Testsuite is
 
@@ -34,6 +35,7 @@ package body Security.Testsuite is
       Security.Permissions.Tests.Add_Tests (Ret);
       Security.Policies.Tests.Add_Tests (Ret);
       Security.OAuth.Clients.Tests.Add_Tests (Ret);
+      Security.OAuth.Servers.Tests.Add_Tests (Ret);
       return Ret;
    end Suite;
 
