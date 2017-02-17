@@ -50,6 +50,7 @@ package body Security.OAuth.Servers is
             else
                Grant.Auth    := Cache_Map.Element (Pos).Auth;
                Grant.Expires := Cache_Map.Element (Pos).Expire;
+               Grant.Status  := Valid_Grant;
             end if;
          else
             Grant.Status := Invalid_Grant;
@@ -303,6 +304,7 @@ package body Security.OAuth.Servers is
             else
                --  Extract user/session ident from code.
                Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
+               Grant.Error   := null;
                Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
             end if;
          end if;
@@ -342,6 +344,7 @@ package body Security.OAuth.Servers is
          else
             Grant.Status  := Valid_Grant;
             Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
+            Grant.Error   := null;
             Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
          end if;
       end if;
@@ -399,14 +402,15 @@ package body Security.OAuth.Servers is
             return Result;
          end if;
 
-         Result.Ident_Start := Pos1;
-         Result.Ident_End   := Pos2;
+         Result.Ident_Start := Pos1 + 1;
+         Result.Ident_End   := Pos2 - 1;
 
          --  When an identifier is passed, verify it.
          if Client_Id'Length > 0 then
             Result.Ident_Start := Util.Strings.Index (Token, '.', Pos1 + 1);
             if Result.Ident_Start = 0
-              or else Client_Id /= Token (Pos1 + 1 .. Result.Ident_Start - 1) then
+              or else Client_Id /= Token (Pos1 + 1 .. Result.Ident_Start - 1)
+            then
                Log.Info ("Token {0} was stealed for another application", Token);
                Result.Status := Stealed_Grant;
                return Result;
