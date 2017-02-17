@@ -15,20 +15,13 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Numerics.Discrete_Random;
-with Interfaces;
-with Ada.Streams;
-
 with Util.Log.Loggers;
 with Util.Strings;
 with Util.Http.Clients;
 with Util.Properties.JSON;
-with Util.Encoders.Base64;
 with Util.Encoders.HMAC.SHA1;
+with Security.Random;
 
---  The <b>Security.OAuth.Clients</b> package implements the client OAuth 2.0 authorization.
---
---  Note: OAuth 1.0 could be implemented but since it's being deprecated it's not worth doing it.
 package body Security.OAuth.Clients is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Clients");
@@ -37,41 +30,7 @@ package body Security.OAuth.Clients is
    --  Access Token
    --  ------------------------------
 
-   package Id_Random is new Ada.Numerics.Discrete_Random (Interfaces.Unsigned_32);
-
-   protected type Random is
-
-      procedure Generate (Into : out Ada.Streams.Stream_Element_Array);
-
-   private
-      --  Random number generator used for ID generation.
-      Random       : Id_Random.Generator;
-   end Random;
-
-   protected body Random is
-
-      procedure Generate (Into : out Ada.Streams.Stream_Element_Array) is
-         use Ada.Streams;
-         use Interfaces;
-
-         Size : constant Ada.Streams.Stream_Element_Offset := Into'Last / 4;
-      begin
-         --  Generate the random sequence.
-         for I in 0 .. Size loop
-            declare
-               Value : constant Unsigned_32 := Id_Random.Random (Random);
-            begin
-               Into (4 * I)     := Stream_Element (Value and 16#0FF#);
-               Into (4 * I + 1) := Stream_Element (Shift_Right (Value, 8) and 16#0FF#);
-               Into (4 * I + 2) := Stream_Element (Shift_Right (Value, 16) and 16#0FF#);
-               Into (4 * I + 3) := Stream_Element (Shift_Right (Value, 24) and 16#0FF#);
-            end;
-         end loop;
-      end Generate;
-
-   end Random;
-
-   Random_Generator : Random;
+   Random_Generator : Security.Random.Generator;
 
    --  ------------------------------
    --  Generate a random nonce with at last the number of random bits.
@@ -79,32 +38,9 @@ package body Security.OAuth.Clients is
    --  The random bits are then converted to base64url in the returned string.
    --  ------------------------------
    function Create_Nonce (Bits : in Positive := 256) return String is
-      use type Ada.Streams.Stream_Element_Offset;
-
-      Rand_Count : constant Ada.Streams.Stream_Element_Offset
-        := Ada.Streams.Stream_Element_Offset (4 * ((Bits + 31) / 32));
-
-      Rand    : Ada.Streams.Stream_Element_Array (0 .. Rand_Count - 1);
-      Buffer  : Ada.Streams.Stream_Element_Array (0 .. Rand_Count * 3);
-      Encoder : Util.Encoders.Base64.Encoder;
-      Last    : Ada.Streams.Stream_Element_Offset;
-      Encoded : Ada.Streams.Stream_Element_Offset;
    begin
       --  Generate the random sequence.
-      Random_Generator.Generate (Rand);
-
-      --  Encode the random stream in base64url and save it into the result string.
-      Encoder.Set_URL_Mode (True);
-      Encoder.Transform (Data => Rand, Into => Buffer,
-                         Last => Last, Encoded => Encoded);
-      declare
-         Result : String (1 .. Natural (Encoded + 1));
-      begin
-         for I in 0 .. Encoded loop
-            Result (Natural (I + 1)) := Character'Val (Buffer (I));
-         end loop;
-         return Result;
-      end;
+      return Random_Generator.Generate (Bits);
    end Create_Nonce;
 
    --  ------------------------------
@@ -122,49 +58,6 @@ package body Security.OAuth.Clients is
    begin
       return From.Id_Token;
    end Get_Id_Token;
-
-   --  ------------------------------
-   --  Get the application identifier.
-   --  ------------------------------
-   function Get_Application_Identifier (App : in Application) return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (App.Client_Id);
-   end Get_Application_Identifier;
-
-   --  ------------------------------
-   --  Set the application identifier used by the OAuth authorization server
-   --  to identify the application (for example, the App ID in Facebook).
-   --  ------------------------------
-   procedure Set_Application_Identifier (App    : in out Application;
-                                         Client : in String) is
-      use Ada.Strings.Unbounded;
-   begin
-      App.Client_Id := To_Unbounded_String (Client);
-      App.Protect   := App.Client_Id & App.Callback;
-   end Set_Application_Identifier;
-
-   --  ------------------------------
-   --  Set the application secret defined in the OAuth authorization server
-   --  for the application (for example, the App Secret in Facebook).
-   --  ------------------------------
-   procedure Set_Application_Secret (App    : in out Application;
-                                     Secret : in String) is
-   begin
-      App.Secret := Ada.Strings.Unbounded.To_Unbounded_String (Secret);
-      App.Key    := App.Secret;
-   end Set_Application_Secret;
-
-   --  ------------------------------
-   --  Set the redirection callback that will be used to redirect the user
-   --  back to the application after the OAuth authorization is finished.
-   --  ------------------------------
-   procedure Set_Application_Callback (App : in out Application;
-                                       URI : in String) is
-      use Ada.Strings.Unbounded;
-   begin
-      App.Callback := To_Unbounded_String (URI);
-      App.Protect  := App.Client_Id & App.Callback;
-   end Set_Application_Callback;
 
    --  ------------------------------
    --  Set the OAuth authorization server URI that the application must use
@@ -186,8 +79,8 @@ package body Security.OAuth.Clients is
                        Nonce : in String) return String is
       use Ada.Strings.Unbounded;
 
-      Data : constant String := Nonce & To_String (App.Protect);
-      Hmac : String := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Key),
+      Data : constant String := Nonce & To_String (App.Client_Id) & To_String (App.Callback);
+      Hmac : String := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Secret),
                                                             Data => Data,
                                                             URL  => True);
    begin
