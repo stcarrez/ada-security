@@ -69,7 +69,7 @@ with Security.Permissions;
 --  the username and password and when they are correct it generates the access token with
 --  an optional refresh token.
 --
---    Realm : Security.OAuth.Servers.Manager;
+--    Realm : Security.OAuth.Servers.Auth_Manager;
 --    Grant : Security.OAuth.Servers.Grant_Type;
 --
 --      Realm.Authorize (Params, Grant);
@@ -80,7 +80,7 @@ with Security.Permissions;
 --  The security principal will identifies the resource owner as well as the application
 --  that is doing the call.
 --
---     Realm : Security.OAuth.Servers.Manager;
+--     Realm : Security.OAuth.Servers.Auth_Manager;
 --     Auth  : Security.Principal_Access;
 --     Token : String := ...;
 --
@@ -267,7 +267,7 @@ private
    function Format_Expire (Expire : in Ada.Calendar.Time) return String;
 
    type Application is new Security.OAuth.Application with record
-      Expire_Timeout : Duration;
+      Expire_Timeout : Duration := 3600.0;
       Permissions    : Security.Permissions.Permission_Index_Set := Security.Permissions.EMPTY_SET;
    end record;
 
