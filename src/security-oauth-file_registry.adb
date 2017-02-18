@@ -15,7 +15,6 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Util.Strings;
 with Util.Encoders.HMAC.SHA1;
 
 package body Security.OAuth.File_Registry is
@@ -155,6 +154,8 @@ package body Security.OAuth.File_Registry is
    function Crypt_Password (Realm    : in File_Realm_Manager;
                             Salt     : in String;
                             Password : in String) return String is
+      pragma Unreferenced (Realm);
+
       Pos : Natural := Util.Strings.Index (Salt, ' ');
    begin
       if Pos = 0 then
