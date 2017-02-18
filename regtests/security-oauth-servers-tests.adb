@@ -177,6 +177,26 @@ package body Security.OAuth.Servers.Tests is
       Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
       T.Assert (Auth_Grant.Status = Revoked_Grant, "Expecting Revoked_Grant for the authenticate");
 
+      --  Change application token expiration time to 1 second.
+      App.Expire_Timeout := 1.0;
+      Apps.Add_Application (App);
+
+      --  Make the access token.
+      Manager.Token (Params, Grant);
+      T.Assert (Grant.Status = Valid_Grant, "Expecting Valid_Grant when the user/password are correct");
+
+      --  Verify the access token.
+      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+      T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
+      T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
+      T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
+      T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+
+      --  Wait for the token to expire.
+      delay 2.0;
+      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+      T.Assert (Auth_Grant.Status = Expired_Grant, "Expecting Expired when the access token is checked");
+
    end Test_Token_Password;
 
 end Security.OAuth.Servers.Tests;
