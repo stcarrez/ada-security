@@ -37,6 +37,8 @@ package body Security.OAuth.Servers.Tests is
                        Test_User_Verify'Access);
       Caller.Add_Test (Suite, "Test Security.OAuth.Servers.Token",
                        Test_Token_Password'Access);
+      Caller.Add_Test (Suite, "Test Security.OAuth.Servers.Authenticate",
+                       Test_Bad_Token'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -161,11 +163,13 @@ package body Security.OAuth.Servers.Tests is
       Util.Tests.Assert_Equals (T, "Gandalf", Grant.Auth.Get_Name, "Invalid user name in the principal");
 
       --  Verify the access token.
-      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-      T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
-      T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
-      T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
-      T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+      for I in 1 .. 5 loop
+         Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+         T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
+         T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
+         T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
+         T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+      end loop;
 
       --  Verify the modified access token.
       Manager.Authenticate (To_String (Grant.Token) & "x", Auth_Grant);
@@ -174,8 +178,10 @@ package body Security.OAuth.Servers.Tests is
       Manager.Revoke (To_String (Grant.Token));
 
       --  Verify the access is now denied.
-      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-      T.Assert (Auth_Grant.Status = Revoked_Grant, "Expecting Revoked_Grant for the authenticate");
+      for I in 1 .. 5 loop
+         Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+         T.Assert (Auth_Grant.Status = Revoked_Grant, "Expecting Revoked_Grant for the authenticate");
+      end loop;
 
       --  Change application token expiration time to 1 second.
       App.Expire_Timeout := 1.0;
@@ -186,17 +192,43 @@ package body Security.OAuth.Servers.Tests is
       T.Assert (Grant.Status = Valid_Grant, "Expecting Valid_Grant when the user/password are correct");
 
       --  Verify the access token.
-      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-      T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
-      T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
-      T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
-      T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+      for I in 1 .. 5 loop
+         Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+         T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
+         T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
+         T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
+         T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+      end loop;
 
       --  Wait for the token to expire.
       delay 2.0;
-      Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-      T.Assert (Auth_Grant.Status = Expired_Grant, "Expecting Expired when the access token is checked");
+      for I in 1 .. 5 loop
+         Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
+         T.Assert (Auth_Grant.Status = Expired_Grant, "Expecting Expired when the access token is checked");
+      end loop;
 
    end Test_Token_Password;
+
+   --  ------------------------------
+   --  Test the access token validation with invalid tokens (bad formed).
+   --  ------------------------------
+   procedure Test_Bad_Token (T : in out Test) is
+      Manager    : Auth_Manager;
+      Auth_Grant : Grant_Type;
+      Params     : Test_Parameters;
+   begin
+      Manager.Authenticate ("x", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      Manager.Authenticate (".", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      Manager.Authenticate ("..", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      Manager.Authenticate ("a..", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      Manager.Authenticate ("..b", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      Manager.Authenticate ("a..b", Auth_Grant);
+      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+   end Test_Bad_Token;
 
 end Security.OAuth.Servers.Tests;
