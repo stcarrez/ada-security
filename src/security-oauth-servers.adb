@@ -66,7 +66,7 @@ package body Security.OAuth.Servers is
 
       procedure Remove (Token : in String) is
       begin
-         null;
+         Entries.Delete (Token);
       end Remove;
 
       procedure Timeout is
@@ -451,6 +451,7 @@ package body Security.OAuth.Servers is
    begin
       Grant.Request := Access_Grant;
       Grant.Status  := Invalid_Grant;
+      Grant.Auth    := null;
       Realm.Cache.Authenticate (Token, Grant);
       if Grant.Auth /= null then
          Log.Debug ("Authenticate access token {0} succeeded from cache", Token);
