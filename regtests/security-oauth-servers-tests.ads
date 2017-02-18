@@ -34,4 +34,7 @@ package Security.OAuth.Servers.Tests is
    --  RFC 6749: Section 4.3.  Resource Owner Password Credentials Grant
    procedure Test_Token_Password (T : in out Test);
 
+   --  Test the access token validation with invalid tokens (bad formed).
+   procedure Test_Bad_Token (T : in out Test);
+
 end Security.OAuth.Servers.Tests;
