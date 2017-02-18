@@ -52,8 +52,6 @@ package body Security.OAuth.Servers is
                Grant.Expires := Cache_Map.Element (Pos).Expire;
                Grant.Status  := Valid_Grant;
             end if;
-         else
-            Grant.Status := Invalid_Grant;
          end if;
       end Authenticate;
 
@@ -449,17 +447,11 @@ package body Security.OAuth.Servers is
       Cacheable : Boolean;
       Check     : Token_Validity;
    begin
-      Grant.Request := Access_Grant;
-      Grant.Status  := Invalid_Grant;
-      Grant.Auth    := null;
-      Realm.Cache.Authenticate (Token, Grant);
-      if Grant.Auth /= null then
-         Log.Debug ("Authenticate access token {0} succeeded from cache", Token);
-         return;
-      end if;
-
       Check := Realm.Validate ("", Token);
-      Grant.Status := Check.Status;
+      Grant.Status  := Check.Status;
+      Grant.Request := Access_Grant;
+      Grant.Expires := Check.Expire;
+      Grant.Auth    := null;
       if Check.Status = Expired_Grant then
          Log.Info ("Access token {0} has expired", Token);
 
@@ -467,6 +459,12 @@ package body Security.OAuth.Servers is
          Log.Info ("Access token {0} is invalid", Token);
 
       else
+         Realm.Cache.Authenticate (Token, Grant);
+         if Grant.Auth /= null then
+            Log.Debug ("Authenticate access token {0} succeeded from cache", Token);
+            return;
+         end if;
+
          --  The access token is valid, well formed and has not expired.
          --  Get the associated principal (the only possibility it could fail is
          --  that it was revoked).
