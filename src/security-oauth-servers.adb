@@ -147,8 +147,13 @@ package body Security.OAuth.Servers is
 
    end Authorize;
 
-   --
-   --  client_id, callback_uri, secret_id -> application
+   --  ------------------------------
+   --  The <tt>Token</tt> procedure is the main entry point to get the access token and
+   --  refresh token.  The request parameters are accessed through the <tt>Params</tt> interface.
+   --  The operation looks at the "grant_type" parameter to identify the access method.
+   --  It also looks at the "client_id" to find the application for which the access token
+   --  is created.  Upon successful authentication, the operation returns a grant.
+   --  ------------------------------
    procedure Token (Realm   : in out Auth_Manager;
                     Params  : in Security.Auth.Parameters'Class;
                     Grant   : out Grant_Type) is
@@ -173,13 +178,13 @@ package body Security.OAuth.Servers is
             Grant.Error := UNSUPPORTED_GRANT_TYPE'Access;
          else
             Grant.Error := UNSUPPORTED_GRANT_TYPE'Access;
-            Log.Warn ("Grant type {0} is not supported", Method);
+            Log.Warn ("Grant type '{0}' is not supported", Method);
          end if;
       end;
 
    exception
       when Invalid_Application =>
-         Log.Warn ("Invalid client_id {0}", Client_Id);
+         Log.Warn ("Invalid client_id '{0}'", Client_Id);
          Grant.Status := Invalid_Grant;
          Grant.Error  := INVALID_CLIENT'Access;
          return;
@@ -348,8 +353,12 @@ package body Security.OAuth.Servers is
       end if;
    end Token_From_Password;
 
-   --  Forge an access token
-   --  RFC 6749: 5.  Issuing an Access Token
+   --  ------------------------------
+   --  Forge an access token.  The access token is signed by an HMAC-SHA1 signature.
+   --  The returned token is formed as follows:
+   --    <expiration>.<ident>.HMAC-SHA1(<private-key>, <expiration>.<ident>)
+   --  See also RFC 6749: 5.  Issuing an Access Token
+   --  ------------------------------
    procedure Create_Token (Realm  : in Auth_Manager;
                            Ident  : in String;
                            Grant  : in out Grant_Type) is
