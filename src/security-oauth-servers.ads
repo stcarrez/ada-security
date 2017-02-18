@@ -281,6 +281,9 @@ private
 
    function Format_Expire (Expire : in Ada.Calendar.Time) return String;
 
+   --  Decode the expiration date that was extracted from the token.
+   function Parse_Expire (Expire : in String) return Ada.Calendar.Time;
+
    type Application is new Security.OAuth.Application with record
       Expire_Timeout : Duration := 3600.0;
       Permissions    : Security.Permissions.Permission_Index_Set := Security.Permissions.EMPTY_SET;
