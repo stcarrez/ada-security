@@ -201,7 +201,7 @@ package body Security.OAuth.Servers is
    --  date and encoded in LEB128 + base64url.
    --  ------------------------------
    function Format_Expire (Expire : in Ada.Calendar.Time) return String is
-      T : constant Interfaces.C.Long := Ada.Calendar.Conversions.To_Unix_Time (Expire);
+      T : constant Interfaces.C.long := Ada.Calendar.Conversions.To_Unix_Time (Expire);
    begin
       return Util.Encoders.Base64.Encode (Interfaces.Unsigned_64 (T));
    end Format_Expire;
@@ -212,7 +212,7 @@ package body Security.OAuth.Servers is
    function Parse_Expire (Expire : in String) return Ada.Calendar.Time is
       V : constant Interfaces.Unsigned_64 := Util.Encoders.Base64.Decode (Expire);
    begin
-      return Ada.Calendar.Conversions.To_Ada_Time (Interfaces.C.Long (V));
+      return Ada.Calendar.Conversions.To_Ada_Time (Interfaces.C.long (V));
    end Parse_Expire;
 
    --  Implement the RFC 6749: 4.1.1.  Authorization Request for the authorization code grant.
