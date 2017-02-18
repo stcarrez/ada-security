@@ -205,6 +205,11 @@ package Security.OAuth.Servers is
                         Auth    : in Security.Principal_Access;
                         Grant   : out Grant_Type);
 
+   --  The <tt>Token</tt> procedure is the main entry point to get the access token and
+   --  refresh token.  The request parameters are accessed through the <tt>Params</tt> interface.
+   --  The operation looks at the "grant_type" parameter to identify the access method.
+   --  It also looks at the "client_id" to find the application for which the access token
+   --  is created.  Upon successful authentication, the operation returns a grant.
    procedure Token (Realm   : in out Auth_Manager;
                     Params  : in Security.Auth.Parameters'Class;
                     Grant   : out Grant_Type);
@@ -241,7 +246,10 @@ package Security.OAuth.Servers is
                                   Params  : in Security.Auth.Parameters'Class;
                                   Grant   : out Grant_Type);
 
-   --  RFC 6749: 5.  Issuing an Access Token
+   --  Forge an access token.  The access token is signed by an HMAC-SHA1 signature.
+   --  The returned token is formed as follows:
+   --    <expiration>.<ident>.HMAC-SHA1(<private-key>, <expiration>.<ident>)
+   --  See also RFC 6749: 5.  Issuing an Access Token
    procedure Create_Token (Realm  : in Auth_Manager;
                            Ident  : in String;
                            Grant  : in out Grant_Type);
