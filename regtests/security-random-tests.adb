@@ -36,6 +36,8 @@ package body Security.Random.Tests is
    --  Test Yadis discovery using static files
    --  ------------------------------
    procedure Test_Generate (T : in out Test) is
+      use Ada.Strings.Unbounded;
+
       G   : Generator;
       Max : constant Ada.Streams.Stream_Element_Offset := 10;
    begin
@@ -44,15 +46,18 @@ package body Security.Random.Tests is
             use type Ada.Streams.Stream_Element;
             S : Ada.Streams.Stream_Element_Array (1 .. I)
               := (others => 0);
-            Z : Boolean := False;
+            Rand : Ada.Strings.Unbounded.Unbounded_String;
          begin
-            G.Generate (S);
-            for J in S'Range loop
-               if S (J) = 0 then
-                  Z := True;
-               end if;
+            --  Try 5 times to fill the array with random patterns and make sure
+            --  we don't get any 0.
+            for Retry in 1 .. 5 loop
+               G.Generate (S);
+               exit when (for all R of S => R /= 0);
             end loop;
-            T.Assert (Z = False, "Generator failed to initialize all bytes");
+            T.Assert ((for all R of S => R /= 0), "Generator failed to initialize all bytes");
+
+            G.Generate (Positive (I), Rand);
+            T.Assert (Length (Rand) > 0, "Generator failed to produce a base64url sequence");
          end;
       end loop;
    end Test_Generate;
