@@ -29,24 +29,27 @@ with Security.Permissions;
 --  == OAuth Server ==
 --  OAuth server side is provided by the <tt>Security.OAuth.Servers</tt> package.
 --  This package allows to implement the authorization framework described in RFC 6749
---  The OAuth 2.0 Authorization Framework.
+--  "The OAuth 2.0 Authorization Framework".
 --
---  The authorization method produce a <tt>Grant_Type</tt> object that contains the result
+--  The authorization method produces a <tt>Grant_Type</tt> object that contains the result
 --  of the grant (successful or denied).  It is the responsibility of the caller to format
 --  the result in JSON/XML and return it to the client.
 --
---  Three important operations are defined for the OAuth 2.0 framework.
+--  Three important operations are defined for the OAuth 2.0 framework.  They will be used
+--  in the following order:
 --
 --  <tt>Authorize</tt> is used to obtain an authorization request.  This operation is
 --  optional in the OAuth 2.0 framework since some authorization method directly return
 --  the access token.  This operation is used by the "Authorization Code Grant" and the
 --  "Implicit Grant".
 --
---  <tt>Token</tt> is used to get the access token and optional refresh token.
+--  <tt>Token</tt> is used to get the access token and optional refresh token.  Each time it
+--  is called, a new token is generated.
 --
 --  <tt>Authenticate</tt> is used for the API request to verify the access token
---  and authenticate the API call.
-
+--  and authenticate the API call.  This operation can be called several times with the same
+--  token until the token is revoked or it has expired.
+--
 --  Several grant types are supported.
 --
 --  === Application Manager ===
@@ -72,19 +75,19 @@ with Security.Permissions;
 --    Realm : Security.OAuth.Servers.Auth_Manager;
 --    Grant : Security.OAuth.Servers.Grant_Type;
 --
---      Realm.Authorize (Params, Grant);
+--      Realm.Token (Params, Grant);
 --
 --  === Accessing Protected Resources ===
 --  When accessing a protected resource, the API implementation will use the
 --  <tt>Authenticate</tt> operation to verify the access token and get a security principal.
---  The security principal will identifies the resource owner as well as the application
+--  The security principal will identify the resource owner as well as the application
 --  that is doing the call.
 --
 --     Realm : Security.OAuth.Servers.Auth_Manager;
---     Auth  : Security.Principal_Access;
+--     Grant : Security.OAuth.Servers.Grant_Type;
 --     Token : String := ...;
 --
---       Realm.Authenticate (Token, Auth);
+--       Realm.Authenticate (Token, Grant);
 --
 --  When a security principal is returned, the access token was validated and the
 --  request is granted for the application.
