@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,16 +97,16 @@ package body Security.OAuth.Clients is
                              State : in String;
                              Scope : in String := "") return String is
    begin
-      return Security.OAuth.Client_Id
+      return Security.OAuth.CLIENT_ID
         & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
         & "&"
-        & Security.OAuth.Redirect_Uri
+        & Security.OAuth.REDIRECT_URI
         & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
         & "&"
-        & Security.OAuth.Scope
+        & Security.OAuth.SCOPE
         & "=" & Scope
         & "&"
-        & Security.OAuth.State
+        & Security.OAuth.STATE
         & "=" & State;
    end Get_Auth_Params;
 
@@ -131,15 +131,15 @@ package body Security.OAuth.Clients is
       Response : Util.Http.Clients.Response;
 
       Data : constant String
-        := Security.OAuth.Grant_Type & "=authorization_code"
+        := Security.OAuth.GRANT_TYPE & "=authorization_code"
           & "&"
-        & Security.OAuth.Code & "=" & Code
+        & Security.OAuth.CODE & "=" & Code
         & "&"
-        & Security.OAuth.Redirect_Uri & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
+        & Security.OAuth.REDIRECT_URI & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
         & "&"
-        & Security.OAuth.Client_Id & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
+        & Security.OAuth.CLIENT_ID & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
         & "&"
-        & Security.OAuth.Client_Secret & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
+        & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
       URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
    begin
       Log.Info ("Getting access token from {0}", URI);

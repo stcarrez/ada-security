@@ -92,7 +92,7 @@ package body Security.Auth.OAuth is
       end if;
       Append (Result, Params);
       Append (Result, "&");
-      Append (Result, Security.OAuth.Response_Type);
+      Append (Result, Security.OAuth.RESPONSE_TYPE);
       Append (Result, "=code");
 
       Log.Debug ("Params = {0}", Params);
