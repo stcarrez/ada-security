@@ -94,6 +94,10 @@ with Security.Permissions;
 --
 package Security.OAuth.Servers is
 
+   --  Minimum length for the server private key (160 bits min length).
+   --  (See NIST Special Publication 800-107)
+   MIN_KEY_LENGTH : constant Positive := 20;
+
    Invalid_Application : exception;
 
    type Application is new Security.OAuth.Application with private;
