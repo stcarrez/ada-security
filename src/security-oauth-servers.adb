@@ -160,6 +160,12 @@ package body Security.OAuth.Servers is
       Method    : constant String := Params.Get_Parameter (Security.OAuth.GRANT_TYPE);
       Client_Id : constant String := Params.Get_Parameter (Security.OAuth.CLIENT_ID);
    begin
+      if Length (Realm.Private_Key) < MIN_KEY_LENGTH then
+         Log.Error ("The private key is too short to generate a secure token");
+         Grant.Status := Invalid_Grant;
+         Grant.Error := SERVER_ERROR'Access;
+         return;
+      end if;
       if Client_Id'Length = 0 then
          Grant.Status := Invalid_Grant;
          Grant.Error := INVALID_REQUEST'Access;
