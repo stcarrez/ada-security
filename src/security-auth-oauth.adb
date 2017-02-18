@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-oauth -- OAuth based authentication
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,9 +107,9 @@ package body Security.Auth.OAuth is
                      Assoc   : in Association;
                      Request : in Parameters'Class;
                      Result  : out Authentication) is
-      State : constant String := Request.Get_Parameter (Security.OAuth.State);
-      Code  : constant String := Request.Get_Parameter (Security.OAuth.Code);
-      Error : constant String := Request.Get_Parameter (Security.OAuth.Error_Description);
+      State : constant String := Request.Get_Parameter (Security.OAuth.STATE);
+      Code  : constant String := Request.Get_Parameter (Security.OAuth.CODE);
+      Error : constant String := Request.Get_Parameter (Security.OAuth.ERROR_DESCRIPTION);
    begin
       if Error'Length /= 0 then
          Set_Result (Result, CANCEL, "Authentication refused: " & Error);
