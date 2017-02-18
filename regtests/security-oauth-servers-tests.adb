@@ -15,10 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Strings.Fixed;
 with Util.Test_Caller;
-with Util.Measures;
-with Util.Strings.Sets;
 
 with Security.Auth.Tests;
 with Security.OAuth.File_Registry;
@@ -103,7 +100,6 @@ package body Security.OAuth.Servers.Tests is
       Apps       : aliased File_Application_Manager;
       Realm      : aliased File_Realm_Manager;
       Manager    : Auth_Manager;
-      Auth       : Principal_Access;
       App        : Application;
       Grant      : Grant_Type;
       Auth_Grant : Grant_Type;
@@ -137,51 +133,67 @@ package body Security.OAuth.Servers.Tests is
       Params.Set_Parameter (Security.OAuth.CLIENT_ID, "my-app-id");
       Params.Set_Parameter (Security.OAuth.GRANT_TYPE, "");
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Status = Invalid_Grant, "Expecting Invalid_Grant when client_id is empty");
+      T.Assert (Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant when client_id is empty");
 
       Params.Set_Parameter (Security.OAuth.GRANT_TYPE, "password");
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Request = Password_Grant, "Expecting Password_Grant for the grant request");
-      T.Assert (Grant.Status = Invalid_Grant, "Expecting Invalid_Grant when the user/password is missing");
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant when the user/password is missing");
 
       Params.Set_Parameter (Security.OAuth.USERNAME, "Gandalf");
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Request = Password_Grant, "Expecting Password_Grant for the grant request");
-      T.Assert (Grant.Status = Invalid_Grant, "Expecting Invalid_Grant when the password is missing");
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant when the password is missing");
 
       Params.Set_Parameter (Security.OAuth.PASSWORD, "test");
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Request = Password_Grant, "Expecting Password_Grant for the grant request");
-      T.Assert (Grant.Status = Invalid_Grant, "Expecting Invalid_Grant when the password is invalid");
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant when the password is invalid");
 
       Params.Set_Parameter (Security.OAuth.PASSWORD, "Mithrandir");
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Request = Password_Grant, "Expecting Password_Grant for the grant request");
-      T.Assert (Grant.Status = Valid_Grant, "Expecting Valid_Grant when the user/password are correct");
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Valid_Grant,
+                "Expecting Valid_Grant when the user/password are correct");
       T.Assert (Grant.Error = null, "Expecting null error");
-      T.Assert (Length (Grant.Token) > 20, "Expecting a token with some reasonable size");
-      T.Assert (Grant.Auth /= null, "Expecting a non null auth principal");
-      Util.Tests.Assert_Equals (T, "Gandalf", Grant.Auth.Get_Name, "Invalid user name in the principal");
+      T.Assert (Length (Grant.Token) > 20,
+                "Expecting a token with some reasonable size");
+      T.Assert (Grant.Auth /= null,
+                "Expecting a non null auth principal");
+      Util.Tests.Assert_Equals (T, "Gandalf", Grant.Auth.Get_Name,
+                                "Invalid user name in the principal");
 
       --  Verify the access token.
       for I in 1 .. 5 loop
          Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-         T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
-         T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
+         T.Assert (Auth_Grant.Request = Access_Grant,
+                   "Expecting Access_Grant for the authenticate");
+         T.Assert (Auth_Grant.Status = Valid_Grant,
+                   "Expecting Valid_Grant when the access token is checked");
          T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
          T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
       end loop;
 
       --  Verify the modified access token.
       Manager.Authenticate (To_String (Grant.Token) & "x", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for the authenticate");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for the authenticate");
 
       Manager.Revoke (To_String (Grant.Token));
 
       --  Verify the access is now denied.
       for I in 1 .. 5 loop
          Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-         T.Assert (Auth_Grant.Status = Revoked_Grant, "Expecting Revoked_Grant for the authenticate");
+         T.Assert (Auth_Grant.Status = Revoked_Grant,
+                   "Expecting Revoked_Grant for the authenticate");
       end loop;
 
       --  Change application token expiration time to 1 second.
@@ -190,22 +202,28 @@ package body Security.OAuth.Servers.Tests is
 
       --  Make the access token.
       Manager.Token (Params, Grant);
-      T.Assert (Grant.Status = Valid_Grant, "Expecting Valid_Grant when the user/password are correct");
+      T.Assert (Grant.Status = Valid_Grant,
+                "Expecting Valid_Grant when the user/password are correct");
 
       --  Verify the access token.
       for I in 1 .. 5 loop
          Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-         T.Assert (Auth_Grant.Request = Access_Grant, "Expecting Access_Grant for the authenticate");
-         T.Assert (Auth_Grant.Status = Valid_Grant, "Expecting Valid_Grant when the access token is checked");
-         T.Assert (Auth_Grant.Error = null, "Expecting null error for access_token");
-         T.Assert (Auth_Grant.Auth = Grant.Auth, "Expecting valid auth principal");
+         T.Assert (Auth_Grant.Request = Access_Grant,
+                   "Expecting Access_Grant for the authenticate");
+         T.Assert (Auth_Grant.Status = Valid_Grant,
+                   "Expecting Valid_Grant when the access token is checked");
+         T.Assert (Auth_Grant.Error = null,
+                   "Expecting null error for access_token");
+         T.Assert (Auth_Grant.Auth = Grant.Auth,
+                   "Expecting valid auth principal");
       end loop;
 
       --  Wait for the token to expire.
       delay 2.0;
       for I in 1 .. 5 loop
          Manager.Authenticate (To_String (Grant.Token), Auth_Grant);
-         T.Assert (Auth_Grant.Status = Expired_Grant, "Expecting Expired when the access token is checked");
+         T.Assert (Auth_Grant.Status = Expired_Grant,
+                   "Expecting Expired when the access token is checked");
       end loop;
 
    end Test_Token_Password;
@@ -216,20 +234,25 @@ package body Security.OAuth.Servers.Tests is
    procedure Test_Bad_Token (T : in out Test) is
       Manager    : Auth_Manager;
       Auth_Grant : Grant_Type;
-      Params     : Test_Parameters;
    begin
       Manager.Authenticate ("x", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
       Manager.Authenticate (".", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
       Manager.Authenticate ("..", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
       Manager.Authenticate ("a..", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
       Manager.Authenticate ("..b", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
       Manager.Authenticate ("a..b", Auth_Grant);
-      T.Assert (Auth_Grant.Status = Invalid_Grant, "Expecting Invalid_Grant for badly formed token");
+      T.Assert (Auth_Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant for badly formed token");
    end Test_Bad_Token;
 
 end Security.OAuth.Servers.Tests;
