@@ -121,6 +121,7 @@ package body Security.OAuth.Servers.Tests is
       --  Configure the auth manager.
       Manager.Set_Application_Manager (Apps'Unchecked_Access);
       Manager.Set_Realm_Manager (Realm'Unchecked_Access);
+      Manager.Set_Private_Key ("server-private-key-no-so-secure");
 
       Manager.Token (Params, Grant);
       T.Assert (Grant.Status = Invalid_Grant, "Expecting Invalid_Grant when client_id is missing");
