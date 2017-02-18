@@ -319,6 +319,10 @@ private
       Expire_Code : Duration := 300.0;
    end record;
 
+   --  The <tt>Token_Validity</tt> record provides information about a token to find out
+   --  the different components it is made of and verify its validity.  The <tt>Validate</tt>
+   --  procedure is in charge of checking the components and verifying the HMAC signature.
+   --  The token has the following format:
    --  <expiration>.<client_id>.<auth-ident>.hmac(<public>.<private-key>)
    type Token_Validity is record
       Status       : Grant_Status := Invalid_Grant;
