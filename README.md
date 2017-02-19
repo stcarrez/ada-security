@@ -7,7 +7,7 @@
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.1.2.svg)
 
 This Ada05 library provides some security frameworks needed by some Web applications.
-It allows a web application to integrate easily with Google, Yahoo!, Facebook and
+It allows a web application to integrate easily with Yahoo!, Facebook and
 Google+ authentication systems.
 The library includes:
 
@@ -57,3 +57,20 @@ The Ada Security sources as well as a wiki documentation is provided on:
 - [Security Authorization](https://github.com/stcarrez/ada-security/wiki/Security_Auth)
 - [Security OAuth Client](https://github.com/stcarrez/ada-security/wiki/Security_OAuth)
 - [Security OAuth Server](https://github.com/stcarrez/ada-security/wiki/Security_OAuth_Servers)
+
+# Other Documentation
+
+The OAuth literature is quite complete on the Internet and there are several good tutorials and
+documentation.
+- [Facebook Login](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow)
+- [Using OAuth 2.0 to Access Google APIs](https://developers.google.com/identity/protocols/OAuth2)
+- [Yahoo OAuth 2.0 Guide](https://developer.yahoo.com/oauth2/guide/)
+- [Salesforce OAuth 2.0 Guide](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm)
+(this is a good guide if you want to learn)
+
+# References
+
+- [RFC 6749: The OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749)
+- [RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://tools.ietf.org/html/rfc6750)
+- [RFC 6819: OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819)
+- [OpenID Connect Core 1.0](http://openid.net/specs/openid-connect-core-1_0.html)
