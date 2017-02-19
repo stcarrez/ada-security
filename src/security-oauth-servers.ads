@@ -70,7 +70,8 @@ with Security.Permissions;
 --  of the less secure.  In this grant method, the username and user password are passed in
 --  the request parameter together with the application client identifier.  The realm verifies
 --  the username and password and when they are correct it generates the access token with
---  an optional refresh token.
+--  an optional refresh token.  The realm also returns in the grant the user principal that
+--  identifies the user.
 --
 --    Realm : Security.OAuth.Servers.Auth_Manager;
 --    Grant : Security.OAuth.Servers.Grant_Type;
