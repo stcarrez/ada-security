@@ -4,7 +4,7 @@ with "security";
 
 project Security_Tests is
 
-   for Languages use ("Ada", "Project file");
+   for Languages use ("Ada");
 
    Mains := ("security_harness.adb");
 
