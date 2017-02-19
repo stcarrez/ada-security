@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security -- Security
---  Copyright (C) 2010, 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@
 --  The <tt>Security</tt> package provides a security framework that allows
 --  an application to use OpenID or OAuth security frameworks.  This security
 --  framework was first developed within the Ada Server Faces project.
+--  It was moved to a separate project so that it can easyly be used with AWS.
 --  This package defines abstractions that are close or similar to Java
 --  security package.
 --
@@ -55,7 +56,7 @@
 --
 --  A user is authenticated through an authentication system which creates a <tt>Principal</tt>
 --  instance that identifies the user (green).  The security framework provides two authentication
---  systems: OpenID and OAuth.
+--  systems: OpenID and OAuth 2.0 OpenID Connect.
 --
 --  [images/ModelOverview.png]
 --
