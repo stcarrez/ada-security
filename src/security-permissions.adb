@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011, 2016 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ package body Security.Permissions is
                                 Index : out Permission_Index);
    private
       Map        : Permission_Maps.Map;
-      Next_Index : Permission_Index := Permission_Index'First;
+      Next_Index : Permission_Index := NONE + 1;
    end Global_Index;
 
    protected body Global_Index is
