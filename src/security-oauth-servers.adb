@@ -20,7 +20,7 @@ with Interfaces.C;
 
 with Util.Log.Loggers;
 with Util.Encoders.Base64;
-with Util.Encoders.HMAC.SHA1;
+with Util.Encoders.HMAC.SHA256;
 
 package body Security.OAuth.Servers is
 
@@ -360,9 +360,9 @@ package body Security.OAuth.Servers is
    end Token_From_Password;
 
    --  ------------------------------
-   --  Forge an access token.  The access token is signed by an HMAC-SHA1 signature.
+   --  Forge an access token.  The access token is signed by an HMAC-SHA256 signature.
    --  The returned token is formed as follows:
-   --    <expiration>.<ident>.HMAC-SHA1(<private-key>, <expiration>.<ident>)
+   --    <expiration>.<ident>.HMAC-SHA256(<private-key>, <expiration>.<ident>)
    --  See also RFC 6749: 5.  Issuing an Access Token
    --  ------------------------------
    procedure Create_Token (Realm  : in Auth_Manager;
@@ -371,15 +371,15 @@ package body Security.OAuth.Servers is
       Exp   : constant String := Format_Expire (Grant.Expires);
       Data  : constant String := Exp & "." & Ident;
       Hmac  : constant String
-        := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (Realm.Private_Key),
-                                                Data => Data,
-                                                URL  => True);
+        := Util.Encoders.HMAC.SHA256.Sign_Base64 (Key  => To_String (Realm.Private_Key),
+                                                  Data => Data,
+                                                  URL  => True);
    begin
       Grant.Token := Ada.Strings.Unbounded.To_Unbounded_String (Data & "." & Hmac);
    end Create_Token;
 
    --  Validate the token by checking that it is well formed, it has not expired
-   --  and the HMAC-SHA1 signature is valid.  Return the set of information to allow
+   --  and the HMAC-SHA256 signature is valid.  Return the set of information to allow
    --  the extraction of the auth identification from the token public part.
    function Validate (Realm     : in Auth_Manager;
                       Client_Id : in String;
@@ -397,9 +397,9 @@ package body Security.OAuth.Servers is
       --  Build the HMAC signature with the private key.
       declare
          Hmac : constant String
-           := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (Realm.Private_Key),
-                                                   Data => Token (Token'First .. Pos2 - 1),
-                                                   URL  => True);
+           := Util.Encoders.HMAC.SHA256.Sign_Base64 (Key  => To_String (Realm.Private_Key),
+                                                     Data => Token (Token'First .. Pos2 - 1),
+                                                     URL  => True);
       begin
          --  Check the HMAC signature part.
          if Token (Pos2 + 1 .. Token'Last) /= Hmac then
