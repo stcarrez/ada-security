@@ -190,7 +190,8 @@ package Security.OAuth.Servers is
 
    --  Set the auth private key.
    procedure Set_Private_Key (Manager : in out Auth_Manager;
-                              Key     : in String);
+                              Key     : in String;
+                              Decode  : in Boolean := False);
 
    --  Set the application manager to use and and applications.
    procedure Set_Application_Manager (Manager    : in out Auth_Manager;
@@ -250,6 +251,11 @@ package Security.OAuth.Servers is
                                   App     : in Application'Class;
                                   Params  : in Security.Auth.Parameters'Class;
                                   Grant   : out Grant_Type);
+
+   --  Create a HMAC-SHA1 of the data with the private key.
+   --  This function can be overriden to use another signature algorithm.
+   function Sign (Realm : in Auth_Manager;
+                  Data  : in String) return String;
 
    --  Forge an access token.  The access token is signed by an HMAC-SHA1 signature.
    --  The returned token is formed as follows:
