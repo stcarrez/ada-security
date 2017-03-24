@@ -20,8 +20,8 @@ with Interfaces.C;
 
 with Util.Log.Loggers;
 with Util.Encoders.Base64;
-with Util.Encoders.SHA1;
-with Util.Encoders.HMAC.SHA1;
+with Util.Encoders.SHA256;
+with Util.Encoders.HMAC.SHA256;
 
 package body Security.OAuth.Servers is
 
@@ -377,19 +377,19 @@ package body Security.OAuth.Servers is
    --  ------------------------------
    function Sign (Realm : in Auth_Manager;
                   Data  : in String) return String is
-      Ctx    : Util.Encoders.HMAC.SHA1.Context;
-      Result : Util.Encoders.SHA1.Base64_Digest;
+      Ctx    : Util.Encoders.HMAC.SHA256.Context;
+      Result : Util.Encoders.SHA256.Base64_Digest;
    begin
-      Util.Encoders.HMAC.SHA1.Set_Key (Ctx, To_String (Realm.Private_Key));
-      Util.Encoders.HMAC.SHA1.Update (Ctx, Data);
-      Util.Encoders.HMAC.SHA1.Finish_Base64 (Ctx, Result, True);
+      Util.Encoders.HMAC.SHA256.Set_Key (Ctx, To_String (Realm.Private_Key));
+      Util.Encoders.HMAC.SHA256.Update (Ctx, Data);
+      Util.Encoders.HMAC.SHA256.Finish_Base64 (Ctx, Result, True);
       return Result;
    end Sign;
 
    --  ------------------------------
-   --  Forge an access token.  The access token is signed by an HMAC-SHA1 signature.
+   --  Forge an access token.  The access token is signed by an HMAC-SHA256 signature.
    --  The returned token is formed as follows:
-   --    <expiration>.<ident>.HMAC-SHA1(<private-key>, <expiration>.<ident>)
+   --    <expiration>.<ident>.HMAC-SHA256(<private-key>, <expiration>.<ident>)
    --  See also RFC 6749: 5.  Issuing an Access Token
    --  ------------------------------
    procedure Create_Token (Realm  : in Auth_Manager;
@@ -403,7 +403,7 @@ package body Security.OAuth.Servers is
    end Create_Token;
 
    --  Validate the token by checking that it is well formed, it has not expired
-   --  and the HMAC-SHA1 signature is valid.  Return the set of information to allow
+   --  and the HMAC-SHA256 signature is valid.  Return the set of information to allow
    --  the extraction of the auth identification from the token public part.
    function Validate (Realm     : in Auth_Manager;
                       Client_Id : in String;

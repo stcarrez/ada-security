@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011, 2012, 2016 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,8 @@ package Security.Permissions is
    MAX_PERMISSION : constant Natural := 255;
 
    type Permission_Index is new Natural range 0 .. MAX_PERMISSION;
+
+   NONE : constant Permission_Index := Permission_Index'First;
 
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
