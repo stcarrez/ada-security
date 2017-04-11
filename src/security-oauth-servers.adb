@@ -20,6 +20,7 @@ with Interfaces.C;
 
 with Util.Log.Loggers;
 with Util.Encoders.Base64;
+with Util.Encoders.SHA256;
 with Util.Encoders.HMAC.SHA256;
 
 package body Security.OAuth.Servers is
@@ -78,9 +79,19 @@ package body Security.OAuth.Servers is
    --  Set the auth private key.
    --  ------------------------------
    procedure Set_Private_Key (Manager : in out Auth_Manager;
-                              Key     : in String) is
+                              Key     : in String;
+                              Decode  : in Boolean := False) is
    begin
-      Manager.Private_Key := To_Unbounded_String (Key);
+      if Decode then
+         declare
+            Decoder : constant Util.Encoders.Encoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
+            Content : constant String := Decoder.Decode (Key);
+         begin
+            Manager.Private_Key := To_Unbounded_String (Content);
+         end;
+      else
+         Manager.Private_Key := To_Unbounded_String (Key);
+      end if;
    end Set_Private_Key;
 
    --  ------------------------------
@@ -130,6 +141,7 @@ package body Security.OAuth.Servers is
          else
             Grant.Status := Invalid_Grant;
             Grant.Error := UNSUPPORTED_RESPONSE_TYPE'Access;
+            Log.Warn ("Authorize method '{0}' is not supported", Method);
          end if;
       end;
 
@@ -360,6 +372,21 @@ package body Security.OAuth.Servers is
    end Token_From_Password;
 
    --  ------------------------------
+   --  Create a HMAC-SHA1 of the data with the private key.
+   --  This function can be overriden to use another signature algorithm.
+   --  ------------------------------
+   function Sign (Realm : in Auth_Manager;
+                  Data  : in String) return String is
+      Ctx    : Util.Encoders.HMAC.SHA256.Context;
+      Result : Util.Encoders.SHA256.Base64_Digest;
+   begin
+      Util.Encoders.HMAC.SHA256.Set_Key (Ctx, To_String (Realm.Private_Key));
+      Util.Encoders.HMAC.SHA256.Update (Ctx, Data);
+      Util.Encoders.HMAC.SHA256.Finish_Base64 (Ctx, Result, True);
+      return Result;
+   end Sign;
+
+   --  ------------------------------
    --  Forge an access token.  The access token is signed by an HMAC-SHA256 signature.
    --  The returned token is formed as follows:
    --    <expiration>.<ident>.HMAC-SHA256(<private-key>, <expiration>.<ident>)
@@ -370,10 +397,7 @@ package body Security.OAuth.Servers is
                            Grant  : in out Grant_Type) is
       Exp   : constant String := Format_Expire (Grant.Expires);
       Data  : constant String := Exp & "." & Ident;
-      Hmac  : constant String
-        := Util.Encoders.HMAC.SHA256.Sign_Base64 (Key  => To_String (Realm.Private_Key),
-                                                  Data => Data,
-                                                  URL  => True);
+      Hmac  : constant String := Auth_Manager'Class (Realm).Sign (Data);
    begin
       Grant.Token := Ada.Strings.Unbounded.To_Unbounded_String (Data & "." & Hmac);
    end Create_Token;
@@ -397,9 +421,7 @@ package body Security.OAuth.Servers is
       --  Build the HMAC signature with the private key.
       declare
          Hmac : constant String
-           := Util.Encoders.HMAC.SHA256.Sign_Base64 (Key  => To_String (Realm.Private_Key),
-                                                     Data => Token (Token'First .. Pos2 - 1),
-                                                     URL  => True);
+            := Auth_Manager'Class (Realm).Sign (Token (Token'First .. Pos2 - 1));
       begin
          --  Check the HMAC signature part.
          if Token (Pos2 + 1 .. Token'Last) /= Hmac then
