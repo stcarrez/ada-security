@@ -9,7 +9,6 @@ MODE=distrib
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=gnatclean
 GPRINSTALL=@GPRINSTALL@
-SVN=svn
 INSTALL=@INSTALL@
 DYNAMO=dynamo
 
@@ -103,7 +102,7 @@ autobuild:
 
 # Clean the root project of all build products.
 clean:
-	-rm -rf obj lib bin
+	-rm -rf lib obj bin
 
 # Clean root project and all imported projects too.
 clean_tree:
@@ -125,37 +124,8 @@ check test:	build
 doc:
 	$(DYNAMO) build-doc -markdown wiki
 
-# Files to package in source distribution
-DISTFILES=README.md LICENSE.txt NOTICE.txt NEWS CHANGES config.guess configure config.sub \
-configure.in Makefile.in install-sh aclocal.m4 \
-security.gpr.in security_tests.gpr.in config.gpr samples.properties samples.gpr \
-src regtests samples \
-bin obj lib distrib
-
 dist:
-	-rm -rf $(distdir)
-	mkdir $(distdir)
-	-chmod 777 $(distdir)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	for file in $(DISTFILES); do \
-	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
-	  else \
-	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-	  fi; \
-	done
-	-rm -f $(distdir)/bin/*
-	-rm -rf $(distdir)/obj/*
-	-rm -rf $(distdir)/lib/*
-	-rm -rf $(distdir)/regtests/result
-	tar --exclude=.svn --exclude="*~" --exclude="*.o" --exclude="*.ali" \
-	    --exclude="*.log" --exclude="*.a" \
-	    -cvzf $(DIST_FILE) $(distdir)
+	git archive -o $(DIST_FILE) --prefix=$(distdir)/ HEAD
 
 install_static:
 	$(MAKE) SECURITY_LIBRARY_TYPE=static install_lib
