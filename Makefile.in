@@ -179,10 +179,3 @@ else
 	rm -f ${libdir}/$(libname).$(LIBEXT)
 	rm -f ${projectdir}/security.gpr
 endif
-
-# prepare before releasing a new version of the package
-# (collect information about changes and SVN repository)
-prepare-release:
-	# ${SVN} update
-	# ${SVN} info > CHANGES
-	# ${SVN} log -v > ChangeLog
