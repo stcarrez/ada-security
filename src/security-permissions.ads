@@ -38,6 +38,8 @@ package Security.Permissions is
 
    type Permission_Index is new Natural range 0 .. MAX_PERMISSION;
 
+   type Permission_Index_Array is array (Positive range <>) of Permission_Index;
+
    NONE : constant Permission_Index := Permission_Index'First;
 
    --  Get the permission index associated with the name.
