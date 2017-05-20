@@ -19,7 +19,6 @@
 with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
-with Ada.Text_IO;
 package body Security.Random.Tests is
 
    use Util.Tests;
