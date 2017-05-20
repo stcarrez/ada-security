@@ -1,0 +1,52 @@
+<policy-rules>
+  <security-role>
+    <role-name>developer</role-name>
+  </security-role>
+  <security-role>
+    <role-name>manager</role-name>
+  </security-role>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+
+  <role-permission>
+    <name>create-ticket</name>
+    <role>developer</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>update-ticket</name>
+    <role>developer</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>delete-ticket</name>
+    <role>developer</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>add-user</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+
+  <role-permission>
+    <name>remove-user</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+
+  <url-policy>
+    <permission>admin</permission>
+    <url-pattern>/admin/.*</url-pattern>
+  </url-policy>
+
+  <url-policy>
+    <permission>create-ticket</permission>
+    <url-pattern>/developer/.*</url-pattern>
+  </url-policy>
+
+</policy-rules>
