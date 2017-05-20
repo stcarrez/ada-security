@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,9 @@ package Security.Policies.Tests is
 
    --  Test reading policy files and using the <role-permission> controller
    procedure Test_Role_Policy (T : in out Test);
+
+   --  Test the Get_Grants operation.
+   procedure Test_Grants (T : in out Test);
 
    --  Test anonymous users and permissions.
    procedure Test_Anonymous_Permission (T : in out Test);
