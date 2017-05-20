@@ -453,6 +453,14 @@ package body Security.Policies.Tests is
       if Roles /= Expect then
          T.Fail ("The create-ticket permission is assigned to the wrong roles");
       end if;
+      declare
+         Names : constant Security.Policies.Roles.Role_Name_Array
+           := R.Get_Role_Names (Roles);
+      begin
+         Util.Tests.Assert_Equals (T, "developer,manager",
+                                   Security.Policies.Roles.To_String (Names),
+                                   "Invalid Get_Role_Names");
+      end;
 
       --  Check that the 'update-ticket' permission is granted to 'developer' and 'manager'
       Permission := Security.Permissions.Get_Permission_Index ("update-ticket");
@@ -484,6 +492,15 @@ package body Security.Policies.Tests is
       if Roles /= Expect then
          T.Fail ("The remove-user permission is assigned to the wrong roles");
       end if;
+
+      declare
+         Names : constant Security.Policies.Roles.Role_Name_Array
+           := R.Get_Role_Names (Roles);
+      begin
+         Util.Tests.Assert_Equals (T, "manager,admin",
+                                   Security.Policies.Roles.To_String (Names),
+                                   "Invalid Get_Role_Names");
+      end;
 
    end Test_Grants;
 
