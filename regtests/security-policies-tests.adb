@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,8 @@ package body Security.Policies.Tests is
                        Test_Set_Roles'Access);
       Caller.Add_Test (Suite, "Test Security.Policies.Roles.Set_Roles (invalid)",
                        Test_Set_Invalid_Roles'Access);
+      Caller.Add_Test (Suite, "Test Security.Policies.Roles.Get_Grants",
+                       Test_Grants'Access);
 
       --  These tests are identical but registered under different names
       --  for the test documentation.
@@ -414,5 +416,75 @@ package body Security.Policies.Tests is
                       Anonymous => True,
                       Granted   => True);
    end Test_Anonymous_Permission;
+
+   --  ------------------------------
+   --  Test the Get_Grants operation.
+   --  ------------------------------
+   procedure Test_Grants (T : in out Test) is
+      use Security.Permissions.Tests;
+      use type Security.Policies.Roles.Role_Map;
+
+      M            : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
+      User         : aliased Test_Principal;
+      Developer    : Policies.Roles.Role_Type;
+      Manager      : Policies.Roles.Role_Type;
+      Admin        : Policies.Roles.Role_Type;
+      Context      : aliased Security.Contexts.Security_Context;
+      R            : Security.Policies.Roles.Role_Policy_Access;
+      Permission   : Security.Permissions.Permission_Index;
+      Roles        : Security.Policies.Roles.Role_Map;
+      Expect       : Security.Policies.Roles.Role_Map;
+   begin
+      Configure_Policy (M, "grants.xml");
+      Context.Set_Context (Manager   => M'Unchecked_Access,
+                           Principal => User'Unchecked_Access);
+
+      R := Security.Policies.Roles.Get_Role_Policy (M);
+      Developer := R.Find_Role ("developer");
+      Manager := R.Find_Role ("manager");
+      Admin := R.Find_Role ("admin");
+
+      --  Check that the 'create-ticket' permission is granted to 'developer' and 'manager'
+      Permission := Security.Permissions.Get_Permission_Index ("create-ticket");
+      Roles := R.Get_Grants (Permission);
+      Expect := (others => False);
+      Expect (Developer) := True;
+      Expect (Manager) := True;
+      if Roles /= Expect then
+         T.Fail ("The create-ticket permission is assigned to the wrong roles");
+      end if;
+
+      --  Check that the 'update-ticket' permission is granted to 'developer' and 'manager'
+      Permission := Security.Permissions.Get_Permission_Index ("update-ticket");
+      Roles := R.Get_Grants (Permission);
+      if Roles /= Expect then
+         T.Fail ("The update-ticket permission is assigned to the wrong roles");
+      end if;
+
+      --  Check that the 'delete-ticket' permission is granted to 'developer' and 'manager'
+      Permission := Security.Permissions.Get_Permission_Index ("delete-ticket");
+      Roles := R.Get_Grants (Permission);
+      if Roles /= Expect then
+         T.Fail ("The delete-ticket permission is assigned to the wrong roles");
+      end if;
+
+      --  Check that the 'add-user' permission is granted to 'admin' and 'manager'
+      Permission := Security.Permissions.Get_Permission_Index ("add-user");
+      Roles := R.Get_Grants (Permission);
+      Expect := (others => False);
+      Expect (Admin) := True;
+      Expect (Manager) := True;
+      if Roles /= Expect then
+         T.Fail ("The add-user permission is assigned to the wrong roles");
+      end if;
+
+      --  Check that the 'remove-user' permission is granted to 'admin' and 'manager'
+      Permission := Security.Permissions.Get_Permission_Index ("remove-user");
+      Roles := R.Get_Grants (Permission);
+      if Roles /= Expect then
+         T.Fail ("The remove-user permission is assigned to the wrong roles");
+      end if;
+
+   end Test_Grants;
 
 end Security.Policies.Tests;
