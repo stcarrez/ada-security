@@ -16,7 +16,6 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
-with Util.Strings.Maps;
 with Util.Tests;
 package Security.Random.Tests is
 
