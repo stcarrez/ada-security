@@ -82,7 +82,7 @@ package Security.Policies.Roles is
 
    type Role_Type_Array is array (Positive range <>) of Role_Type;
 
-   type Role_Name_Array is array (Role_Type range <>) of Ada.Strings.Unbounded.String_Access;
+   type Role_Name_Array is array (Positive range <>) of Ada.Strings.Unbounded.String_Access;
 
    --  The <b>Role_Map</b> represents a set of roles which are assigned to a user.
    --  Each role is represented by a boolean in the map.  The implementation is limited
@@ -145,6 +145,10 @@ package Security.Policies.Roles is
    function Get_Grants (Manager    : in Role_Policy;
                         Permission : in Permissions.Permission_Index) return Role_Map;
 
+   --  Get the list of role names that are defined by the role map.
+   function Get_Role_Names (Manager : in Role_Policy;
+                            Map     : in Role_Map) return Role_Name_Array;
+
    --  Create a role
    procedure Create_Role (Manager : in out Role_Policy;
                           Name    : in String;
@@ -181,8 +185,10 @@ private
    --  Array to map a permission index to a list of roles that are granted the permission.
    type Permission_Role_Array is array (Permission_Index) of Role_Map;
 
+   type Role_Map_Name_Array is array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
+
    type Role_Policy is new Policy with record
-      Names     : Role_Name_Array (Role_Type'Range) := (others => null);
+      Names     : Role_Map_Name_Array := (others => null);
       Next_Role : Role_Type := Role_Type'First;
       Name      : Util.Beans.Objects.Object;
       Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last)) := (others => 0);
