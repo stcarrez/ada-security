@@ -93,6 +93,9 @@ package Security.Policies.Roles is
    --  Get the number of roles set in the map.
    function Get_Count (Map : in Role_Map) return Natural;
 
+   --  Return the list of role names separated by ','.
+   function To_String (List : in Role_Name_Array) return String;
+
    --  ------------------------------
    --  Role principal context
    --  ------------------------------
