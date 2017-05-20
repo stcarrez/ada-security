@@ -91,6 +91,15 @@ package body Security.Policies.Roles is
    end Get_Role_Name;
 
    --  ------------------------------
+   --  Get the roles that grant the given permission.
+   --  ------------------------------
+   function Get_Grants (Manager    : in Role_Policy;
+                        Permission : in Permission_Index) return Role_Map is
+   begin
+      return Manager.Grants (Permission);
+   end Get_Grants;
+
+   --  ------------------------------
    --  Find the role type associated with the role name identified by <b>Name</b>.
    --  Raises <b>Invalid_Name</b> if there is no role type.
    --  ------------------------------
