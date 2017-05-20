@@ -94,7 +94,7 @@ package body Security.Policies.Roles is
    --  Get the roles that grant the given permission.
    --  ------------------------------
    function Get_Grants (Manager    : in Role_Policy;
-                        Permission : in Permission_Index) return Role_Map is
+                        Permission : in Permissions.Permission_Index) return Role_Map is
    begin
       return Manager.Grants (Permission);
    end Get_Grants;
