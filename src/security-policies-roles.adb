@@ -100,6 +100,23 @@ package body Security.Policies.Roles is
    end Get_Grants;
 
    --  ------------------------------
+   --  Get the list of role names that are defined by the role map.
+   --  ------------------------------
+   function Get_Role_Names (Manager : in Role_Policy;
+                            Map     : in Role_Map) return Role_Name_Array is
+      Result : Role_Name_Array (1 .. Get_Count (Map));
+      Pos    : Positive := 1;
+   begin
+      for Role in Map'Range loop
+         if Map (Role) then
+            Result (Pos) := Manager.Names (Role);
+            Pos := Pos + 1;
+         end if;
+      end loop;
+      return Result;
+   end Get_Role_Names;
+
+   --  ------------------------------
    --  Find the role type associated with the role name identified by <b>Name</b>.
    --  Raises <b>Invalid_Name</b> if there is no role type.
    --  ------------------------------
