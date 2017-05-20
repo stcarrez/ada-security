@@ -90,6 +90,9 @@ package Security.Policies.Roles is
    type Role_Map is array (Role_Type'Range) of Boolean;
    pragma Pack (Role_Map);
 
+   --  Get the number of roles set in the map.
+   function Get_Count (Map : in Role_Map) return Natural;
+
    --  ------------------------------
    --  Role principal context
    --  ------------------------------
