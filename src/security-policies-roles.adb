@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-roles -- Role based policies
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,10 +25,8 @@ with Security.Controllers.Roles;
 
 package body Security.Policies.Roles is
 
-   use Util.Log;
-
    --  The logger
-   Log : constant Loggers.Logger := Loggers.Create ("Security.Policies.Roles");
+   Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Policies.Roles");
 
    --  ------------------------------
    --  Set the roles which are assigned to the user in the security context.
@@ -213,7 +211,12 @@ package body Security.Policies.Roles is
                Perm : constant Role_Controller_Access
                  := new Role_Controller '(Count => Into.Count,
                                           Roles => Into.Roles (1 .. Into.Count));
+               Index : Permission_Index;
             begin
+               Security.Permissions.Add_Permission (Name, Index);
+               for I in 1 .. Into.Count loop
+                  Into.Grants (Index) (Into.Roles (I)) := True;
+               end loop;
                Into.Manager.Add_Permission (Name, Perm.all'Access);
                Into.Count := 0;
             end;
