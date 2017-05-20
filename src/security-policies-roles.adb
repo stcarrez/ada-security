@@ -19,6 +19,7 @@
 with Util.Log.Loggers;
 with Util.Serialize.Mappers.Record_Mapper;
 with Util.Strings.Tokenizers;
+with Util.Strings.Builders;
 
 with Security.Controllers;
 with Security.Controllers.Roles;
@@ -112,6 +113,27 @@ package body Security.Policies.Roles is
       end loop;
       return Count;
    end Get_Count;
+
+   --  ------------------------------
+   --  Return the list of role names separated by ','.
+   --  ------------------------------
+   function To_String (List : in Role_Name_Array) return String is
+      use type Ada.Strings.Unbounded.String_Access;
+
+      Buf        : Util.Strings.Builders.Builder (Len => 256);
+      Need_Colon : Boolean := False;
+   begin
+      for Name of List loop
+         if Name /= null then
+            if Need_Colon then
+               Util.Strings.Builders.Append (Buf, ",");
+            end if;
+            Util.Strings.Builders.Append (Buf, Name.all);
+            Need_Colon := True;
+         end if;
+      end loop;
+      return Util.Strings.Builders.To_Array (Buf);
+   end To_String;
 
    --  ------------------------------
    --  Get the list of role names that are defined by the role map.
