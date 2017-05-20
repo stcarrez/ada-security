@@ -139,6 +139,10 @@ package Security.Policies.Roles is
    function Get_Role_Name (Manager : in Role_Policy;
                            Role    : in Role_Type) return String;
 
+   --  Get the roles that grant the given permission.
+   function Get_Grants (Manager    : in Role_Policy;
+                        Permission : in Permissions.Permission_Index) return Role_Map;
+
    --  Create a role
    procedure Create_Role (Manager : in out Role_Policy;
                           Name    : in String;
