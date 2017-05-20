@@ -100,6 +100,20 @@ package body Security.Policies.Roles is
    end Get_Grants;
 
    --  ------------------------------
+   --  Get the number of roles set in the map.
+   --  ------------------------------
+   function Get_Count (Map : in Role_Map) return Natural is
+      Count : Natural := 0;
+   begin
+      for R of Map loop
+         if R then
+            Count := Count + 1;
+         end if;
+      end loop;
+      return Count;
+   end Get_Count;
+
+   --  ------------------------------
    --  Get the list of role names that are defined by the role map.
    --  ------------------------------
    function Get_Role_Names (Manager : in Role_Policy;
