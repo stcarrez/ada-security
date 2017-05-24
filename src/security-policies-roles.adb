@@ -269,17 +269,19 @@ package body Security.Policies.Roles is
                raise Util.Serialize.Mappers.Field_Error with "Missing at least one role";
             end if;
             declare
-               Name : constant String := Util.Beans.Objects.To_String (Into.Name);
-               Perm : constant Role_Controller_Access
-                 := new Role_Controller '(Count => Into.Count,
-                                          Roles => Into.Roles (1 .. Into.Count));
+               Name  : constant String := Util.Beans.Objects.To_String (Into.Name);
+               Perm  : Role_Controller_Access;
                Index : Permission_Index;
             begin
                Security.Permissions.Add_Permission (Name, Index);
                for I in 1 .. Into.Count loop
                   Into.Grants (Index) (Into.Roles (I)) := True;
                end loop;
-               Into.Manager.Add_Permission (Name, Perm.all'Access);
+               if not Into.Manager.Has_Controller (Index) then
+                  Perm := new Role_Controller '(Count => Into.Count,
+                                                Roles => Into.Roles (1 .. Into.Count));
+                  Into.Manager.Add_Permission (Name, Perm.all'Access);
+               end if;
                Into.Count := 0;
             end;
 
