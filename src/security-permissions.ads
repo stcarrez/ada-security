@@ -45,6 +45,9 @@ package Security.Permissions is
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
 
+   --  Get the list of permissions whose name is given in the string with separated comma.
+   function Get_Permission_Array (List : in String) return Permission_Index_Array;
+
    --  Get the permission name given the index.
    function Get_Name (Index : in Permission_Index) return String;
 
