@@ -18,6 +18,7 @@
 
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
+with Util.Strings.Tokenizers;
 
 with Util.Log.Loggers;
 
@@ -122,6 +123,47 @@ package body Security.Permissions is
    begin
       return Permission_Indexes.Get_Permission_Index (Name);
    end Get_Permission_Index;
+
+   function Occurence (List : in String; Of_Char : in Character) return Natural is
+      Count : Natural := 0;
+   begin
+      if List'Length > 0 then
+         Count := 1;
+         for C of List loop
+            if C = Of_Char then
+               Count := Count + 1;
+            end if;
+         end loop;
+      end if;
+      return Count;
+   end Occurence;
+
+   --  ------------------------------
+   --  Get the list of permissions whose name is given in the string with separated comma.
+   --  ------------------------------
+   function Get_Permission_Array (List : in String) return Permission_Index_Array is
+      Result : Permission_Index_Array (1 .. Occurence (List, ','));
+      Count  : Natural := 0;
+
+      procedure Process (Name : in String;
+                         Done : out Boolean) is
+      begin
+         Done := False;
+         Result (Count + 1) := Get_Permission_Index (Name);
+         Count := Count + 1;
+
+      exception
+         when Invalid_Name =>
+            Log.Info ("Permission {0} does not exist", Name);
+
+      end Process;
+   begin
+      Util.Strings.Tokenizers.Iterate_Tokens (Content => List,
+                                              Pattern => ",",
+                                              Process => Process'Access,
+                                              Going   => Ada.Strings.Forward);
+      return Result (1 .. Count);
+   end Get_Permission_Array;
 
    --  ------------------------------
    --  Get the permission name given the index.
