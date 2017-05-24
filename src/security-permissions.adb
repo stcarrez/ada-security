@@ -47,6 +47,9 @@ package body Security.Permissions is
       --  Get the last permission index registered in the global permission map.
       function Get_Last_Permission_Index return Permission_Index;
 
+      --  Get the permission name associated with the index.
+      function Get_Name (Index : in Permission_Index) return String;
+
       procedure Add_Permission (Name  : in String;
                                 Index : out Permission_Index);
    private
@@ -65,10 +68,12 @@ package body Security.Permissions is
          end if;
       end Get_Permission_Index;
 
+      --  ------------------------------
       --  Get the last permission index registered in the global permission map.
+      --  ------------------------------
       function Get_Last_Permission_Index return Permission_Index is
       begin
-         return Next_Index;
+         return Next_Index - 1;
       end Get_Last_Permission_Index;
 
       procedure Add_Permission (Name  : in String;
@@ -91,6 +96,21 @@ package body Security.Permissions is
          end if;
       end Add_Permission;
 
+      --  ------------------------------
+      --  Get the permission name associated with the index.
+      --  ------------------------------
+      function Get_Name (Index : in Permission_Index) return String is
+         Iter : Permission_Maps.Cursor := Map.First;
+      begin
+         while Permission_Maps.Has_Element (Iter) loop
+            if Permission_Maps.Element (Iter) = Index then
+               return Permission_Maps.Key (Iter);
+            end if;
+            Permission_Maps.Next (Iter);
+         end loop;
+         return "";
+      end Get_Name;
+
    end Global_Index;
 
    Permission_Indexes : Global_Index;
@@ -102,6 +122,14 @@ package body Security.Permissions is
    begin
       return Permission_Indexes.Get_Permission_Index (Name);
    end Get_Permission_Index;
+
+   --  ------------------------------
+   --  Get the permission name given the index.
+   --  ------------------------------
+   function Get_Name (Index : in Permission_Index) return String is
+   begin
+      return Permission_Indexes.Get_Name (Index);
+   end Get_Name;
 
    --  ------------------------------
    --  Get the last permission index registered in the global permission map.
