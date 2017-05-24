@@ -45,6 +45,9 @@ package Security.Permissions is
    --  Get the permission index associated with the name.
    function Get_Permission_Index (Name : in String) return Permission_Index;
 
+   --  Get the permission name given the index.
+   function Get_Name (Index : in Permission_Index) return String;
+
    --  The permission root class.
    --  Each permission is represented by a <b>Permission_Index</b> number to provide a fast
    --  and efficient permission check.
@@ -71,13 +74,13 @@ package Security.Permissions is
    procedure Add_Permission (Set   : in out Permission_Index_Set;
                              Index : in Permission_Index);
 
+   --  Get the last permission index registered in the global permission map.
+   function Get_Last_Permission_Index return Permission_Index;
+
    --  The empty set of permission indexes.
    EMPTY_SET : constant Permission_Index_Set;
 
 private
-
-   --  Get the last permission index registered in the global permission map.
-   function Get_Last_Permission_Index return Permission_Index;
 
    INDEX_SET_SIZE : constant Natural := (MAX_PERMISSION + 7) / 8;
 
