@@ -15,6 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Exceptions;
 with Util.Log.Loggers;
 with Util.Strings;
 with Util.Http.Clients;
@@ -143,14 +144,25 @@ package body Security.OAuth.Clients is
       URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
    begin
       Log.Info ("Getting access token from {0}", URI);
-      Client.Post (URL   => URI,
-                   Data  => Data,
-                   Reply => Response);
-      if Response.Get_Status /= Util.Http.SC_OK then
-         Log.Warn ("Cannot get access token from {0}: status is {1} Body {2}",
-                   URI, Natural'Image (Response.Get_Status), Response.Get_Body);
-         return null;
-      end if;
+      begin
+         Client.Post (URL   => URI,
+                      Data  => Data,
+                      Reply => Response);
+         if Response.Get_Status /= Util.Http.SC_OK then
+            Log.Warn ("Cannot get access token from {0}: status is {1} Body {2}",
+                      URI, Natural'Image (Response.Get_Status), Response.Get_Body);
+            return null;
+         end if;
+
+      exception
+            --  Handle a Program_Error exception that could be raised by AWS when SSL
+            --  is not supported.  Emit a log error so that we can trouble this kins of
+            --  problem more easily.
+         when E : Program_Error =>
+            Log.Error ("Cannot get access token from {0}: program error: {1}",
+                       URI, Ada.Exceptions.Exception_Message (E));
+            raise;
+      end;
 
       --  Decode the response.
       declare
