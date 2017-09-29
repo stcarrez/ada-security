@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ with Ada.Containers.Vectors;
 
 with Util.Refs;
 with Util.Strings;
-with Util.Serialize.IO.XML;
+with Util.Serialize.Mappers;
 
 with GNAT.Regexp;
 
@@ -128,7 +128,7 @@ package Security.Policies.URLs is
    --  Setup the XML parser to read the <b>policy</b> description.
    overriding
    procedure Prepare_Config (Policy : in out URL_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser);
+                             Mapper : in out Util.Serialize.Mappers.Processing);
 
    --  Get the URL policy associated with the given policy manager.
    --  Returns the URL policy instance or null if it was not registered in the policy manager.
