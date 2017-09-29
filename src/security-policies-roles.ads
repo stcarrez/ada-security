@@ -175,7 +175,7 @@ package Security.Policies.Roles is
    --  Setup the XML parser to read the <b>role-permission</b> description.
    overriding
    procedure Prepare_Config (Policy : in out Role_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser);
+                             Mapper : in out Util.Serialize.Mappers.Processing);
 
    --  Finalize the policy manager.
    overriding
