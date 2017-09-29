@@ -23,6 +23,7 @@ with Util.Beans.Objects.Vectors;
 with Util.Serialize.IO.XML;
 
 with Security.Permissions;
+with Util.Serialize.Mappers;
 limited with Security.Controllers;
 limited with Security.Contexts;
 
@@ -101,7 +102,7 @@ package Security.Policies is
 
    --  Prepare the XML parser to read the policy configuration.
    procedure Prepare_Config (Pol     : in out Policy;
-                             Reader  : in out Util.Serialize.IO.XML.Parser) is null;
+                             Mapper  : in out Util.Serialize.Mappers.Processing) is null;
 
    --  Finish reading the XML policy configuration.  The security policy implementation can use
    --  this procedure to perform any configuration setup after the configuration is parsed.
@@ -162,7 +163,7 @@ package Security.Policies is
 
    --  Prepare the XML parser to read the policy configuration.
    procedure Prepare_Config (Manager : in out Policy_Manager;
-                             Reader  : in out Util.Serialize.IO.XML.Parser);
+                             Mapper  : in out Util.Serialize.Mappers.Processing);
 
    --  Finish reading the XML policy configuration.  The security policy implementation can use
    --  this procedure to perform any configuration setup after the configuration is parsed.
