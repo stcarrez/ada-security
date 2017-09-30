@@ -19,7 +19,6 @@
 with Ada.Unchecked_Deallocation;
 
 with Util.Log.Loggers;
-with Util.Serialize.Mappers;
 with Util.Serialize.Mappers.Record_Mapper;
 
 with Security.Controllers;
@@ -286,16 +285,16 @@ package body Security.Policies is
    --  Prepare the XML parser to read the policy configuration.
    --  ------------------------------
    procedure Prepare_Config (Manager : in out Policy_Manager;
-                             Reader  : in out Util.Serialize.IO.XML.Parser) is
+                             Mapper  : in out Util.Serialize.Mappers.Processing) is
    begin
-      Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
-      Reader.Add_Mapping ("module", Policy_Mapping'Access);
-      Policy_Mapper.Set_Context (Reader, Manager'Unchecked_Access);
+      Mapper.Add_Mapping ("policy-rules", Policy_Mapping'Access);
+      Mapper.Add_Mapping ("module", Policy_Mapping'Access);
+      Policy_Mapper.Set_Context (Mapper, Manager'Unchecked_Access);
 
       --  Prepare the reader to parse the policy configuration.
       for I in Manager.Policies'Range loop
          exit when Manager.Policies (I) = null;
-         Manager.Policies (I).Prepare_Config (Reader);
+         Manager.Policies (I).Prepare_Config (Mapper);
       end loop;
    end Prepare_Config;
 
@@ -322,6 +321,7 @@ package body Security.Policies is
       use Util;
 
       Reader : Util.Serialize.IO.XML.Parser;
+      Mapper : Util.Serialize.Mappers.Processing;
 
       package Policy_Config is
         new Reader_Config (Reader, Manager'Unchecked_Access);
@@ -329,10 +329,10 @@ package body Security.Policies is
    begin
       Log.Info ("Reading policy file {0}", File);
 
-      Manager.Prepare_Config (Reader);
+      Manager.Prepare_Config (Mapper);
 
       --  Read the configuration file.
-      Reader.Parse (File);
+      Reader.Parse (File, Mapper);
 
       Manager.Finish_Config (Reader);
    end Read_Policy;
