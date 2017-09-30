@@ -231,12 +231,12 @@ package body Security.Policies.URLs is
    --  ------------------------------
    overriding
    procedure Prepare_Config (Policy : in out URL_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser) is
+                             Mapper : in out Util.Serialize.Mappers.Processing) is
       Perm : Security.Controllers.URLs.URL_Controller_Access;
    begin
-      Reader.Add_Mapping ("policy-rules", Policy_Mapping'Access);
-      Reader.Add_Mapping ("module", Policy_Mapping'Access);
-      Policy_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
+      Mapper.Add_Mapping ("policy-rules", Policy_Mapping'Access);
+      Mapper.Add_Mapping ("module", Policy_Mapping'Access);
+      Policy_Mapper.Set_Context (Mapper, Policy'Unchecked_Access);
       if not Policy.Manager.Has_Controller (P_URL.Permission) then
          Perm := new Security.Controllers.URLs.URL_Controller;
          Perm.Manager := Policy'Unchecked_Access;
