@@ -301,17 +301,17 @@ package body Security.Policies.Roles is
                                                Fields              => Config_Fields,
                                                Set_Member          => Set_Member);
 
-   Mapper : aliased Config_Mapper.Mapper;
+   Role_Mapper : aliased Config_Mapper.Mapper;
 
    --  ------------------------------
    --  Setup the XML parser to read the <b>role-permission</b> description.
    --  ------------------------------
    procedure Prepare_Config (Policy : in out Role_Policy;
-                             Reader : in out Util.Serialize.IO.XML.Parser) is
+                             Mapper : in out Util.Serialize.Mappers.Processing) is
    begin
-      Reader.Add_Mapping ("policy-rules", Mapper'Access);
-      Reader.Add_Mapping ("module", Mapper'Access);
-      Config_Mapper.Set_Context (Reader, Policy'Unchecked_Access);
+      Mapper.Add_Mapping ("policy-rules", Role_Mapper'Access);
+      Mapper.Add_Mapping ("module", Role_Mapper'Access);
+      Config_Mapper.Set_Context (Mapper, Policy'Unchecked_Access);
    end Prepare_Config;
 
    --  ------------------------------
@@ -343,8 +343,8 @@ package body Security.Policies.Roles is
    end Get_Role_Policy;
 
 begin
-   Mapper.Add_Mapping ("role-permission", FIELD_ROLE_PERMISSION);
-   Mapper.Add_Mapping ("role-permission/name", FIELD_NAME);
-   Mapper.Add_Mapping ("role-permission/role", FIELD_ROLE);
-   Mapper.Add_Mapping ("security-role/role-name", FIELD_ROLE_NAME);
+   Role_Mapper.Add_Mapping ("role-permission", FIELD_ROLE_PERMISSION);
+   Role_Mapper.Add_Mapping ("role-permission/name", FIELD_NAME);
+   Role_Mapper.Add_Mapping ("role-permission/role", FIELD_ROLE);
+   Role_Mapper.Add_Mapping ("security-role/role-name", FIELD_ROLE_NAME);
 end Security.Policies.Roles;
