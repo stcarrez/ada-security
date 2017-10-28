@@ -72,10 +72,10 @@ endif
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared
-install: install_static install_shared install-info
+install: uninstall install_static install_shared install-info
 else
 all:     static
-install: install_static install-info
+install: uninstall install_static install-info
 endif
 
 # Build executables for all mains defined by the project.
