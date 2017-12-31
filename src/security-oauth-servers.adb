@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016 Stephane Carrez
+--  Copyright (C) 2016, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,7 +84,7 @@ package body Security.OAuth.Servers is
    begin
       if Decode then
          declare
-            Decoder : constant Util.Encoders.Encoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
+            Decoder : constant Util.Encoders.Decoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
             Content : constant String := Decoder.Decode (Key);
          begin
             Manager.Private_Key := To_Unbounded_String (Content);
