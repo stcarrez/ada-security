@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -399,7 +399,7 @@ package body Security.Auth.OpenID is
       Log.Info ("Signing: '{0}'", To_String (Sign));
 
       declare
-         Decoder : constant Util.Encoders.Encoder := Util.Encoders.Create (Util.Encoders.BASE_64);
+         Decoder : constant Util.Encoders.Decoder := Util.Encoders.Create (Util.Encoders.BASE_64);
          S       : constant String := Request.Get_Parameter ("openid.sig");
          Key     : constant String := Decoder.Decode (To_String (Assoc.Mac_Key));
 
