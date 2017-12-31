@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-jwt -- OAuth Java Web Token
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2017 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,7 +131,7 @@ package body Security.OAuth.JWT is
    procedure Decode_Part (Into : in out Util.Properties.Manager;
                           Name : in String;
                           Data : in String) is
-      Decoder : constant Util.Encoders.Encoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
+      Decoder : constant Util.Encoders.Decoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
       Content : constant String := Decoder.Decode (Data);
    begin
       Log.Debug ("Decoding {0}: {1}", Name, Content);
