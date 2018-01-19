@@ -50,6 +50,10 @@ package Security.OAuth.Clients is
    --  Get the principal name.  This is the OAuth access token.
    function Get_Name (From : in Grant_Type) return String;
 
+   --  Get the Authorization header to be used for accessing a protected resource.
+   --  (See RFC 6749 7.  Accessing Protected Resources)
+   function Get_Authorization (From : in Grant_Type) return String;
+
    --  ------------------------------
    --  Application
    --  ------------------------------
