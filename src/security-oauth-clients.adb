@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013, 2017 Stephane Carrez
+--  security-oauth-clients -- OAuth Client Security
+--  Copyright (C) 2012, 2013, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,6 +59,14 @@ package body Security.OAuth.Clients is
    begin
       return From.Id_Token;
    end Get_Id_Token;
+
+   --  ------------------------------
+   --  Get the principal name.  This is the OAuth access token.
+   --  ------------------------------
+   function Get_Name (From : in Grant_Type) return String is
+   begin
+      return To_String (From.Access_Token);
+   end Get_Name;
 
    --  ------------------------------
    --  Set the OAuth authorization server URI that the application must use
