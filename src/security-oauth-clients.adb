@@ -25,6 +25,8 @@ with Security.Random;
 
 package body Security.OAuth.Clients is
 
+   use Ada.Strings.Unbounded;
+
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Clients");
 
    --  ------------------------------
@@ -231,6 +233,119 @@ package body Security.OAuth.Clients is
          end if;
       end;
    end Request_Access_Token;
+   --  ------------------------------
+   --  Exchange the OAuth code into an access token.
+   --  ------------------------------
+   procedure Do_Request_Token (App  : in Application;
+                               URI  : in String;
+                               Data : in String;
+                               Cred : in out Grant_Type'Class) is
+      Client   : Util.Http.Clients.Client;
+      Response : Util.Http.Clients.Response;
+   begin
+      Log.Info ("Getting access token from {0}", URI);
+      Client.Post (URL   => URI,
+                   Data  => Data,
+                   Reply => Response);
+      if Response.Get_Status /= Util.Http.SC_OK then
+         Log.Warn ("Cannot get access token from {0}: status is {1} Body {2}",
+                   URI, Natural'Image (Response.Get_Status), Response.Get_Body);
+         return;
+      end if;
+
+      --  Decode the response.
+      declare
+         Content      : constant String := Response.Get_Body;
+         Content_Type : constant String := Response.Get_Header ("Content-Type");
+         Pos          : Natural := Util.Strings.Index (Content_Type, ';');
+         Last         : Natural;
+         Expires      : Natural;
+      begin
+         if Pos = 0 then
+            Pos := Content_Type'Last;
+         else
+            Pos := Pos - 1;
+         end if;
+         Log.Debug ("Content type: {0}", Content_Type);
+         Log.Debug ("Data: {0}", Content);
+
+         --  Facebook sends the access token as a 'text/plain' content.
+         if Content_Type (Content_Type'First .. Pos) = "text/plain" then
+            Pos := Util.Strings.Index (Content, '=');
+            if Pos = 0 then
+               Log.Error ("Invalid access token response: '{0}'", Content);
+               return;
+            end if;
+            if Content (Content'First .. Pos) /= "access_token=" then
+               Log.Error ("The 'access_token' parameter is missing in response: '{0}'", Content);
+               return;
+            end if;
+            Last := Util.Strings.Index (Content, '&', Pos + 1);
+            if Last = 0 then
+               Log.Error ("Invalid 'access_token' parameter: '{0}'", Content);
+               return;
+            end if;
+            if Content (Last .. Last + 8) /= "&expires=" then
+               Log.Error ("Invalid 'expires' parameter: '{0}'", Content);
+               return;
+            end if;
+            Expires := Natural'Value (Content (Last + 9 .. Content'Last));
+            Cred.Access_Token := To_Unbounded_String (Content (Pos + 1 .. Last - 1));
+
+         elsif Content_Type (Content_Type'First .. Pos) = "application/json" then
+            declare
+               P : Util.Properties.Manager;
+            begin
+               Util.Properties.JSON.Parse_JSON (P, Content);
+               Expires := Natural'Value (P.Get ("expires_in"));
+               Cred.Access_Token := P.Get ("access_token");
+               Cred.Refresh_Token := To_Unbounded_String (P.Get ("refresh_token", ""));
+               Cred.Id_Token := To_Unbounded_String (P.Get ("id_token", ""));
+            end;
+         else
+            Log.Error ("Content type {0} not supported for access token response", Content_Type);
+            Log.Error ("Response: {0}", Content);
+            return;
+         end if;
+      end;
+   exception
+         --  Handle a Program_Error exception that could be raised by AWS when SSL
+         --  is not supported.  Emit a log error so that we can trouble this kins of
+         --  problem more easily.
+      when E : Program_Error =>
+         Log.Error ("Cannot get access token from {0}: program error: {1}",
+                    URI, Ada.Exceptions.Exception_Message (E));
+         raise;
+   end Do_Request_Token;
+
+   --  ------------------------------
+   --  Get a request token with username and password.
+   --  RFC 6749: 4.3.  Resource Owner Password Credentials Grant
+   --  ------------------------------
+   procedure Request_Token (App      : in Application;
+                            Username : in String;
+                            Password : in String;
+                            Scope    : in String;
+                            Token    : in out Grant_Type'Class) is
+      Client   : Util.Http.Clients.Client;
+
+      Data : constant String
+        := Security.OAuth.GRANT_TYPE & "=password"
+          & "&"
+        & Security.OAuth.USERNAME & "=" & Username
+        & "&"
+        & Security.OAuth.PASSWORD & "=" & Password
+        & "&"
+        & Security.OAuth.CLIENT_ID & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
+        & "&"
+        & Security.OAuth.SCOPE & "=" & Scope
+        & "&"
+        & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
+      URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+   begin
+      Log.Info ("Getting access token from {0} - resource owner password", URI);
+      Do_Request_Token (App, URI, Data, Token);
+   end Request_Token;
 
    --  ------------------------------
    --  Create the access token
