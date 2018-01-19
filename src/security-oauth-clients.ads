@@ -95,6 +95,14 @@ package Security.OAuth.Clients is
    function Request_Access_Token (App  : in Application;
                                   Code : in String) return Access_Token_Access;
 
+   --  Get a request token with username and password.
+   --  RFC 6749: 4.3.  Resource Owner Password Credentials Grant
+   procedure Request_Token (App      : in Application;
+                            Username : in String;
+                            Password : in String;
+                            Scope    : in String;
+                            Token    : in out Grant_Type'Class);
+
    --  Create the access token
    function Create_Access_Token (App      : in Application;
                                  Token    : in String;
