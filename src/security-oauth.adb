@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,5 +56,15 @@ package body Security.OAuth is
    begin
       App.Callback := To_Unbounded_String (URI);
    end Set_Application_Callback;
+
+   --  ------------------------------
+   --  Set the client authentication method used when doing OAuth calls for this application.
+   --  See RFC 6749, 2.3.  Client Authentication
+   --  ------------------------------
+   procedure Set_Client_Authentication (App    : in out Application;
+                                        Method : in Client_Authentication_Type) is
+   begin
+      App.Client_Auth := Method;
+   end Set_Client_Authentication;
 
 end Security.OAuth;
