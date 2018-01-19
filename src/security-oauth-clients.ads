@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,11 @@ package Security.OAuth.Clients is
    --  The number of bits is rounded up to a multiple of 32.
    --  The random bits are then converted to base64url in the returned string.
    function Create_Nonce (Bits : in Positive := 256) return String;
+
+   type Grant_Type is new Security.Principal with private;
+
+   --  Get the principal name.  This is the OAuth access token.
+   function Get_Name (From : in Grant_Type) return String;
 
    --  ------------------------------
    --  Application
@@ -110,6 +115,12 @@ private
 
    type Application is new Security.OAuth.Application with record
       Request_URI : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   type Grant_Type is new Security.Principal with record
+      Access_Token  : Ada.Strings.Unbounded.Unbounded_String;
+      Refresh_Token : Ada.Strings.Unbounded.Unbounded_String;
+      Id_Token      : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end Security.OAuth.Clients;
