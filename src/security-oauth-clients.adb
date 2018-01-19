@@ -71,6 +71,15 @@ package body Security.OAuth.Clients is
    end Get_Name;
 
    --  ------------------------------
+   --  Get the Authorization header to be used for accessing a protected resource.
+   --  (See RFC 6749 7.  Accessing Protected Resources)
+   --  ------------------------------
+   function Get_Authorization (From : in Grant_Type) return String is
+   begin
+      return "Bearer " & To_String (From.Access_Token);
+   end Get_Authorization;
+
+   --  ------------------------------
    --  Set the OAuth authorization server URI that the application must use
    --  to exchange the OAuth code into an access token.
    --  ------------------------------
