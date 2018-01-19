@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,8 @@ package Security.OAuth is
    SERVER_ERROR              : aliased constant String := "server_error";
    TEMPORARILY_UNAVAILABLE   : aliased constant String := "temporarily_unavailable";
 
+   type Client_Authentication_Type is (AUTH_NONE, AUTH_BASIC);
+
    --  ------------------------------
    --  Application
    --  ------------------------------
@@ -83,12 +85,18 @@ package Security.OAuth is
    procedure Set_Application_Callback (App : in out Application;
                                        URI : in String);
 
+   --  Set the client authentication method used when doing OAuth calls for this application.
+   --  See RFC 6749, 2.3.  Client Authentication
+   procedure Set_Client_Authentication (App    : in out Application;
+                                        Method : in Client_Authentication_Type);
+
 private
 
    type Application is tagged record
       Client_Id   : Ada.Strings.Unbounded.Unbounded_String;
       Secret      : Ada.Strings.Unbounded.Unbounded_String;
       Callback    : Ada.Strings.Unbounded.Unbounded_String;
+      Client_Auth : Client_Authentication_Type := AUTH_NONE;
    end record;
 
 end Security.OAuth;
