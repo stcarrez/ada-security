@@ -107,6 +107,12 @@ package Security.OAuth.Clients is
                             Scope    : in String;
                             Token    : in out Grant_Type'Class);
 
+   --  Refresh the access token.
+   --  RFC 6749: 6.  Refreshing an Access Token
+   procedure Refresh_Token (App      : in Application;
+                            Scope    : in String;
+                            Token    : in out Grant_Type'Class);
+
    --  Create the access token
    function Create_Access_Token (App      : in Application;
                                  Token    : in String;
