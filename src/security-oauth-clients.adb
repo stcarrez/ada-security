@@ -357,6 +357,31 @@ package body Security.OAuth.Clients is
    end Request_Token;
 
    --  ------------------------------
+   --  Refresh the access token.
+   --  RFC 6749: 6.  Refreshing an Access Token
+   --  ------------------------------
+   procedure Refresh_Token (App      : in Application;
+                            Scope    : in String;
+                            Token    : in out Grant_Type'Class) is
+      Client   : Util.Http.Clients.Client;
+
+      Data : constant String
+        := Security.OAuth.GRANT_TYPE & "=refresh_token"
+          & "&"
+        & Security.OAuth.REFRESH_TOKEN & "=" & To_String (Token.Refresh_Token)
+        & "&"
+        & Security.OAuth.CLIENT_ID & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
+        & "&"
+        & Security.OAuth.SCOPE & "=" & Scope
+        & "&"
+        & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
+      URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+   begin
+      Log.Info ("Refresh access token from {0}", URI);
+      Do_Request_Token (App, URI, Data, Token);
+   end Refresh_Token;
+
+   --  ------------------------------
    --  Create the access token
    --  ------------------------------
    function Create_Access_Token (App      : in Application;
