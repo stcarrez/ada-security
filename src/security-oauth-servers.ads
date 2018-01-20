@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +130,9 @@ package Security.OAuth.Servers is
 
       --  When success, the token expiration date.
       Expires : Ada.Calendar.Time;
+
+      --  The token expiration date in seconds.
+      Expires_In : Duration := 0.0;
 
       --  When success, the authentication principal.
       Auth    : Security.Principal_Access;
