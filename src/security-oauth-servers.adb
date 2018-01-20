@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016, 2017 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -249,6 +249,7 @@ package body Security.OAuth.Servers is
       else
          --  Manager'Class (Realm).Authorize (Auth, Scope);
          Grant.Expires := Ada.Calendar.Clock + Realm.Expire_Code;
+         Grant.Expires_In := Realm.Expire_Code;
          Grant.Status  := Valid_Grant;
          Grant.Auth    := Auth;
          Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Auth), Grant);
@@ -276,6 +277,7 @@ package body Security.OAuth.Servers is
 
       else
          Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
+         Grant.Expires_In := App.Expire_Timeout;
          Grant.Status  := Valid_Grant;
          Grant.Auth    := Auth;
          Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
@@ -325,6 +327,7 @@ package body Security.OAuth.Servers is
             else
                --  Extract user/session ident from code.
                Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
+               Grant.Expires_In := App.Expire_Timeout;
                Grant.Error   := null;
                Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
             end if;
@@ -365,6 +368,7 @@ package body Security.OAuth.Servers is
          else
             Grant.Status  := Valid_Grant;
             Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
+            Grant.Expires_In := App.Expire_Timeout;
             Grant.Error   := null;
             Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
          end if;
