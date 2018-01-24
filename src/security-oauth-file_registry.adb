@@ -16,8 +16,12 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with Util.Encoders.HMAC.SHA1;
+with Util.Log.Loggers;
 
 package body Security.OAuth.File_Registry is
+
+   Log : constant Util.Log.Loggers.Logger
+     := Util.Log.Loggers.Create ("Security.OAuth.File_Registry");
 
    --  ------------------------------
    --  Get the principal name.
@@ -51,6 +55,65 @@ package body Security.OAuth.File_Registry is
    begin
       Realm.Applications.Include (App.Get_Application_Identifier, App);
    end Add_Application;
+
+   --  ------------------------------
+   --  Load from the properties the definition of applications.  The list of applications
+   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  application names or ids.  The application definition are represented by properties
+   --  of the form:
+   --    <prefix>.<app>.client_id
+   --    <prefix>.<app>.client_secret
+   --    <prefix>.<app>.callback_url
+   --  ------------------------------
+   procedure Load (Realm  : in out File_Application_Manager;
+                   Props  : in Util.Properties.Manager'Class;
+                   Prefix : in String) is
+      procedure Configure (Basename : in String);
+
+      procedure Configure (Basename : in String) is
+         App : Servers.Application;
+      begin
+         App.Set_Application_Identifier (Props.Get (Basename & ".client_id"));
+         App.Set_Application_Secret (Props.Get (Basename & ".client_secret"));
+         App.Set_Application_Callback (Props.Get (Basename & ".callback_url", ""));
+         Realm.Add_Application (App);
+      end Configure;
+
+      List  : constant String := Props.Get (Prefix & ".list");
+      First : Natural := List'First;
+      Last  : Natural;
+      Count : Natural := 0;
+   begin
+      Log.Info ("Loading application with prefix {0}", Prefix);
+      while First <= List'Last loop
+         Last := Util.Strings.Index (Source => List, Char => ',', From => First);
+         if Last = 0 then
+            Last := List'Last;
+         else
+            Last := Last - 1;
+         end if;
+         begin
+            Configure (Prefix & "." & List (First .. Last));
+            Count := Count + 1;
+         exception
+            when others =>
+               Log.Error ("Invalid application definition {0}",
+                          Prefix & "." & List (First .. Last));
+         end;
+         First := Last + 2;
+      end loop;
+      Log.Info ("Loaded {0} applications", Util.Strings.Image (Count));
+   end Load;
+
+   procedure Load (Realm  : in out File_Application_Manager;
+                   Path   : in String;
+                   Prefix : in String) is
+      Props : Util.Properties.Manager;
+   begin
+      Log.Info ("Loading application with prefix {0} from {1}", Prefix, Path);
+      Props.Load_Properties (Path);
+      Realm.Load (Props, Prefix);
+   end Load;
 
    --  ------------------------------
    --  Authenticate the token and find the associated authentication principal.
