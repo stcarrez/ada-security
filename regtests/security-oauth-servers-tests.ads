@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-oauth-servers-tests - Unit tests for server side OAuth
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,5 +36,8 @@ package Security.OAuth.Servers.Tests is
 
    --  Test the access token validation with invalid tokens (bad formed).
    procedure Test_Bad_Token (T : in out Test);
+
+   --  Test the loading configuration files for the File_Registry.
+   procedure Test_Load_Registry (T : in out Test);
 
 end Security.OAuth.Servers.Tests;
