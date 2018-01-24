@@ -116,6 +116,70 @@ package body Security.OAuth.File_Registry is
    end Load;
 
    --  ------------------------------
+   --  Load from the properties the definition of users.  The list of users
+   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  users names or ids.  The user definition are represented by properties
+   --  of the form:
+   --    <prefix>.<user>.username
+   --    <prefix>.<user>.password
+   --    <prefix>.<user>.salt
+   --  When a 'salt' property is defined, it is assumed that the password is encrypted using
+   --  the salt and SHA1 and base64url. Otherwise, the password is in clear text.
+   --  ------------------------------
+   procedure Load (Realm  : in out File_Realm_Manager;
+                   Props  : in Util.Properties.Manager'Class;
+                   Prefix : in String) is
+      procedure Configure (Basename : in String);
+
+      procedure Configure (Basename : in String) is
+         Username : constant String := Props.Get (Basename & ".username");
+         Password : constant String := Props.Get (Basename & ".password");
+         Salt     : constant String := Props.Get (Basename & ".salt", "");
+      begin
+         if Salt'Length = 0 then
+            Realm.Add_User (Username, Password);
+         else
+            Realm.Users.Include (Username, Salt & " " & Password);
+         end if;
+      end Configure;
+
+      List  : constant String := Props.Get (Prefix & ".list");
+      First : Natural := List'First;
+      Last  : Natural;
+      Count : Natural := 0;
+   begin
+      Log.Info ("Loading users with prefix {0}", Prefix);
+      while First <= List'Last loop
+         Last := Util.Strings.Index (Source => List, Char => ',', From => First);
+         if Last = 0 then
+            Last := List'Last;
+         else
+            Last := Last - 1;
+         end if;
+         begin
+            Configure (Prefix & "." & List (First .. Last));
+            Count := Count + 1;
+         exception
+            when others =>
+               Log.Error ("Invalid user definition {0}",
+                          Prefix & "." & List (First .. Last));
+         end;
+         First := Last + 2;
+      end loop;
+      Log.Info ("Loaded {0} users", Util.Strings.Image (Count));
+   end Load;
+
+   procedure Load (Realm  : in out File_Realm_Manager;
+                   Path   : in String;
+                   Prefix : in String) is
+      Props : Util.Properties.Manager;
+   begin
+      Log.Info ("Loading users with prefix {0} from {1}", Prefix, Path);
+      Props.Load_Properties (Path);
+      Realm.Load (Props, Prefix);
+   end Load;
+
+   --  ------------------------------
    --  Authenticate the token and find the associated authentication principal.
    --  The access token has been verified and the token represents the identifier
    --  of the Tuple (client_id, user, session) that describes the authentication.
@@ -166,6 +230,7 @@ package body Security.OAuth.File_Registry is
       Pos    : constant User_Maps.Cursor := Realm.Users.Find (Username);
    begin
       if not User_Maps.Has_Element (Pos) then
+         Log.Info ("Verify user {0} - unkown user", Username);
          Auth := null;
          return;
       end if;
@@ -176,6 +241,7 @@ package body Security.OAuth.File_Registry is
          Hash   : constant String := Realm.Crypt_Password (Expect, Password);
       begin
          if Hash /= Expect then
+            Log.Info ("Verify user {0} - invalid password", Username);
             Auth := null;
             return;
          end if;
@@ -190,6 +256,7 @@ package body Security.OAuth.File_Registry is
          Ada.Strings.Unbounded.Append (Result.Name, Username);
          Realm.Tokens.Insert (Token, Result);
       end;
+      Log.Info ("Verify user {0} - grant access", Username);
       Auth := Result.all'Access;
    end Verify;
 
@@ -198,7 +265,8 @@ package body Security.OAuth.File_Registry is
                      Token : in String;
                      Auth  : out Principal_Access) is
    begin
-      null;
+      Log.Info ("Verify token {0}", Token);
+      Auth := null;
    end Verify;
 
    overriding
