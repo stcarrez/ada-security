@@ -110,6 +110,23 @@ package Security.OAuth.File_Registry is
                             Salt     : in String;
                             Password : in String) return String;
 
+   --  Load from the properties the definition of users.  The list of users
+   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  users names or ids.  The user definition are represented by properties
+   --  of the form:
+   --    <prefix>.<user>.username
+   --    <prefix>.<user>.password
+   --    <prefix>.<user>.salt
+   --  When a 'salt' property is defined, it is assumed that the password is encrypted using
+   --  the salt and SHA1 and base64url. Otherwise, the password is in clear text.
+   procedure Load (Realm  : in out File_Realm_Manager;
+                   Props  : in Util.Properties.Manager'Class;
+                   Prefix : in String);
+
+   procedure Load (Realm  : in out File_Realm_Manager;
+                   Path   : in String;
+                   Prefix : in String);
+
    --  Add a username with the associated password.
    procedure Add_User (Realm    : in out File_Realm_Manager;
                        Username : in String;
