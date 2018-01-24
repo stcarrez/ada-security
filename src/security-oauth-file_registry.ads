@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-file_registry -- File Based Application and Realm
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with Ada.Strings.Hash;
 with Ada.Containers.Indefinite_Hashed_Maps;
 
 with Util.Strings;
+with Util.Properties;
 
 with Security.OAuth.Servers;
 private with Util.Strings.Maps;
@@ -44,6 +45,21 @@ package Security.OAuth.File_Registry is
    --  Add the application to the application repository.
    procedure Add_Application (Realm : in out File_Application_Manager;
                               App   : in Servers.Application);
+
+   --  Load from the properties the definition of applications.  The list of applications
+   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  application names or ids.  The application definition are represented by properties
+   --  of the form:
+   --    <prefix>.<app>.client_id
+   --    <prefix>.<app>.client_secret
+   --    <prefix>.<app>.callback_url
+   procedure Load (Realm  : in out File_Application_Manager;
+                   Props  : in Util.Properties.Manager'Class;
+                   Prefix : in String);
+
+   procedure Load (Realm  : in out File_Application_Manager;
+                   Path   : in String;
+                   Prefix : in String);
 
    type File_Realm_Manager is limited new Servers.Realm_Manager with private;
 
