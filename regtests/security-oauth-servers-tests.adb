@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-oauth-servers-tests - Unit tests for server side OAuth
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,8 @@ package body Security.OAuth.Servers.Tests is
                        Test_Token_Password'Access);
       Caller.Add_Test (Suite, "Test Security.OAuth.Servers.Authenticate",
                        Test_Bad_Token'Access);
+      Caller.Add_Test (Suite, "Test Security.OAuth.File_Registry.Load",
+                       Test_Load_Registry'Access);
    end Add_Tests;
 
    --  ------------------------------
@@ -254,5 +256,35 @@ package body Security.OAuth.Servers.Tests is
       T.Assert (Auth_Grant.Status = Invalid_Grant,
                 "Expecting Invalid_Grant for badly formed token");
    end Test_Bad_Token;
+
+   --  ------------------------------
+   --  Test the loading configuration files for the File_Registry.
+   --  ------------------------------
+   procedure Test_Load_Registry (T : in out Test) is
+      Apps       : aliased File_Application_Manager;
+      Realm      : aliased File_Realm_Manager;
+      Manager    : Auth_Manager;
+      Grant      : Grant_Type;
+      Auth_Grant : Grant_Type;
+      Params     : Test_Parameters;
+   begin
+      Apps.Load (Util.Tests.Get_Path ("regtests/files/user_apps.properties"), "apps");
+      Realm.Load (Util.Tests.Get_Path ("regtests/files/user_apps.properties"), "users");
+
+      --  Configure the auth manager.
+      Manager.Set_Application_Manager (Apps'Unchecked_Access);
+      Manager.Set_Realm_Manager (Realm'Unchecked_Access);
+      Manager.Set_Private_Key ("server-private-key-no-so-secure");
+      Params.Set_Parameter (Security.OAuth.CLIENT_ID, "app-id-1");
+      Params.Set_Parameter (Security.OAuth.CLIENT_SECRET, "app-secret-1");
+      Params.Set_Parameter (Security.OAuth.GRANT_TYPE, "password");
+      Params.Set_Parameter (Security.OAuth.USERNAME, "joe");
+      Params.Set_Parameter (Security.OAuth.PASSWORD, "test");
+      Manager.Token (Params, Grant);
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Valid_Grant,
+                "Expecting Valid_Grant when the user/password are correct");
+   end Test_Load_Registry;
 
 end Security.OAuth.Servers.Tests;
