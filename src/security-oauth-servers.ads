@@ -107,6 +107,14 @@ package Security.OAuth.Servers is
    function Has_Permission (App        : in Application;
                             Permission : in Security.Permissions.Permission_Index) return Boolean;
 
+   type Principal is limited interface and Security.Principal;
+   type Principal_Access is access all Principal'Class;
+
+   --  Check if the permission was granted.
+   function Has_Permission (Auth       : in Principal;
+                            Permission : in Security.Permissions.Permission_Index)
+                            return Boolean is abstract;
+
    --  Define the status of the grant.
    type Grant_Status is (Invalid_Grant, Expired_Grant, Revoked_Grant,
                          Stealed_Grant, Valid_Grant);
@@ -135,7 +143,7 @@ package Security.OAuth.Servers is
       Expires_In : Duration := 0.0;
 
       --  When success, the authentication principal.
-      Auth    : Security.Principal_Access;
+      Auth    : Principal_Access;
 
       --  When error, the type of error to return.
       Error   : Util.Strings.Name_Access;
@@ -211,7 +219,7 @@ package Security.OAuth.Servers is
    --  Handle the "Authorization Code Grant" and "Implicit Grant" defined in RFC 6749.
    procedure Authorize (Realm   : in out Auth_Manager;
                         Params  : in Security.Auth.Parameters'Class;
-                        Auth    : in Security.Principal_Access;
+                        Auth    : in Principal_Access;
                         Grant   : out Grant_Type);
 
    --  The <tt>Token</tt> procedure is the main entry point to get the access token and
@@ -236,13 +244,13 @@ package Security.OAuth.Servers is
    procedure Authorize_Code (Realm   : in out Auth_Manager;
                              App     : in Application'Class;
                              Params  : in Security.Auth.Parameters'Class;
-                             Auth    : in Security.Principal_Access;
+                             Auth    : in Principal_Access;
                              Grant   : out Grant_Type);
 
    procedure Authorize_Token (Realm   : in out Auth_Manager;
                               App     : in Application'Class;
                               Params  : in Security.Auth.Parameters'Class;
-                              Auth    : in Security.Principal_Access;
+                              Auth    : in Principal_Access;
                               Grant   : out Grant_Type);
 
    --  Make the access token from the resource owner password credentials.  The username,
