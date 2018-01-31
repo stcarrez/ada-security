@@ -121,7 +121,7 @@ package body Security.OAuth.Servers is
    --  ------------------------------
    procedure Authorize (Realm   : in out Auth_Manager;
                         Params  : in Security.Auth.Parameters'Class;
-                        Auth    : in Security.Principal_Access;
+                        Auth    : in Principal_Access;
                         Grant   : out Grant_Type) is
       Method    : constant String := Params.Get_Parameter (Security.OAuth.RESPONSE_TYPE);
       Client_Id : constant String := Params.Get_Parameter (Security.OAuth.CLIENT_ID);
@@ -231,7 +231,7 @@ package body Security.OAuth.Servers is
    procedure Authorize_Code (Realm   : in out Auth_Manager;
                              App     : in Application'Class;
                              Params  : in Security.Auth.Parameters'Class;
-                             Auth    : in Security.Principal_Access;
+                             Auth    : in Principal_Access;
                              Grant   : out Grant_Type) is
       Callback  : constant String := Params.Get_Parameter (Security.OAuth.REDIRECT_URI);
       Scope     : constant String := Params.Get_Parameter (Security.OAuth.SCOPE);
@@ -260,7 +260,7 @@ package body Security.OAuth.Servers is
    procedure Authorize_Token (Realm   : in out Auth_Manager;
                               App     : in Application'Class;
                               Params  : in Security.Auth.Parameters'Class;
-                              Auth    : in Security.Principal_Access;
+                              Auth    : in Principal_Access;
                               Grant   : out Grant_Type) is
       Callback  : constant String := Params.Get_Parameter (Security.OAuth.REDIRECT_URI);
       Scope     : constant String := Params.Get_Parameter (Security.OAuth.SCOPE);
@@ -349,6 +349,7 @@ package body Security.OAuth.Servers is
       Username  : constant String := Params.Get_Parameter (Security.OAuth.USERNAME);
       Password  : constant String := Params.Get_Parameter (Security.OAuth.PASSWORD);
       Scope     : constant String := Params.Get_Parameter (Security.OAuth.SCOPE);
+      Secret    : constant String := Params.Get_Parameter (Security.OAuth.CLIENT_SECRET);
    begin
       Grant.Request := Password_Grant;
       Grant.Status  := Invalid_Grant;
@@ -359,6 +360,11 @@ package body Security.OAuth.Servers is
       elsif Password'Length = 0 then
          Log.Info ("Missing password request parameter");
          Grant.Error := INVALID_REQUEST'Access;
+
+      elsif App.Secret /= Secret then
+         Log.Info ("Invalid application secret");
+         Grant.Error := UNAUTHORIZED_CLIENT'Access;
+
       else
          --  Verify the username and password to get the principal.
          Realm.Realm.Verify (Username, Password, Grant.Auth);
