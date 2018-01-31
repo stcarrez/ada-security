@@ -33,6 +33,17 @@ package body Security.OAuth.File_Registry is
    end Get_Name;
 
    --  ------------------------------
+   --  Check if the permission was granted.
+   --  ------------------------------
+   overriding
+   function Has_Permission (Auth       : in File_Principal;
+                            Permission : in Security.Permissions.Permission_Index)
+                            return Boolean is
+   begin
+      return Security.Permissions.Has_Permission (Auth.Perms, Permission);
+   end Has_Permission;
+
+   --  ------------------------------
    --  Find the application that correspond to the given client id.
    --  The <tt>Invalid_Application</tt> exception should be raised if there is no such application.
    --  ------------------------------
@@ -194,7 +205,7 @@ package body Security.OAuth.File_Registry is
    overriding
    procedure Authenticate (Realm     : in out File_Realm_Manager;
                            Token     : in String;
-                           Auth      : out Principal_Access;
+                           Auth      : out Servers.Principal_Access;
                            Cacheable : out Boolean) is
       Pos : constant Token_Maps.Cursor := Realm.Tokens.Find (Token);
    begin
@@ -216,8 +227,12 @@ package body Security.OAuth.File_Registry is
    function Authorize (Realm : in File_Realm_Manager;
                        App   : in Servers.Application'Class;
                        Scope : in String;
-                       Auth  : in Principal_Access) return String is
+                       Auth  : in Servers.Principal_Access) return String is
+      File_Auth : constant File_Principal_Access := File_Principal (Auth.all)'Access;
    begin
+      for P of Security.Permissions.Get_Permission_Array (Scope) loop
+         Security.Permissions.Add_Permission (File_Auth.Perms, P);
+      end loop;
       return To_String (File_Principal (Auth.all).Token);
    end Authorize;
 
@@ -225,7 +240,7 @@ package body Security.OAuth.File_Registry is
    procedure Verify (Realm    : in out File_Realm_Manager;
                      Username : in String;
                      Password : in String;
-                     Auth     : out Principal_Access) is
+                     Auth     : out Servers.Principal_Access) is
       Result : File_Principal_Access;
       Pos    : constant User_Maps.Cursor := Realm.Users.Find (Username);
    begin
@@ -263,7 +278,7 @@ package body Security.OAuth.File_Registry is
    overriding
    procedure Verify (Realm : in out File_Realm_Manager;
                      Token : in String;
-                     Auth  : out Principal_Access) is
+                     Auth  : out Servers.Principal_Access) is
    begin
       Log.Info ("Verify token {0}", Token);
       Auth := null;
@@ -271,7 +286,8 @@ package body Security.OAuth.File_Registry is
 
    overriding
    procedure Revoke (Realm : in out File_Realm_Manager;
-                     Auth  : in Principal_Access) is
+                     Auth  : in Servers.Principal_Access) is
+      use type Servers.Principal_Access;
    begin
       if Auth /= null and then Auth.all in File_Principal'Class then
          Realm.Tokens.Delete (To_String (File_Principal (Auth.all).Token));
