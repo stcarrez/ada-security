@@ -23,16 +23,23 @@ with Util.Strings;
 with Util.Properties;
 
 with Security.OAuth.Servers;
+with Security.Permissions;
 private with Util.Strings.Maps;
 private with Security.Random;
 package Security.OAuth.File_Registry is
 
-   type File_Principal is new Security.Principal with private;
+   type File_Principal is new Servers.Principal with private;
    type File_Principal_Access is access all File_Principal'Class;
 
    --  Get the principal name.
    overriding
    function Get_Name (From : in File_Principal) return String;
+
+   --  Check if the permission was granted.
+   overriding
+   function Has_Permission (Auth       : in File_Principal;
+                            Permission : in Security.Permissions.Permission_Index)
+                            return Boolean;
 
    type File_Application_Manager is new Servers.Application_Manager with private;
 
@@ -76,7 +83,7 @@ package Security.OAuth.File_Registry is
    overriding
    procedure Authenticate (Realm     : in out File_Realm_Manager;
                            Token     : in String;
-                           Auth      : out Principal_Access;
+                           Auth      : out Servers.Principal_Access;
                            Cacheable : out Boolean);
 
    --  Create an auth token string that identifies the given principal.  The returned
@@ -87,22 +94,22 @@ package Security.OAuth.File_Registry is
    function Authorize (Realm : in File_Realm_Manager;
                        App   : in Servers.Application'Class;
                        Scope : in String;
-                       Auth  : in Principal_Access) return String;
+                       Auth  : in Servers.Principal_Access) return String;
 
    overriding
    procedure Verify (Realm    : in out File_Realm_Manager;
                      Username : in String;
                      Password : in String;
-                     Auth     : out Principal_Access);
+                     Auth     : out Servers.Principal_Access);
 
    overriding
    procedure Verify (Realm : in out File_Realm_Manager;
                      Token : in String;
-                     Auth  : out Principal_Access);
+                     Auth  : out Servers.Principal_Access);
 
    overriding
    procedure Revoke (Realm : in out File_Realm_Manager;
-                     Auth  : in Principal_Access);
+                     Auth  : in Servers.Principal_Access);
 
    --  Crypt the password using the given salt and return the string composed with
    --  the salt in clear text and the crypted password.
@@ -152,9 +159,10 @@ private
 
    package User_Maps renames Util.Strings.Maps;
 
-   type File_Principal is new Security.Principal with record
+   type File_Principal is new Servers.Principal with record
       Token : Ada.Strings.Unbounded.Unbounded_String;
       Name  : Ada.Strings.Unbounded.Unbounded_String;
+      Perms : Security.Permissions.Permission_Index_Set := Security.Permissions.EMPTY_SET;
    end record;
 
    type File_Application_Manager is new Servers.Application_Manager with record
