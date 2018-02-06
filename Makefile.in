@@ -7,7 +7,7 @@ SECURITY_LIBRARY_TYPE=static
 # target names defined.
 MODE=distrib
 GNATMAKE=@GNATMAKE@
-GNATCLEAN=gnatclean
+GNATCLEAN=@GNATCLEAN@
 GPRINSTALL=@GPRINSTALL@
 INSTALL=@INSTALL@
 DYNAMO=dynamo
@@ -63,7 +63,8 @@ alidir=${prefix}/${infix_ali}
 libname=libada_security
 
 PROCESSORS=@NR_CPUS@
-MAKE_ARGS=-XMODE=${MODE} -XSECURITY_LIBRARY_TYPE=${SECURITY_LIBRARY_TYPE} -XPROCESSORS=${PROCESSORS}
+COVERAGE=no
+MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XSECURITY_LIBRARY_TYPE=${SECURITY_LIBRARY_TYPE} -XPROCESSORS=${PROCESSORS}
 ifeq ($(SECURITY_LIBRARY_TYPE),relocatable)
 MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
 MAKE_ARGS += -XXMLADA_BUILD=relocatable
@@ -71,10 +72,10 @@ MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 endif
 
 ifeq (${BUILDS_SHARED},yes)
-all:     static shared
+all:     static shared build-test
 install: uninstall install_static install_shared install-info
 else
-all:     static
+all:     static build-test
 install: uninstall install_static install-info
 endif
 
@@ -87,6 +88,9 @@ static:
 
 shared:
 	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable build
+
+build-test: build
+	$(GNATMAKE) $(MAKE_ARGS) -p -Psecurity_tests
 
 setup: obj/security/static lib/security/static
 
@@ -117,8 +121,7 @@ analyze:
 rebuild: clean build
 
 # Build and run the unit tests
-check test:	build
-	$(GNATMAKE) $(MAKE_ARGS) -p -Psecurity_tests
+check test:	build-test
 	bin/security_harness -xml security-aunit.xml
 
 doc:
