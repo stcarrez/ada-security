@@ -163,6 +163,13 @@ package body Security.OAuth.Servers.Tests is
       Manager.Token (Params, Grant);
       T.Assert (Grant.Request = Password_Grant,
                 "Expecting Password_Grant for the grant request");
+      T.Assert (Grant.Status = Invalid_Grant,
+                "Expecting Invalid_Grant when the client_secret is invalid");
+
+      Params.Set_Parameter (Security.OAuth.CLIENT_SECRET, "my-secret");
+      Manager.Token (Params, Grant);
+      T.Assert (Grant.Request = Password_Grant,
+                "Expecting Password_Grant for the grant request");
       T.Assert (Grant.Status = Valid_Grant,
                 "Expecting Valid_Grant when the user/password are correct");
       T.Assert (Grant.Error = null, "Expecting null error");
