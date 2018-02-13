@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-roles -- Role based policies
---  Copyright (C) 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,13 @@
 with Ada.Strings.Unbounded;
 
 --  == Role Based Security Policy ==
---  The <tt>Security.Policies.Roles</tt> package implements a role based security policy.
+--  The `Security.Policies.Roles` package implements a role based security policy.
 --  In this policy, users are assigned one or several roles and permissions are
 --  associated with roles.  A permission is granted if the user has one of the roles required
 --  by the permission.
 --
 --  === Policy creation ===
---  An instance of the <tt>Role_Policy</tt> must be created and registered in the policy manager.
+--  An instance of the `Role_Policy` must be created and registered in the policy manager.
 --  Get or declare the following variables:
 --
 --    Manager : Security.Policies.Policy_Manager;
@@ -57,17 +57,17 @@ with Ada.Strings.Unbounded;
 --      ...
 --    </policy-rules>
 --
---  This definition declares two roles: <tt>admin</tt> and <tt>manager</tt>
---  It defines a permission <b>create-workspace</b> that will be granted if the
---  user has either the <b>admin</b> or the <b>manager</b> role.
+--  This definition declares two roles: `admin` and `manager`
+--  It defines a permission `create-workspace` that will be granted if the
+--  user has either the `admin` or the `manager` role.
 --
 --  Each role is identified by a name in the configuration file.  It is represented by
---  a <tt>Role_Type</tt>.  To provide an efficient implementation, the <tt>Role_Type</tt>
+--  a `Role_Type`.  To provide an efficient implementation, the `Role_Type`
 --  is represented as an integer with a limit of 64 different roles.
 --
 --  === Assigning roles to users ===
---  A <tt>Security_Context</tt> must be associated with a set of roles before checking the
---  permission.  This is done by using the <tt>Set_Role_Context</tt> operation:
+--  A `Security_Context` must be associated with a set of roles before checking the
+--  permission.  This is done by using the `Set_Role_Context` operation:
 --
 --     Security.Policies.Roles.Set_Role_Context (Security.Contexts.Current, "admin");
 --
