@@ -21,3 +21,6 @@ obj/
 lib/
 security-aunit.xml
 distrib/security.gpr
+docs/security-book.html
+docs/security-book.pdf
+        
