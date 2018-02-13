@@ -52,9 +52,9 @@ an optional refresh token.  The realm also returns in the grant the user princip
 identifies the user.
 
 ```Ada
-  Realm : Security.OAuth.Servers.Auth_Manager;
-  Grant : Security.OAuth.Servers.Grant_Type;
-    Realm.Token (Params, Grant);
+Realm : Security.OAuth.Servers.Auth_Manager;
+Grant : Security.OAuth.Servers.Grant_Type;
+  Realm.Token (Params, Grant);
 
 ```
 
@@ -65,10 +65,10 @@ The security principal will identify the resource owner as well as the applicati
 that is doing the call.
 
 ```Ada
-   Realm : Security.OAuth.Servers.Auth_Manager;
-   Grant : Security.OAuth.Servers.Grant_Type;
-   Token : String := ...;
-     Realm.Authenticate (Token, Grant);
+ Realm : Security.OAuth.Servers.Auth_Manager;
+ Grant : Security.OAuth.Servers.Grant_Type;
+ Token : String := ...;
+   Realm.Authenticate (Token, Grant);
 
 ```
 

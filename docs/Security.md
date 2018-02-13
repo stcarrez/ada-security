@@ -48,14 +48,14 @@ checked by the access control manager.  An application should declare each permi
 by instantiating the <tt>Definition</tt> package:
 
 ```Ada
-  package Perm_Create_Workspace is new Security.Permissions.Definition ("create-workspace");
+package Perm_Create_Workspace is new Security.Permissions.Definition ("create-workspace");
 ```
 
 This declares a permission that can be represented by "<tt>create-workspace</tt>" in
 configuration files.  In Ada, the permission is used as follows:
 
 ```Ada
-   Perm_Create_Workspace.Permission
+ Perm_Create_Workspace.Permission
 ```
 
 
@@ -65,13 +65,13 @@ the [[OAuth|Security_OAuth ]] or another authentication mechanism.  The authenti
 an object that must implement the `Principal` interface.  For example:
 
 ```Ada
-  P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Auth);
+P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Auth);
 ```
 
 or
 
 ```Ada
-  P : Security.OAuth.Clients.Access_Token_Access := Security.OAuth.Clients.Create_Access_Token
+P : Security.OAuth.Clients.Access_Token_Access := Security.OAuth.Clients.Create_Access_Token
 ```
 
 The principal is then stored in a security context.
@@ -89,24 +89,24 @@ This security context is used as follows:
 For example the security context is declared as follows:
 
 ```Ada
-  Context : Security.Contexts.Security_Context;
+Context : Security.Contexts.Security_Context;
 ```
 
 A security policy and a principal must be set in the security context.  The security policy
 defines the rules that govern the security and the principal identifies the current user.
 
 ```Ada
-  Context.Set_Context (Policy_Manager, P);
+Context.Set_Context (Policy_Manager, P);
 ```
 
 A permission is checked by using the <tt>Has_Permission</tt> operation:
 
 ```Ada
-  if Security.Contexts.Has_Permission (Perm_Create_Workspace.Permission) then
-    -- Granted
-  else
-    -- Denied
-  end if;
+if Security.Contexts.Has_Permission (Perm_Create_Workspace.Permission) then
+  -- Granted
+else
+  -- Denied
+end if;
 ```
 
 

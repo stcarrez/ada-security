@@ -36,7 +36,7 @@ The initialization process must be done before each two steps (discovery and ver
 The Authentication manager must be declared and configured.
 
 ```Ada
-  Mgr   : Security.Auth.Manager;
+Mgr   : Security.Auth.Manager;
 ```
 
 For the configuration, the <b>Initialize</b> procedure is called to configure
@@ -44,9 +44,9 @@ the Auth realm and set the authentication return callback URL.  The return callb
 must be a valid URL that is based on the realm.  Example:
 
 ```Ada
-  Mgr.Initialize (Name      => "http://app.site.com/auth",
-                  Return_To => "http://app.site.com/auth/verify",
-                  Realm     => "openid");
+Mgr.Initialize (Name      => "http://app.site.com/auth",
+                Return_To => "http://app.site.com/auth/verify",
+                Realm     => "openid");
 ```
 
 After this initialization, the authentication manager can be used in the authentication
@@ -56,8 +56,8 @@ process.
 The Open ID provider needs the following configuration parameters:
 
 ```Ada
-  openid.realm          The OpenID realm parameter passed in the authentication URL.
-  openid.callback_url   The OpenID return_to parameter.
+openid.realm          The OpenID realm parameter passed in the authentication URL.
+openid.callback_url   The OpenID return_to parameter.
 ```
 
 ### Google+
@@ -73,9 +73,9 @@ do the association and get an <b>End_Point</b>.  The OpenID provider is specifie
 URL, below is an example for Google OpenID:
 
 ```Ada
-  Provider : constant String := "https://www.google.com/accounts/o8/id";
-  OP       : Security.Auth.End_Point;
-  Assoc    : constant Security.Auth.Association_Access := new Security.Auth.Association;
+Provider : constant String := "https://www.google.com/accounts/o8/id";
+OP       : Security.Auth.End_Point;
+Assoc    : constant Security.Auth.Association_Access := new Security.Auth.Association;
 ```
 
 The following steps are performed:
@@ -84,15 +84,15 @@ The following steps are performed:
   * The <b>Associate</b> procedure is called to make the association with the <b>End_Point</b>. The <b>Association</b> record holds session, and authentication.
 
 ```Ada
-  Mgr.Discover (Provider, OP);  --  Yadis discovery (get the XRDS file).
-  Mgr.Associate (OP, Assoc.all);--  Associate and get an end-point with a key.
+Mgr.Discover (Provider, OP);  --  Yadis discovery (get the XRDS file).
+Mgr.Associate (OP, Assoc.all);--  Associate and get an end-point with a key.
 ```
 
 After this first step, you must manage to save the association in the HTTP session.
 Then you must redirect to the authentication URL that is obtained by using:
 
 ```Ada
-  Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
+Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
 ```
 
 ## Verify: acknowledge the authentication in the callback URL
@@ -102,9 +102,9 @@ It must also prepare a parameters object that allows the OpenID framework to get
 URI parameters from the return callback.
 
 ```Ada
-  Assoc      : Association_Access := ...;  --  Get the association saved in the session.
-  Credential : Security.Auth.Authentication;
-  Params     : Auth_Params;
+Assoc      : Association_Access := ...;  --  Get the association saved in the session.
+Credential : Security.Auth.Authentication;
+Params     : Auth_Params;
 ```
 
 The auth manager must be initialized and the <b>Verify</b> procedure is called with
@@ -112,8 +112,8 @@ the association, parameters and the authentication result.  The <b>Get_Status</b
 must be used to check that the authentication succeeded.
 
 ```Ada
-  Mgr.Verify (Assoc.all, Params, Credential);
-  if Security.Auth.Get_Status (Credential) = Security.Auth.AUTHENTICATED then ...  -- Success.
+Mgr.Verify (Assoc.all, Params, Credential);
+if Security.Auth.Get_Status (Credential) = Security.Auth.AUTHENTICATED then ...  -- Success.
 ```
 
 ## Principal creation
@@ -122,6 +122,6 @@ the session.  The user principal can then be used to assign permissions to that 
 enforce the application permissions using the security policy manger.
 
 ```Ada
-  P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Credential);
+P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Credential);
 ```
 

@@ -18,11 +18,11 @@ Otherwise the permission is denied.  The permission is assigned a name and is de
 as follows:
 
 ```Ada
-  <policy-rules>
-    <auth-permission>
-      <name>view-profile</name>
-    </auth-permission>
-  </policy-rules>
+<policy-rules>
+  <auth-permission>
+    <name>view-profile</name>
+  </auth-permission>
+</policy-rules>
 ```
 
 This example defines the `view-profile` permission.
@@ -32,11 +32,11 @@ The `grant-permission` is another pre-defined permission that gives the permissi
 the security context.  The permission is defined as follows:
 
 ```Ada
-  <policy-rules>
-    <grant-permission>
-      <name>anonymous</name>
-    </grant-permission>
-  </policy-rules>
+<policy-rules>
+  <grant-permission>
+    <name>anonymous</name>
+  </grant-permission>
+</policy-rules>
 ```
 
 This example defines the `anonymous` permission.
@@ -52,15 +52,15 @@ An instance of the `Role_Policy` must be created and registered in the policy ma
 Get or declare the following variables:
 
 ```Ada
-  Manager : Security.Policies.Policy_Manager;
-  Policy  : Security.Policies.Roles.Role_Policy_Access;
+Manager : Security.Policies.Policy_Manager;
+Policy  : Security.Policies.Roles.Role_Policy_Access;
 ```
 
 Create the role policy and register it in the policy manager as follows:
 
 ```Ada
-  Policy := new Role_Policy;
-  Manager.Add_Policy (Policy.all'Access);
+Policy := new Role_Policy;
+Manager.Add_Policy (Policy.all'Access);
 ```
 
 ### Policy Configuration
@@ -70,20 +70,20 @@ roles.  When the role based policy is registered in the policy manager, the foll
 XML configuration is used:
 
 ```Ada
-  <policy-rules>
-    <security-role>
-      <role-name>admin</role-name>
-    </security-role>
-    <security-role>
-      <role-name>manager</role-name>
-    </security-role>
-    <role-permission>
-      <name>create-workspace</name>
-      <role>admin</role>
-      <role>manager</role>
-    </role-permission>
-    ...
-  </policy-rules>
+<policy-rules>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+  <security-role>
+    <role-name>manager</role-name>
+  </security-role>
+  <role-permission>
+    <name>create-workspace</name>
+    <role>admin</role>
+    <role>manager</role>
+  </role-permission>
+  ...
+</policy-rules>
 ```
 
 This definition declares two roles: `admin` and `manager`
@@ -99,7 +99,7 @@ A `Security_Context` must be associated with a set of roles before checking the
 permission.  This is done by using the `Set_Role_Context` operation:
 
 ```Ada
-   Security.Policies.Roles.Set_Role_Context (Security.Contexts.Current, "admin");
+ Security.Policies.Roles.Set_Role_Context (Security.Contexts.Current, "admin");
 ```
 
 ## URL Security Policy
@@ -113,15 +113,15 @@ An instance of the `URL_Policy` must be created and registered in the policy man
 Get or declare the following variables:
 
 ```Ada
-  Manager : Security.Policies.Policy_Manager;
-  Policy  : Security.Policies.Urls.URL_Policy_Access;
+Manager : Security.Policies.Policy_Manager;
+Policy  : Security.Policies.Urls.URL_Policy_Access;
 ```
 
 Create the URL policy and register it in the policy manager as follows:
 
 ```Ada
-  Policy := new URL_Policy;
-  Manager.Add_Policy (Policy.all'Access);
+Policy := new URL_Policy;
+Manager.Add_Policy (Policy.all'Access);
 ```
 
 ### Policy Configuration
@@ -129,15 +129,15 @@ Once the URL policy is registered, the policy manager can read and process the f
 XML configuration:
 
 ```Ada
-  <policy-rules>
-    <url-policy id='1'>
-      <permission>create-workspace</permission>
-      <permission>admin</permission>
-      <url-pattern>/workspace/create</url-pattern>
-      <url-pattern>/workspace/setup/*</url-pattern>
-    </url-policy>
-    ...
-  </policy-rules>
+<policy-rules>
+  <url-policy id='1'>
+    <permission>create-workspace</permission>
+    <permission>admin</permission>
+    <url-pattern>/workspace/create</url-pattern>
+    <url-pattern>/workspace/setup/*</url-pattern>
+  </url-policy>
+  ...
+</policy-rules>
 ```
 
 This policy gives access to the URL that match one of the URL pattern if the
@@ -154,15 +154,15 @@ The first permission that is granted gives access to the URL.
 To check a URL permission, you must declare a `URL_Permission` object with the URL.
 
 ```Ada
-   URL    : constant String := ...;
-   Perm   : constant Policies.URLs.URL_Permission (URL'Length)
-             := URL_Permission '(Len => URI'Length, URL => URL);
+ URL    : constant String := ...;
+ Perm   : constant Policies.URLs.URL_Permission (URL'Length)
+           := URL_Permission '(Len => URI'Length, URL => URL);
 ```
 
 Then, we can check the permission:
 
 ```Ada
-   Result : Boolean := Security.Contexts.Has_Permission (Perm);
+ Result : Boolean := Security.Contexts.Has_Permission (Perm);
 ```
 
 
