@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Security
-dnl Copyright (C) 2012, 2013, 2015, 2016 Stephane Carrez
+dnl Copyright (C) 2012, 2013, 2015, 2016, 2018 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,9 @@ NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/de
 AC_MSG_RESULT($NR_CPUS)
 AC_SUBST(NR_CPUS)
 
+AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
+AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
+
 ##########################################
 # Check to enable/disable shared library
 ##########################################
@@ -59,7 +62,7 @@ AM_SHARED_LIBRARY_SUPPORT
 ##########################################
 AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
   [git@github.com:stcarrez/ada-util.git],
-  [Building Ada EL requires the Ada Utility Library.],
+  [Building Ada Security requires the Ada Utility Library.],
   [
     UTIL_DIR=${gnat_project_dir_util}
   ])
