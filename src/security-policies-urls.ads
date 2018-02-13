@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,13 +28,13 @@ with GNAT.Regexp;
 with Security.Contexts;
 
 --  == URL Security Policy ==
---  The <tt>Security.Policies.Urls</tt> implements a security policy intended to be used
+--  The `Security.Policies.Urls` implements a security policy intended to be used
 --  in web servers.  It allows to protect an URL by defining permissions that must be granted
 --  for a user to get access to the URL.  A typical example is a web server that has a set of
 --  administration pages, these pages should be accessed by users having some admin permission.
 --
 --  === Policy creation ===
---  An instance of the <tt>URL_Policy</tt> must be created and registered in the policy manager.
+--  An instance of the `URL_Policy` must be created and registered in the policy manager.
 --  Get or declare the following variables:
 --
 --    Manager : Security.Policies.Policy_Manager;
@@ -60,17 +60,17 @@ with Security.Contexts;
 --    </policy-rules>
 --
 --  This policy gives access to the URL that match one of the URL pattern if the
---  security context has the permission <b>create-workspace</b> or <b>admin</b>.
+--  security context has the permission `create-workspace` or `admin`.
 --  These two permissions are checked according to another security policy.
---  The XML configuration can define several <tt>url-policy</tt>.  They are checked in
---  the order defined in the XML.  In other words, the first <tt>url-policy</tt> that matches
+--  The XML configuration can define several `url-policy`.  They are checked in
+--  the order defined in the XML.  In other words, the first `url-policy` that matches
 --  the URL is used to verify the permission.
 --
---  The <tt>url-policy</tt> definition can contain several <tt>permission</tt>.
+--  The `url-policy` definition can contain several `permission`.
 --  The first permission that is granted gives access to the URL.
 --
 --  === Checking for permission ===
---  To check a URL permission, you must declare a <tt>URL_Permission</tt> object with the URL.
+--  To check a URL permission, you must declare a `URL_Permission` object with the URL.
 --
 --     URL    : constant String := ...;
 --     Perm   : constant Policies.URLs.URL_Permission (URL'Length)
