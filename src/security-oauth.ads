@@ -17,10 +17,13 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 
---  == OAuth ==
+--  = OAuth =
 --  The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authorization
 --  framework as defined by the IETF working group.
 --  See http://tools.ietf.org/html/draft-ietf-oauth-v2-26
+--
+--  @include security-oauth-clients.ads
+--  @include security-oauth-servers.ads
 package Security.OAuth is
 
    --  OAuth 2.0: Section 10.2.2. Initial Registry Contents
