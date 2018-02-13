@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth -- Authentication Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,8 @@ with Ada.Strings.Unbounded;
 with Ada.Calendar;
 with Ada.Finalization;
 
---  == Auth ==
---  The <b>Security.Auth</b> package implements an authentication framework that is
+--  = Authentication =
+--  The `Security.Auth` package implements an authentication framework that is
 --  suitable for OpenID 2.0, OAuth 2.0 and later for OpenID Connect.  It allows an application
 --  to authenticate users using an external authorization server such as Google, Facebook,
 --  Google +, Twitter and others.
@@ -35,14 +35,14 @@ with Ada.Finalization;
 --  https://developers.facebook.com/docs/facebook-login/login-flow-for-web-no-jssdk/
 --
 --  Despite their subtle differences, all these authentication frameworks share almost
---  a common flow.  The API provided by <b>Security.Auth</b> defines an abstraction suitable
+--  a common flow.  The API provided by `Security.Auth` defines an abstraction suitable
 --  for all these frameworks.
 --
 --  There are basically two steps that an application must implement:
 --
---    * <b>Discovery</b>: to resolve and use the OpenID provider and redirect the user to the
+--    * `Discovery`: to resolve and use the OpenID provider and redirect the user to the
 --      provider authentication form.
---    * <b>Verify</b>: to decode the authentication and check its result.
+--    * `Verify`: to decode the authentication and check its result.
 --
 --  [[images/OpenID.png]]
 --
@@ -51,10 +51,10 @@ with Ada.Finalization;
 --    * The application should redirect the user to the authentication URL.
 --    * The OpenID provider authenticate the user and redirects the user to the callback CB.
 --    * The association is decoded from the callback parameter.
---    * The <b>Verify</b> procedure is called with the association to check the result and
+--    * The `Verify` procedure is called with the association to check the result and
 --      obtain the authentication results.
 --
---  === Initialization ===
+--  == Initialization ==
 --  The initialization process must be done before each two steps (discovery and verify).
 --  The Authentication manager must be declared and configured.
 --
@@ -72,9 +72,9 @@ with Ada.Finalization;
 --  process.
 --
 --  @include security-auth-openid.ads
---  @include security-auth-oauth.ads
+--  @include security-auth-oauth-googleplus.ads
 --
---  === Discovery: creating the authentication URL ===
+--  == Discovery: creating the authentication URL ==
 --  The first step is to create an authentication URL to which the user must be redirected.
 --  In this step, we have to create an OpenID manager, discover the OpenID provider,
 --  do the association and get an <b>End_Point</b>.  The OpenID provider is specified as an
@@ -99,7 +99,7 @@ with Ada.Finalization;
 --
 --    Auth_URL : constant String := Mgr.Get_Authentication_URL (OP, Assoc.all);
 --
---  === Verify: acknowledge the authentication in the callback URL ===
+--  == Verify: acknowledge the authentication in the callback URL ==
 --  The second step is done when the user has finished the authentication successfully or not.
 --  For this step, the application must get back the association that was saved in the session.
 --  It must also prepare a parameters object that allows the OpenID framework to get the
@@ -116,7 +116,7 @@ with Ada.Finalization;
 --    Mgr.Verify (Assoc.all, Params, Credential);
 --    if Security.Auth.Get_Status (Credential) = Security.Auth.AUTHENTICATED then ...  -- Success.
 --
---  === Principal creation ===
+--  == Principal creation ==
 --  After the user is successfully authenticated, a user principal can be created and saved in
 --  the session.  The user principal can then be used to assign permissions to that user and
 --  enforce the application permissions using the security policy manger.
