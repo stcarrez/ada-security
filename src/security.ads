@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security -- Security
---  Copyright (C) 2010, 2011, 2012, 2015, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,8 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 
---  == Introduction ==
---  The <tt>Security</tt> package provides a security framework that allows
+--  = Security =
+--  The `Security` package provides a security framework that allows
 --  an application to use OpenID or OAuth security frameworks.  This security
 --  framework was first developed within the Ada Server Faces project.
 --  It was moved to a separate project so that it can easyly be used with AWS.
@@ -26,22 +26,22 @@
 --
 --  The security framework uses the following abstractions:
 --
---  === Policy and policy manager ===
---  The <tt>Policy</tt> defines and implements the set of security rules that specify how to
---  protect the system or resources.  The <tt>Policy_Manager</tt> maintains the security policies.
+--  * **Policy and policy manager**:
+--    The `Policy` defines and implements the set of security rules that specify how to
+--    protect the system or resources.  The `Policy_Manager` maintains the security policies.
 --
---  === Principal ===
---  The <tt>Principal</tt> is the entity that can be authenticated.  A principal is obtained
---  after successful authentication of a user or of a system through an authorization process.
---  The OpenID or OAuth authentication processes generate such security principal.
+--  * **Principal**:
+--    The `Principal` is the entity that can be authenticated.  A principal is obtained
+--    after successful authentication of a user or of a system through an authorization process.
+--    The OpenID or OAuth authentication processes generate such security principal.
 --
---  === Permission ===
---  The <tt>Permission</tt> represents an access to a system or application resource.
---  A permission is checked by using the security policy manager.  The policy manager uses a
---  security controller to enforce the permission.
+--  * **Permission**:
+--    The `Permission` represents an access to a system or application resource.
+--    A permission is checked by using the security policy manager.  The policy manager uses a
+--    security controller to enforce the permission.
 --
 --  === Security Context ===
---  The <tt>Security_Context</tt> holds the contextual information that the security controller
+--  The `Security_Context` holds the contextual information that the security controller
 --  can use to verify the permission.  The security context is associated with a principal and
 --  a set of policy context.
 --
@@ -54,14 +54,14 @@
 --  to the application security rules.  All these components are built only once when
 --  an application starts.
 --
---  A user is authenticated through an authentication system which creates a <tt>Principal</tt>
+--  A user is authenticated through an authentication system which creates a `Principal`
 --  instance that identifies the user (green).  The security framework provides two authentication
 --  systems: OpenID and OAuth 2.0 OpenID Connect.
 --
 --  [images/ModelOverview.png]
 --
 --  When a permission must be enforced, a security context is created and linked to the
---  <tt>Principal</tt> instance (blue).  Additional security policy context can be added depending
+--  `Principal` instance (blue).  Additional security policy context can be added depending
 --  on the application context.  To check the permission, the security policy manager is called
 --  and it will ask a security controller to verify the permission.
 --
@@ -73,7 +73,7 @@
 --  == Principal ==
 --  A principal is created by using either the [Security_Auth OpenID],
 --  the [Security_OAuth OAuth] or another authentication mechanism.  The authentication produces
---  an object that must implement the <tt>Principal</tt> interface.  For example:
+--  an object that must implement the `Principal` interface.  For example:
 --
 --    P : Security.Auth.Principal_Access := Security.Auth.Create_Principal (Auth);
 --
