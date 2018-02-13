@@ -1,0 +1,10 @@
+site_name: Ada Security Library
+docs_dir: docs
+pages:
+  - Introduction: index.md
+  - Installation: Installation.md
+  - Overview: Security.md
+  - Authentication: Security_Auth.md
+  - OAuth2: Security_OAuth.md
+  - Policies: Security_Policies.md
+theme: readthedocs
