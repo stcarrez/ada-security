@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies -- Security Policies
---  Copyright (C) 2010, 2011, 2012, 2015 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,9 @@ with Util.Serialize.Mappers;
 limited with Security.Controllers;
 limited with Security.Contexts;
 
---  == Security Policies ==
+--  = Security Policies =
 --  The Security Policy defines and implements the set of security rules that specify
---  how to protect the system or resources. The <tt>Policy_Manager</tt> maintains
+--  how to protect the system or resources. The `Policy_Manager` maintains
 --  the security policies.  These policies are registered when an application starts,
 --  before reading the policy configuration files.
 --
@@ -37,10 +37,10 @@ limited with Security.Contexts;
 --
 --  While the policy configuration files are processed, the policy instances that have been
 --  registered will create a security controller and bind it to a given permission.  After
---  successful initialization, the <tt>Policy_Manager</tt> contains a list of securiy
+--  successful initialization, the `Policy_Manager` contains a list of securiy
 --  controllers which are associated with each permission defined by the application.
 --
---  === Authenticated Permission ===
+--  == Authenticated Permission ==
 --  The `auth-permission` is a pre-defined permission that can be configured in the XML
 --  configuration.  Basically the permission is granted if the security context has a principal.
 --  Otherwise the permission is denied.  The permission is assigned a name and is declared
@@ -54,7 +54,7 @@ limited with Security.Contexts;
 --
 --  This example defines the `view-profile` permission.
 --
---  === Grant Permission ===
+--  == Grant Permission ==
 --  The `grant-permission` is another pre-defined permission that gives the permission whatever
 --  the security context.  The permission is defined as follows:
 --
