@@ -6,7 +6,7 @@ This chapter explains how to build and install the library.
 
 Before building the library, you will need:
 
-* [Ada Utility Library](https://github.com/stcarrez/ada-util).
+* [Ada Utility Library](https://github.com/stcarrez/ada-util) available at https://github.com/stcarrez/ada-util.
 
 First get, build and install the [Ada Utility Library](https://github.com/stcarrez/ada-util).
 
@@ -54,4 +54,12 @@ direction as follows:
 
 ```
 make install prefix=/opt
+```
+
+## Using
+
+To use the library in an Ada project, add the following line at the beginning of your GNAT project file:
+
+```
+with "security";
 ```
