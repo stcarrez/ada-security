@@ -247,7 +247,7 @@ package body Security.OAuth.Clients is
    --  ------------------------------
    procedure Do_Request_Token (App  : in Application;
                                URI  : in String;
-                               Data : in String;
+                               Data : in Util.Http.Clients.Form_Data'Class;
                                Cred : in out Grant_Type'Class) is
       Client   : Util.Http.Clients.Client;
       Response : Util.Http.Clients.Response;
@@ -351,9 +351,17 @@ package body Security.OAuth.Clients is
         & "&"
         & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
       URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+      Form : Util.Http.Clients.Form_Data;
    begin
       Log.Info ("Getting access token from {0} - resource owner password", URI);
-      Do_Request_Token (App, URI, Data, Token);
+      Form.Initialize (Size => 1024);
+      Form.Write_Attribute (Security.OAuth.GRANT_TYPE, "password");
+      Form.Write_Attribute (Security.OAuth.CLIENT_ID, App.Client_Id);
+      Form.Write_Attribute (Security.OAuth.CLIENT_SECRET, App.Secret);
+      Form.Write_Attribute (Security.OAuth.USERNAME, Username);
+      Form.Write_Attribute (Security.OAuth.PASSWORD, Password);
+      Form.Write_Attribute (Security.OAuth.SCOPE, Scope);
+      Do_Request_Token (App, URI, Form, Token);
    end Request_Token;
 
    --  ------------------------------
@@ -363,22 +371,18 @@ package body Security.OAuth.Clients is
    procedure Refresh_Token (App      : in Application;
                             Scope    : in String;
                             Token    : in out Grant_Type'Class) is
-      Client   : Util.Http.Clients.Client;
-
-      Data : constant String
-        := Security.OAuth.GRANT_TYPE & "=refresh_token"
-          & "&"
-        & Security.OAuth.REFRESH_TOKEN & "=" & To_String (Token.Refresh_Token)
-        & "&"
-        & Security.OAuth.CLIENT_ID & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
-        & "&"
-        & Security.OAuth.SCOPE & "=" & Scope
-        & "&"
-        & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
-      URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+      Client : Util.Http.Clients.Client;
+      URI    : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+      Form   : Util.Http.Clients.Form_Data;
    begin
       Log.Info ("Refresh access token from {0}", URI);
-      Do_Request_Token (App, URI, Data, Token);
+      Form.Initialize (Size => 1024);
+      Form.Write_Attribute (Security.OAuth.GRANT_TYPE, "refresh_token");
+      Form.Write_Attribute (Security.OAuth.REFRESH_TOKEN, Token.Refresh_Token);
+      Form.Write_Attribute (Security.OAuth.CLIENT_ID, App.Client_Id);
+      Form.Write_Attribute (Security.OAuth.SCOPE, Scope);
+      Form.Write_Attribute (Security.OAuth.CLIENT_SECRET, App.Secret);
+      Do_Request_Token (App, URI, Form, Token);
    end Refresh_Token;
 
    --  ------------------------------
