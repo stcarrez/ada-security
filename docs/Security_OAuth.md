@@ -3,6 +3,53 @@ The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authoriza
 framework as defined by the IETF working group.
 See http://tools.ietf.org/html/draft-ietf-oauth-v2-26
 
+# OAuth2 Client
+The `Security.OAuth.Clients` package implements the client OAuth 2.0 authorization.
+
+## Application setup
+For an OAuth2 client application to authenticate, it must be registered on the server
+and the server provides the following information:
+
+* **client_id**: the client identifier is a unique string that identifies the application.
+* **client_secret** the client secret is a secret shared between the server and the client application.  The client secret is optional.
+
+The `Security.OAuth.Clients.Application` tagged record is the primary type that
+allows to perform one of the OAuth 2.0 authorization flows.  It is necessary to
+declare an `Application` instance and register the **client_id**, the **client_secret**
+and the authorisation URLs to connect to the server.
+
+```Ada
+App : Security.OAuth.Clients.Application;
+...
+   App.Set_Application_Identifier ("app-identifier");
+   App.Set_Application_Secret ("app-secret");
+   App.Set_Provider_URL ("https://graph.facebook.com/oauth/access_token");
+
+```
+
+## Resource Owner Password Credentials Grant
+The RFC 6749: 4.3.  Resource Owner Password Credentials Grant allows to authorize an
+application by using the user's name and password.  This is the simplest OAuth flow
+but because it requires to know the user's name and password, it is not recommended and
+not supported by several servers.  To use this authorization, the application will use
+the `Request_Token` procedure and will give the user's name, password and the scope
+of permissions.  When the authorization succeeds, a `Grant_Type` token object is returned.
+
+```Ada
+Token  : Security.OAuth.Clients.Grant_Type;
+...
+  App.Request_Token ("admin", "admin", "scope", Token);
+```
+
+## Refreshing an access token
+An access token has an expiration date and a new access token must be asked by using the
+refresh token.  When the access token has expired, the grant token object can be refreshed
+to retrieve a new access token by using the `Refresh_Token` procedure.  The scope of
+permissions can also be passsed.
+
+```Ada
+ App.Refresh_Token ("scope", Token);
+```
 
 ## OAuth Server
 OAuth server side is provided by the <tt>Security.OAuth.Servers</tt> package.
