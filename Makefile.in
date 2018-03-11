@@ -5,7 +5,7 @@ SECURITY_LIBRARY_TYPE=static
 
 # You may edit this makefile as long as you keep these original 
 # target names defined.
-MODE=distrib
+MODE=@MODE@
 GNATMAKE=@GNATMAKE@
 GNATCLEAN=@GNATCLEAN@
 GPRINSTALL=@GPRINSTALL@
@@ -65,7 +65,7 @@ alidir=${prefix}/${infix_ali}
 libname=libada_security
 
 PROCESSORS=@NR_CPUS@
-COVERAGE=no
+COVERAGE=@BUILDS_COVERAGE@
 MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XSECURITY_LIBRARY_TYPE=${SECURITY_LIBRARY_TYPE} -XPROCESSORS=${PROCESSORS}
 ifeq ($(SECURITY_LIBRARY_TYPE),relocatable)
 MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
