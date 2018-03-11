@@ -30,7 +30,6 @@ SECURITY_VERSION=$SECURITY_MAJOR_VERSION.$SECURITY_MINOR_VERSION.$SECURITY_MICRO
 AM_GNAT_CHECK_GPRBUILD
 
 # checking for local tools
-AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -56,6 +55,8 @@ AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 # Check to enable/disable shared library
 ##########################################
 AM_SHARED_LIBRARY_SUPPORT
+AM_DISTRIB_SUPPORT
+AM_COVERAGE_SUPPORT
 
 ##########################################
 # Ada Util library
