@@ -75,7 +75,7 @@ endif
 
 ifeq (${BUILDS_SHARED},yes)
 all:     static shared build-test
-install: uninstall install_static install_shared install-info
+install: uninstall install_shared install_static install-info
 else
 all:     static build-test
 install: uninstall install_static install-info
