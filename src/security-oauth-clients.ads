@@ -62,7 +62,8 @@ with Ada.Strings.Unbounded;
 --
 package Security.OAuth.Clients is
 
-   --  Note: OAuth 1.0 could be implemented but since it's being deprecated it's not worth doing it.
+   --  Note: OAuth 1.0 could be implemented but since it's being deprecated
+   --  it's not worth doing it.
 
    --  ------------------------------
    --  Access Token
@@ -181,6 +182,7 @@ private
       Access_Token  : Ada.Strings.Unbounded.Unbounded_String;
       Refresh_Token : Ada.Strings.Unbounded.Unbounded_String;
       Id_Token      : Ada.Strings.Unbounded.Unbounded_String;
+      Expires       : Natural;
    end record;
 
 end Security.OAuth.Clients;

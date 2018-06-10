@@ -29,6 +29,10 @@ package body Security.OAuth.Clients is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Clients");
 
+   procedure Do_Request_Token (URI  : in String;
+                               Data : in Util.Http.Clients.Form_Data'Class;
+                               Cred : in out Grant_Type'Class);
+
    --  ------------------------------
    --  Access Token
    --  ------------------------------
@@ -97,8 +101,6 @@ package body Security.OAuth.Clients is
    --  ------------------------------
    function Get_State (App   : in Application;
                        Nonce : in String) return String is
-      use Ada.Strings.Unbounded;
-
       Data : constant String := Nonce & To_String (App.Client_Id) & To_String (App.Callback);
       Hmac : String := Util.Encoders.HMAC.SHA1.Sign_Base64 (Key  => To_String (App.Secret),
                                                             Data => Data,
@@ -242,11 +244,11 @@ package body Security.OAuth.Clients is
          end if;
       end;
    end Request_Access_Token;
+
    --  ------------------------------
    --  Exchange the OAuth code into an access token.
    --  ------------------------------
-   procedure Do_Request_Token (App  : in Application;
-                               URI  : in String;
+   procedure Do_Request_Token (URI  : in String;
                                Data : in Util.Http.Clients.Form_Data'Class;
                                Cred : in out Grant_Type'Class) is
       Client   : Util.Http.Clients.Client;
@@ -268,7 +270,6 @@ package body Security.OAuth.Clients is
          Content_Type : constant String := Response.Get_Header ("Content-Type");
          Pos          : Natural := Util.Strings.Index (Content_Type, ';');
          Last         : Natural;
-         Expires      : Natural;
       begin
          if Pos = 0 then
             Pos := Content_Type'Last;
@@ -298,7 +299,7 @@ package body Security.OAuth.Clients is
                Log.Error ("Invalid 'expires' parameter: '{0}'", Content);
                return;
             end if;
-            Expires := Natural'Value (Content (Last + 9 .. Content'Last));
+            Cred.Expires := Natural'Value (Content (Last + 9 .. Content'Last));
             Cred.Access_Token := To_Unbounded_String (Content (Pos + 1 .. Last - 1));
 
          elsif Content_Type (Content_Type'First .. Pos) = "application/json" then
@@ -306,7 +307,7 @@ package body Security.OAuth.Clients is
                P : Util.Properties.Manager;
             begin
                Util.Properties.JSON.Parse_JSON (P, Content);
-               Expires := Natural'Value (P.Get ("expires_in"));
+               Cred.Expires := Natural'Value (P.Get ("expires_in"));
                Cred.Access_Token := P.Get ("access_token");
                Cred.Refresh_Token := To_Unbounded_String (P.Get ("refresh_token", ""));
                Cred.Id_Token := To_Unbounded_String (P.Get ("id_token", ""));
@@ -336,21 +337,7 @@ package body Security.OAuth.Clients is
                             Password : in String;
                             Scope    : in String;
                             Token    : in out Grant_Type'Class) is
-      Client   : Util.Http.Clients.Client;
-
-      Data : constant String
-        := Security.OAuth.GRANT_TYPE & "=password"
-          & "&"
-        & Security.OAuth.USERNAME & "=" & Username
-        & "&"
-        & Security.OAuth.PASSWORD & "=" & Password
-        & "&"
-        & Security.OAuth.CLIENT_ID & "=" & Ada.Strings.Unbounded.To_String (App.Client_Id)
-        & "&"
-        & Security.OAuth.SCOPE & "=" & Scope
-        & "&"
-        & Security.OAuth.CLIENT_SECRET & "=" & Ada.Strings.Unbounded.To_String (App.Secret);
-      URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
+      URI  : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
       Form : Util.Http.Clients.Form_Data;
    begin
       Log.Info ("Getting access token from {0} - resource owner password", URI);
@@ -361,7 +348,7 @@ package body Security.OAuth.Clients is
       Form.Write_Attribute (Security.OAuth.USERNAME, Username);
       Form.Write_Attribute (Security.OAuth.PASSWORD, Password);
       Form.Write_Attribute (Security.OAuth.SCOPE, Scope);
-      Do_Request_Token (App, URI, Form, Token);
+      Do_Request_Token (URI, Form, Token);
    end Request_Token;
 
    --  ------------------------------
@@ -371,7 +358,6 @@ package body Security.OAuth.Clients is
    procedure Refresh_Token (App      : in Application;
                             Scope    : in String;
                             Token    : in out Grant_Type'Class) is
-      Client : Util.Http.Clients.Client;
       URI    : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
       Form   : Util.Http.Clients.Form_Data;
    begin
@@ -382,7 +368,7 @@ package body Security.OAuth.Clients is
       Form.Write_Attribute (Security.OAuth.CLIENT_ID, App.Client_Id);
       Form.Write_Attribute (Security.OAuth.SCOPE, Scope);
       Form.Write_Attribute (Security.OAuth.CLIENT_SECRET, App.Secret);
-      Do_Request_Token (App, URI, Form, Token);
+      Do_Request_Token (URI, Form, Token);
    end Refresh_Token;
 
    --  ------------------------------
