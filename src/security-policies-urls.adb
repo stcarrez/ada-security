@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2016 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ with Ada.Unchecked_Deallocation;
 
 with Util.Beans.Objects;
 with Util.Beans.Objects.Vectors;
-with Util.Serialize.Mappers;
 with Util.Serialize.Mappers.Record_Mapper;
 
 with Security.Controllers.URLs;

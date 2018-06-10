@@ -228,6 +228,7 @@ package body Security.OAuth.File_Registry is
                        App   : in Servers.Application'Class;
                        Scope : in String;
                        Auth  : in Servers.Principal_Access) return String is
+      pragma Unreferenced (Realm, App);
       File_Auth : constant File_Principal_Access := File_Principal (Auth.all)'Access;
    begin
       for P of Security.Permissions.Get_Permission_Array (Scope) loop
@@ -279,8 +280,9 @@ package body Security.OAuth.File_Registry is
    procedure Verify (Realm : in out File_Realm_Manager;
                      Token : in String;
                      Auth  : out Servers.Principal_Access) is
+      pragma Unreferenced (Realm);
    begin
-      Log.Info ("Verify token {0}", Token);
+      Log.Info ("Verify token {0}: refused", Token);
       Auth := null;
    end Verify;
 

@@ -84,7 +84,8 @@ package body Security.OAuth.Servers is
    begin
       if Decode then
          declare
-            Decoder : constant Util.Encoders.Decoder := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
+            Decoder : constant Util.Encoders.Decoder
+              := Util.Encoders.Create (Util.Encoders.BASE_64_URL);
             Content : constant String := Decoder.Decode (Key);
          begin
             Manager.Private_Key := To_Unbounded_String (Content);
@@ -329,7 +330,7 @@ package body Security.OAuth.Servers is
                Grant.Expires := Ada.Calendar.Clock + App.Expire_Timeout;
                Grant.Expires_In := App.Expire_Timeout;
                Grant.Error   := null;
-               Realm.Create_Token (Realm.Realm.Authorize (App, Scope, Grant.Auth), Grant);
+               Realm.Create_Token (Realm.Realm.Authorize (App, SCOPE, Grant.Auth), Grant);
             end if;
          end if;
       end if;
