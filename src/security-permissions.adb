@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2016, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,15 @@
 
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
-with Util.Strings.Tokenizers;
 
+with Util.Strings.Tokenizers;
 with Util.Log.Loggers;
 
 --  The <b>Security.Permissions</b> package defines the different permissions that can be
 --  checked by the access control manager.
 package body Security.Permissions is
 
-   --  ------------------------------
-   --  Permission Manager
-   --  ------------------------------
+   function Occurence (List : in String; Of_Char : in Character) return Natural;
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Permissions");
@@ -142,6 +140,9 @@ package body Security.Permissions is
    --  Get the list of permissions whose name is given in the string with separated comma.
    --  ------------------------------
    function Get_Permission_Array (List : in String) return Permission_Index_Array is
+      procedure Process (Name : in String;
+                         Done : out Boolean);
+
       Result : Permission_Index_Array (1 .. Occurence (List, ','));
       Count  : Natural := 0;
 

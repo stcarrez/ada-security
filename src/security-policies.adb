@@ -74,7 +74,6 @@ package body Security.Policies is
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean is
       pragma Unreferenced (Handler, Permission);
-      use type Security.Principal_Access;
 
       P : constant Security.Principal_Access := Context.Get_User_Principal;
    begin
@@ -317,8 +316,6 @@ package body Security.Policies is
    --------------------------
    procedure Read_Policy (Manager : in out Policy_Manager;
                           File    : in String) is
-
-      use Util;
 
       Reader : Util.Serialize.IO.XML.Parser;
       Mapper : Util.Serialize.Mappers.Processing;
