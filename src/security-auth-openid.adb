@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -367,8 +367,6 @@ package body Security.Auth.OpenID is
                                Request : in Parameters'Class;
                                Result  : in out Authentication) is
       pragma Unreferenced (Realm);
-
-      use type Util.Encoders.SHA1.Digest;
 
       Signed : constant String := Request.Get_Parameter ("openid.signed");
       Len    : constant Natural := Signed'Length;
