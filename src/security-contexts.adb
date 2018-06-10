@@ -205,7 +205,6 @@ package body Security.Contexts is
                           Manager   : in Security.Policies.Policy_Manager_Access;
                           Principal : in Security.Principal_Access) is
       use type Security.Policies.Policy_Manager_Access;
-      use type Security.Principal_Access;
    begin
       if Manager /= null then
          Context.Manager   := Manager;

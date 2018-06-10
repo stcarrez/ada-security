@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-controllers-roles -- Simple role base security
---  Copyright (C) 2011, 2012 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +28,6 @@ package body Security.Controllers.Roles is
                             Permission : in Security.Permissions.Permission'Class)
                             return Boolean is
       pragma Unreferenced (Permission);
-
-      use type Security.Principal_Access;
 
       P     : constant Security.Principal_Access := Context.Get_User_Principal;
       Roles : Security.Policies.Roles.Role_Map;
