@@ -8,7 +8,7 @@ library project Security is
    for Library_Dir use Util_Config.Libdir;
    for Library_Kind use "LIBRARY_TYPE";
 
-   for Source_Dirs use (Util_Config.Includedir & "/ada-security");
-   for Library_ALI_Dir use Util_Config.Alidir & "/ada-security/";
+   for Source_Dirs use (Util_Config.Includedir & "/security");
+   for Library_ALI_Dir use Util_Config.Alidir & "/security/";
    for Externally_Built use "true";
 end Security;
