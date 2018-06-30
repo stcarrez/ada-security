@@ -27,13 +27,6 @@ SECURITY_MINOR_VERSION=2
 SECURITY_MICRO_VERSION=0
 SECURITY_VERSION=$SECURITY_MAJOR_VERSION.$SECURITY_MINOR_VERSION.$SECURITY_MICRO_VERSION
 
-AM_GNAT_CHECK_GPRBUILD
-
-# checking for local tools
-AC_PROG_MAKE_SET
-AC_PROG_INSTALL
-AC_PROG_LN_S
-
 # Set the version number of Ada Server Faces
 AC_SUBST(SECURITY_VERSION)
 AC_SUBST(SECURITY_MAJOR_VERSION)
@@ -43,20 +36,13 @@ AC_SUBST(SECURITY_MICRO_VERSION)
 SECURITY_LIBDIR="lib"
 AC_SUBST(SECURITY_LIBDIR)
 
-AC_MSG_CHECKING([number of processors])
-NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
-AC_MSG_RESULT($NR_CPUS)
-AC_SUBST(NR_CPUS)
-
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
 ##########################################
 # Check to enable/disable shared library
 ##########################################
-AM_SHARED_LIBRARY_SUPPORT
-AM_DISTRIB_SUPPORT
-AM_COVERAGE_SUPPORT
+AM_GNAT_LIBRARY_PROJECT(security)
 
 ##########################################
 # Ada Util library
@@ -68,8 +54,6 @@ AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
     UTIL_DIR=${gnat_project_dir_util}
   ])
 AC_SUBST(UTIL_DIR)
-
-AM_UTIL_CHECK_INSTALL
 
 AC_OUTPUT(
 Makefile security.gpr security_tests.gpr distrib/security.gpr
