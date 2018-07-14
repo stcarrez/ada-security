@@ -1,7 +1,7 @@
 with "@UTIL_DIR@config";
 with "@UTIL_DIR@util";
 
-project Security is
+library project Security is
 
    Version := "@SECURITY_VERSION@";
    Library_Dir := "@SECURITY_LIBDIR@";
