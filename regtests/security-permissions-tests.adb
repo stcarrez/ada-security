@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-permissions-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2016, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,6 @@
 with Util.Test_Caller;
 
 package body Security.Permissions.Tests is
-
-   use Util.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Security.Permissions");
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random-tests - Tests for random package
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2018 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,6 @@ with Ada.Strings.Unbounded;
 
 with Util.Test_Caller;
 package body Security.Random.Tests is
-
-   use Util.Tests;
 
    package Caller is new Util.Test_Caller (Test, "Security.Random");
 

@@ -24,9 +24,9 @@ with Util.Test_Caller;
 with Ada.Text_IO;
 package body Security.Auth.Tests is
 
-   use Util.Tests;
-
    package Caller is new Util.Test_Caller (Test, "Security.Openid");
+   procedure Setup (M : in out Manager;
+                    Name : in String);
 
    procedure Check_Discovery (T    : in out Test;
                               Name : in String;
@@ -148,7 +148,7 @@ package body Security.Auth.Tests is
 
       --  If the verification is succeeds, the signature is correct, we should be authenticated.
       T.Assert (Get_Status (Result) = AUTHENTICATED, "Authentication status is not authenticated");
-      Assert_Equals (T, "stephane.carrez@gmail.com", Get_Email (Result), "Invalid email");
+      Util.Tests.Assert_Equals (T, "stephane.carrez@gmail.com", Get_Email (Result), "Invalid email");
    end Test_Verify_Signature;
 
 end Security.Auth.Tests;
