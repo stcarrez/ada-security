@@ -3,9 +3,9 @@
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Security.svg)](http://jenkins.vacs.fr/job/Ada-Security/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Security.svg)](http://jenkins.vacs.fr/job/Ada-Security/)
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](http://ada-security.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-1.1.2-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.1.2.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.2.0-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.2.0.tar.gz)
 [![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.1.2.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.2.0.svg)
 
 Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
