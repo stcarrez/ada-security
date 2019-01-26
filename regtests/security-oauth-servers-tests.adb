@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  Security-oauth-servers-tests - Unit tests for server side OAuth
---  Copyright (C) 2017, 2018 Stephane Carrez
+--  security-oauth-servers-tests - Unit tests for server side OAuth
+--  Copyright (C) 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -272,7 +272,6 @@ package body Security.OAuth.Servers.Tests is
       Realm      : aliased File_Realm_Manager;
       Manager    : Auth_Manager;
       Grant      : Grant_Type;
-      Auth_Grant : Grant_Type;
       Params     : Test_Parameters;
    begin
       Apps.Load (Util.Tests.Get_Path ("regtests/files/user_apps.properties"), "apps");
