@@ -9,8 +9,8 @@
 
 Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
-[OpenID Authentication 2.0](http://openid.net/specs/openid-authentication-2_0.html)
-as well as [OAuth 2.0](http://oauth.net/2/) protocol.
+[OpenID Authentication 2.0](https://openid.net/specs/openid-authentication-2_0.html)
+as well as [OAuth 2.0](https://oauth.net/2/) protocol.
 It allows a web application to integrate easily with Yahoo!, Facebook and
 Google+ authentication systems.
 The Ada05 library includes:
@@ -41,12 +41,12 @@ For the installation, use the following command:
 The package provides a simple AWS server that illustrates the OpenID and OpenConnect
 authentication.  Build it as follows:
 ```
-   gnatmake -Psamples
+   gprbuild -Psamples
 ```
 Before launching the demo server, you must update the 'samples.properties' file
-and change the lines that contain PUT-HERE-YOUR-FACEBOOK-xxx and
-PUT-HERE-GOOGLE-xxx with your client ID and client secrets.  These two changes
-are required by the OAuth and OpenID Connect framework only.
+and change the lines that contain PUT-HERE-YOUR-FACEBOOK-xxx with your client ID
+and client secrets.  This change
+is required by the OAuth and OpenID Connect framework only.
 Then, run the server:
 ```
    bin/auth_demo
@@ -81,4 +81,4 @@ documentation.
 - [RFC 6749: The OAuth 2.0 Authorization Framework](https://tools.ietf.org/html/rfc6749)
 - [RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://tools.ietf.org/html/rfc6750)
 - [RFC 6819: OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819)
-- [OpenID Connect Core 1.0](http://openid.net/specs/openid-connect-core-1_0.html)
+- [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
