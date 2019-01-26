@@ -1,7 +1,7 @@
 ---
 title: "Ada Security Library Programmer's Guide"
 author: [Stephane Carrez]
-date: 2018-02-13
+date: 2019-01-26
 subject: "Ada Security Library"
 tags: [Ada, Security, Permission, OAuth2, Policies, JWT]
 titlepage: true
