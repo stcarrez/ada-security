@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  security-openid - Tests for OpenID
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015Stephane Carrez
+--  security-auth-tests - Tests for OpenID
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -114,6 +114,7 @@ package body Security.Auth.Tests is
    begin
       Setup (M, "openid");
 
+      pragma Style_Checks ("-mr");
 --        M.Return_To := To_Unbounded_String ("http://localhost/openId");
 
       --  Below is a part of the authentication process on Google OpenId.
