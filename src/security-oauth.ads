@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,8 @@ with Ada.Strings.Unbounded;
 
 --  = OAuth =
 --  The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authorization
---  framework as defined by the IETF working group.
---  See http://tools.ietf.org/html/draft-ietf-oauth-v2-26
+--  framework as defined by the IETF working group in RFC 6749:
+--  The OAuth 2.0 Authorization Framework.
 --
 --  @include security-oauth-clients.ads
 --  @include security-oauth-servers.ads

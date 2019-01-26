@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth -- Authentication Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +26,10 @@ with Ada.Finalization;
 --  Google +, Twitter and others.
 --
 --  See OpenID Authentication 2.0 - Final
---  http://openid.net/specs/openid-authentication-2_0.html
+--  https://openid.net/specs/openid-authentication-2_0.html
 --
---  See OpenID Connect Standard 1.0
---  http://openid.net/specs/openid-connect-standard-1_0.html
+--  See OpenID Connect Core 1.0
+--  https://openid.net/specs/openid-connect-core-1_0.html
 --
 --  See Facebook API: The Login Flow for Web (without JavaScript SDK)
 --  https://developers.facebook.com/docs/facebook-login/login-flow-for-web-no-jssdk/

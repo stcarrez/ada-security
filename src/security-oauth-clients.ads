@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013, 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,10 @@
 -----------------------------------------------------------------------
 with Ada.Strings.Unbounded;
 
---  = OAuth2 Client =
+--  == OAuth Client ==
 --  The `Security.OAuth.Clients` package implements the client OAuth 2.0 authorization.
 --
---  == Application setup ==
+--  === Application setup ===
 --  For an OAuth2 client application to authenticate, it must be registered on the server
 --  and the server provides the following information:
 --
@@ -40,7 +40,7 @@ with Ada.Strings.Unbounded;
 --       App.Set_Provider_URL ("https://graph.facebook.com/oauth/access_token");
 --
 --
---  == Resource Owner Password Credentials Grant ==
+--  === Resource Owner Password Credentials Grant ===
 --  The RFC 6749: 4.3.  Resource Owner Password Credentials Grant allows to authorize an
 --  application by using the user's name and password.  This is the simplest OAuth flow
 --  but because it requires to know the user's name and password, it is not recommended and
@@ -52,7 +52,7 @@ with Ada.Strings.Unbounded;
 --    ...
 --      App.Request_Token ("admin", "admin", "scope", Token);
 --
---  == Refreshing an access token ==
+--  === Refreshing an access token ===
 --  An access token has an expiration date and a new access token must be asked by using the
 --  refresh token.  When the access token has expired, the grant token object can be refreshed
 --  to retrieve a new access token by using the `Refresh_Token` procedure.  The scope of

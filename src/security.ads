@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security -- Security
---  Copyright (C) 2010, 2011, 2012, 2015, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2015, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,6 @@
 --    A permission is checked by using the security policy manager.  The policy manager uses a
 --    security controller to enforce the permission.
 --
---  === Security Context ===
 --  The `Security_Context` holds the contextual information that the security controller
 --  can use to verify the permission.  The security context is associated with a principal and
 --  a set of policy context.
@@ -84,10 +83,6 @@
 --  The principal is then stored in a security context.
 --
 --  @include security-contexts.ads
---
---  [Security_Policies Security Policies]
---  [Security_Auth OpenID]
---  [Security_OAuth OAuth]
 --
 package Security is
 
