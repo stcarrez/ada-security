@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013, 2017 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -421,7 +421,6 @@ package body Security.Policies.Tests is
    --  Test the Get_Grants operation.
    --  ------------------------------
    procedure Test_Grants (T : in out Test) is
-      use Security.Permissions.Tests;
       use type Security.Policies.Roles.Role_Map;
 
       M            : aliased Security.Policies.Policy_Manager (Max_Policies => 2);
