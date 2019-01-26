@@ -4,11 +4,11 @@ suitable for OpenID 2.0, OAuth 2.0 and later for OpenID Connect.  It allows an a
 to authenticate users using an external authorization server such as Google, Facebook,
 Google +, Twitter and others.
 
-See OpenID Authentication 2.0 - Final
-http://openid.net/specs/openid-authentication-2_0.html
+See [OpenID Authentication 2.0](https://openid.net/specs/openid-authentication-2_0.html) - Final
+https://openid.net/specs/openid-authentication-2_0.html
 
-See OpenID Connect Standard 1.0
-http://openid.net/specs/openid-connect-standard-1_0.html
+See [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
+https://openid.net/specs/openid-connect-core-1_0.html
 
 See Facebook API: The Login Flow for Web (without JavaScript SDK)
 https://developers.facebook.com/docs/facebook-login/login-flow-for-web-no-jssdk/

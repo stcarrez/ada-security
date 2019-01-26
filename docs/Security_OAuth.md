@@ -1,12 +1,12 @@
 # OAuth
 The <b>Security.OAuth</b> package defines and implements the OAuth 2.0 authorization
-framework as defined by the IETF working group.
-See http://tools.ietf.org/html/draft-ietf-oauth-v2-26
+framework as defined by the IETF working group in [RFC 6749](https://tools.ietf.org/html/rfc6749):
+The OAuth 2.0 Authorization Framework.
 
-# OAuth2 Client
+## OAuth Client
 The `Security.OAuth.Clients` package implements the client OAuth 2.0 authorization.
 
-## Application setup
+### Application setup
 For an OAuth2 client application to authenticate, it must be registered on the server
 and the server provides the following information:
 
@@ -27,8 +27,8 @@ App : Security.OAuth.Clients.Application;
 
 ```
 
-## Resource Owner Password Credentials Grant
-The RFC 6749: 4.3.  Resource Owner Password Credentials Grant allows to authorize an
+### Resource Owner Password Credentials Grant
+The [RFC 6749](https://tools.ietf.org/html/rfc6749): 4.3.  Resource Owner Password Credentials Grant allows to authorize an
 application by using the user's name and password.  This is the simplest OAuth flow
 but because it requires to know the user's name and password, it is not recommended and
 not supported by several servers.  To use this authorization, the application will use
@@ -41,7 +41,7 @@ Token  : Security.OAuth.Clients.Grant_Type;
   App.Request_Token ("admin", "admin", "scope", Token);
 ```
 
-## Refreshing an access token
+### Refreshing an access token
 An access token has an expiration date and a new access token must be asked by using the
 refresh token.  When the access token has expired, the grant token object can be refreshed
 to retrieve a new access token by using the `Refresh_Token` procedure.  The scope of
@@ -53,7 +53,7 @@ permissions can also be passsed.
 
 ## OAuth Server
 OAuth server side is provided by the <tt>Security.OAuth.Servers</tt> package.
-This package allows to implement the authorization framework described in RFC 6749
+This package allows to implement the authorization framework described in [RFC 6749](https://tools.ietf.org/html/rfc6749)
 "The OAuth 2.0 Authorization Framework".
 
 The authorization method produces a <tt>Grant_Type</tt> object that contains the result

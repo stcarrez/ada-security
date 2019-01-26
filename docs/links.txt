@@ -10,3 +10,6 @@ Java Bean                  https://en.wikipedia.org/wiki/JavaBean
 Java Log4j                 https://logging.apache.org/log4j/2.x/
 Log4cxx                    https://logging.apache.org/log4cxx/latest_stable/index.html
 RFC7231                    https://tools.ietf.org/html/rfc7231
+RFC 6749                   https://tools.ietf.org/html/rfc6749
+OpenID Authentication 2.0  https://openid.net/specs/openid-authentication-2_0.html
+OpenID Connect Core 1.0    https://openid.net/specs/openid-connect-core-1_0.html

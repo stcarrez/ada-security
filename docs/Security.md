@@ -1,8 +1,8 @@
 # Security
 The `Security` package provides a security framework that allows
 an application to use OpenID or OAuth security frameworks.  This security
-framework was first developed within the Ada Server Faces project.
-It was moved to a separate project so that it can easyly be used with AWS.
+framework was first developed within the [Ada Server Faces](https://github.com/stcarrez/ada-asf) project.
+It was moved to a separate project so that it can easyly be used with [AWS](https://github.com/AdaCore/aws).
 This package defines abstractions that are close or similar to Java
 security package.
 
@@ -14,7 +14,6 @@ The security framework uses the following abstractions:
 
 * **Permission**: The `Permission` represents an access to a system or application resource. A permission is checked by using the security policy manager.  The policy manager uses a security controller to enforce the permission.
 
-### Security Context
 The `Security_Context` holds the contextual information that the security controller
 can use to verify the permission.  The security context is associated with a principal and
 a set of policy context.
@@ -109,9 +108,5 @@ else
 end if;
 ```
 
-
-[[Security Policies|Security_Policies ]]
-[[OpenID|Security_Auth ]]
-[[OAuth|Security_OAuth ]]
 
 
