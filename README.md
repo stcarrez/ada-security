@@ -59,12 +59,10 @@ and redirect your browser to:
 
 The Ada Security sources as well as a wiki documentation is provided on:
 
+- [Ada Security Programmer's Guide](https://ada-security.readthedocs.io/en/latest/)
 - [Overview](https://github.com/stcarrez/ada-security/wiki)
 - [Security Overview](https://github.com/stcarrez/ada-security/wiki/Security)
-- [Security Policies](https://github.com/stcarrez/ada-security/wiki/Security_Policies)
-- [Security Authorization](https://github.com/stcarrez/ada-security/wiki/Security_Auth)
-- [Security OAuth Client](https://github.com/stcarrez/ada-security/wiki/Security_OAuth)
-- [Security OAuth Server](https://github.com/stcarrez/ada-security/wiki/Security_OAuth_Servers)
+
 
 # Other Documentation
 
