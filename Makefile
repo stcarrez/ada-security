@@ -1,129 +1,22 @@
-## The type of library we want to build. Possible values:
-##   relocatable
-##   static
-SECURITY_LIBRARY_TYPE=static
+NAME=security
 
-# You may edit this makefile as long as you keep these original 
-# target names defined.
-MODE=@MODE@
-GNATMAKE=@GNATMAKE@
-GNATCLEAN=@GNATCLEAN@
-GPRINSTALL=@GPRINSTALL@
-INSTALL=@INSTALL@
-HAVE_PANDOC=@HAVE_PANDOC@
-HAVE_DYNAMO=@HAVE_DYNAMO@
-DYNAMO=dynamo
+GPRPATH=$(NAME).gpr
 
-GPRPATH=security.gpr
+-include Makefile.conf
 
-BUILDS_SHARED=@BUILDS_SHARED@
+STATIC_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=static
+SHARED_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XUTILADA_BASE_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
+SHARED_MAKE_ARGS += -XXMLADA_BUILD=relocatable
+SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 
-version=@SECURITY_VERSION@
+include Makefile.defaults
 
-distdir=ada-security-@SECURITY_VERSION@
-
-DIST_FILE=ada-security-@SECURITY_VERSION@.tar.gz
-
-LN_S=@LN_S@
-MKDIR=mkdir
-CP=cp
-LN=ln -s
-
-ifeq (${OS},Windows_NT)
-LIBEXT=dll
-LIBVER=dll
-else
-LIBEXT=so
-LIBVER=so.$(version)
-endif
-
-srcdir = .
-top_srcdir = @top_srcdir@
-VPATH = @srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-top_builddir = .
-
-# share/ada/adainclude
-infix_inc=@ADA_INC_BASE@
-
-# share/ada/adainclude
-infix_prj=@ADA_PRJ_BASE@
-
-# lib
-infix_lib=@ADA_LIB_BASE@
-
-# lib/ada/adalib
-infix_ali=@ADA_ALI_BASE@
-
-includedir=${prefix}/${infix_inc}
-projectdir=${prefix}/${infix_prj}
-bindir=${prefix}/bin
-libdir=${prefix}/${infix_lib}
-alidir=${prefix}/${infix_ali}
-
-libname=libada_security
-
-PROCESSORS=@NR_CPUS@
-COVERAGE=@BUILDS_COVERAGE@
-MAKE_ARGS=-XMODE=${MODE} -XCOVERAGE=${COVERAGE} -XSECURITY_LIBRARY_TYPE=${SECURITY_LIBRARY_TYPE} -XPROCESSORS=${PROCESSORS}
-ifeq ($(SECURITY_LIBRARY_TYPE),relocatable)
-MAKE_ARGS += -XUTIL_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
-MAKE_ARGS += -XXMLADA_BUILD=relocatable
-MAKE_ARGS += -XLIBRARY_TYPE=relocatable
-endif
-
-ifeq (${BUILDS_SHARED},yes)
-all:     static shared build-test
-install: uninstall install_shared install_static install-info
-else
-all:     static build-test
-install: uninstall install_static install-info
-endif
-
-# Build executables for all mains defined by the project.
-build: setup
-	$(GNATMAKE) -m -p -P"$(GPRPATH)" $(MAKE_ARGS)
-
-static:
-	$(MAKE) SECURITY_LIBRARY_TYPE=static build
-
-shared:
-	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable build
-
-build-test: build
-	$(GNATMAKE) $(MAKE_ARGS) -p -Psecurity_tests
-
-setup: obj/security/static lib/security/static
-
-obj/security/static lib/security/static:
-	$(MKDIR) -p $@
-
-# Not intended for manual invocation.
-# Invoked if automatic builds are enabled.
-# Analyzes only on those sources that have changed.
-# Does not build executables.
-autobuild:
-	$(GNATMAKE) $(MAKE_ARGS) -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean the root project of all build products.
-clean:
-	-rm -rf lib obj bin
-
-# Clean root project and all imported projects too.
-clean_tree:
-	$(GNATCLEAN) -q -P "$(GPRPATH)" -r
-
-# Check *all* sources for errors, even those not changed.
-# Does not build executables.
-analyze:
-	$(GNATMAKE) $(MAKE_ARGS) -f  -gnatc -c -k  -P "$(GPRPATH)"
-
-# Clean, then build executables for all mains defined by the project.
-rebuild: clean build
+build-test:: setup
+	$(GNATMAKE) $(GPRFLAGS) -p -Psecurity_tests $(MAKE_ARGS) 
 
 # Build and run the unit tests
-check test:	build-test
+test:	build-test
 	bin/security_harness -xml security-aunit.xml
 
 ifeq (${HAVE_PANDOC},yes)
@@ -158,60 +51,5 @@ docs/security-book.html: docs/security-book.pdf force
 endif
 endif
 
-dist:
-	git archive -o $(DIST_FILE) --prefix=$(distdir)/ HEAD
 
-install_static:
-	$(MAKE) SECURITY_LIBRARY_TYPE=static install_lib
-
-install_shared:
-	$(MAKE) SECURITY_LIBRARY_TYPE=relocatable install_lib
-
-install_lib:
-ifneq (${GPRINSTALL},)
-	$(GPRINSTALL) -p -f --prefix=${prefix} $(MAKE_ARGS) \
-		--build-name=$(SECURITY_LIBRARY_TYPE) $(GPRPATH)
-else
-	$(MKDIR) -p ${includedir}/ada-security
-	$(MKDIR) -p ${projectdir}/ ${bindir}/
-	${MKDIR} -p ${alidir}/ada-security
-	${CP} -p src/*.ad[bs] ${includedir}/ada-security
-	sed -e "s,LIBRARY_TYPE,$(SECURITY_LIBRARY_TYPE),g" < distrib/security.gpr > ${projectdir}/security.gpr
-	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/*.ali ${alidir}/ada-security/
-ifeq ($(SECURITY_LIBRARY_TYPE),static)
-	${CP} lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).a ${libdir}/
-else
-	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).$(LIBVER) ${libdir}/
-ifneq (${OS},Windows_NT)
-	cd ${libdir} && \
-	   rm -f $(libname).$(LIBEXT) && \
-	   ${LN} $(libname).$(LIBVER) $(libname).$(LIBEXT)
-else
-	${CP} -p lib/security/$(SECURITY_LIBRARY_TYPE)/$(libname).$(LIBVER) ${bindir}/
-endif
-endif
-endif
-
-install-info:
-ifeq (${GPRINSTALL},)
-	@echo "Installation directories:"
-	@echo "  Ada source files:    ${includedir}"
-	@echo "  ALI files:           ${alidir}"
-	@echo "  Libraries:           ${libdir}"
-	@echo "  GNAT project:        ${projectdir}"
-else
-	@echo "Environment setup:"
-	@echo "  export ADA_PROJECT_PATH=${projectdir}:$$ADA_PROJECT_PATH"
-endif
-
-uninstall:
-ifneq (${GPRINSTALL},)
-	-$(GPRINSTALL) -q -f --prefix=${prefix} $(MAKE_ARGS) --uninstall $(GPRPATH)
-else
-	rm -rf ${includedir}/ada-security ${alidir}/ada-security
-	rm -f ${libdir}/$(libname).a
-	rm -f ${libdir}/$(libname).$(LIBEXT)
-	rm -f ${projectdir}/security.gpr
-endif
-
-force:
+$(eval $(call ada_library,$(NAME)))
