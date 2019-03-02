@@ -1,6 +1,6 @@
-with "/home/ciceron/work/awa/ada-awa/ada-util/config";
-with "/home/ciceron/work/awa/ada-awa/ada-util/utilada_sys";
-with "/home/ciceron/work/awa/ada-awa/ada-util/utilada_http";
+with "@UTIL_DIR@config";
+with "@UTIL_DIR@utilada_sys";
+with "@UTIL_DIR@utilada_http";
 with "security";
 with "aws";
 
