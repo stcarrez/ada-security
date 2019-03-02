@@ -47,5 +47,5 @@ AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_sys],
 AC_SUBST(UTIL_DIR)
 
 AC_OUTPUT(
-Makefile.conf security.gpr security_tests.gpr
+Makefile.conf security.gpr security_tests.gpr samples.gpr
 )
