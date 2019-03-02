@@ -1,6 +1,6 @@
 *~
 *.log
-Makefile
+Makefile.conf
 config.status
 CHANGES
 *.cproject
@@ -10,7 +10,6 @@ CHANGES
 ChangeLog
 .settings
 configure.lineno
-Makefile
 security.gpr
 security_tests.gpr
 tests.xml
