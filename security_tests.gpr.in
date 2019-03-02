@@ -1,5 +1,5 @@
 with "@UTIL_DIR@config";
-with "@UTIL_DIR@util_unit";
+with "@UTIL_DIR@utilada_unit";
 with "security";
 
 project Security_Tests is
