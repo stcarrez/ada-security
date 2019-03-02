@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Security
-dnl Copyright (C) 2012, 2013, 2015, 2016, 2018 Stephane Carrez
+dnl Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +18,6 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/security.ads)
 
-AC_CANONICAL_SYSTEM
-dnl AM_MAINTAINER_MODE
-
 # Current release settings
 SECURITY_MAJOR_VERSION=1
 SECURITY_MINOR_VERSION=2
@@ -33,28 +30,22 @@ AC_SUBST(SECURITY_MAJOR_VERSION)
 AC_SUBST(SECURITY_MINOR_VERSION)
 AC_SUBST(SECURITY_MICRO_VERSION)
 
-SECURITY_LIBDIR="lib"
-AC_SUBST(SECURITY_LIBDIR)
+AM_GNAT_LIBRARY_PROJECT(security)
 
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
 ##########################################
-# Check to enable/disable shared library
-##########################################
-AM_GNAT_LIBRARY_PROJECT(security)
-
-##########################################
 # Ada Util library
 ##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
+AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_sys],
   [git@github.com:stcarrez/ada-util.git],
   [Building Ada Security requires the Ada Utility Library.],
   [
-    UTIL_DIR=${gnat_project_dir_util}
+    UTIL_DIR=${gnat_project_dir_utilada_sys}
   ])
 AC_SUBST(UTIL_DIR)
 
 AC_OUTPUT(
-Makefile security.gpr security_tests.gpr distrib/security.gpr
+Makefile.conf security.gpr security_tests.gpr
 )
