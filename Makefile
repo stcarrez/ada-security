@@ -1,7 +1,5 @@
 NAME=security
 
-GPRPATH=$(NAME).gpr
-
 -include Makefile.conf
 
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=static
@@ -16,12 +14,12 @@ build-test:: setup
 	$(GNATMAKE) $(GPRFLAGS) -p -Psecurity_tests $(MAKE_ARGS) 
 
 # Build and run the unit tests
-test:	build-test
+test:	build
 	bin/security_harness -xml security-aunit.xml
 
 ifeq (${HAVE_PANDOC},yes)
 ifeq (${HAVE_DYNAMO},yes)
-doc:  docs/security-book.pdf docs/security-book.html
+doc::  docs/security-book.pdf docs/security-book.html
 	$(DYNAMO) build-doc -markdown wiki
 
 SECURITY_DOC= \
