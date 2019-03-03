@@ -115,7 +115,6 @@ package body Security.Auth.Tests is
       Setup (M, "openid");
 
       pragma Style_Checks ("-mr");
---        M.Return_To := To_Unbounded_String ("http://localhost/openId");
 
       --  Below is a part of the authentication process on Google OpenId.
       --  In theory, you cannot use the following information to authenticate again...
