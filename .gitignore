@@ -11,6 +11,8 @@ ChangeLog
 .settings
 configure.lineno
 security.gpr
+samples.gpr
+t.gpr
 security_tests.gpr
 tests.xml
 security-tests.xml
