@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2016, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ package body Security.Policies.URLs is
                             Permission : in URL_Permission'Class) return Boolean is
       Name  : constant String_Ref := To_String_Ref (Permission.URL);
       Ref   : constant Rules_Ref.Ref := Manager.Cache.Get;
-      Rules : constant Rules_Access := Ref.Value;
+      Rules : constant Rules_Ref.Element_Accessor := Ref.Value;
       Pos   : constant Rules_Maps.Cursor := Rules.Map.Find (Name);
       Rule  : Access_Rule_Ref;
    begin
@@ -56,8 +56,8 @@ package body Security.Policies.URLs is
             New_Ref : constant Rules_Ref.Ref := Rules_Ref.Create;
          begin
             Rule := Manager.Find_Access_Rule (Permission.URL);
-            New_Ref.Value.all.Map := Rules.Map;
-            New_Ref.Value.all.Map.Insert (Name, Rule);
+            New_Ref.Value.Map := Rules.Map;
+            New_Ref.Value.Map.Insert (Name, Rule);
             Manager.Cache.Set (New_Ref);
          end;
       else
@@ -65,17 +65,17 @@ package body Security.Policies.URLs is
       end if;
 
       --  Check if the user has one of the required permission.
-      declare
-         P       : constant Access_Rule_Access := Rule.Value;
-      begin
-         if P /= null then
+      if not Rule.Is_Null then
+         declare
+            P : constant Access_Rule_Refs.Element_Accessor := Rule.Value;
+         begin
             for I in P.Permissions'Range loop
                if Context.Has_Permission (P.Permissions (I)) then
                   return True;
                end if;
             end loop;
-         end if;
-      end;
+         end;
+      end if;
       return False;
    end Has_Permission;
 
@@ -129,7 +129,7 @@ package body Security.Policies.URLs is
    overriding
    procedure Initialize (Manager : in out URL_Policy) is
    begin
-      Manager.Cache := new Rules_Ref.Atomic_Ref;
+      Manager.Cache := new Atomic_Rules_Ref.Atomic_Ref;
       Manager.Cache.Set (Rules_Ref.Create);
    end Initialize;
 
@@ -140,7 +140,7 @@ package body Security.Policies.URLs is
    procedure Finalize (Manager : in out URL_Policy) is
 
       procedure Free is
-        new Ada.Unchecked_Deallocation (Rules_Ref.Atomic_Ref,
+        new Ada.Unchecked_Deallocation (Atomic_Rules_Ref.Atomic_Ref,
                                         Rules_Ref_Access);
    begin
       Free (Manager.Cache);
@@ -192,7 +192,7 @@ package body Security.Policies.URLs is
             Perm : constant Util.Beans.Objects.Object := Util.Beans.Objects.Vectors.Element (Iter);
             Name : constant String := Util.Beans.Objects.To_String (Perm);
          begin
-            Rule.Value.all.Permissions (Pos) := Permissions.Get_Permission_Index (Name);
+            Rule.Value.Permissions (Pos) := Permissions.Get_Permission_Index (Name);
             Pos := Pos + 1;
 
          exception
