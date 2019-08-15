@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2018, 2019 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -184,7 +184,9 @@ private
 
    package Rules_Ref is new Util.Refs.References (Rules, Rules_Access);
 
-   type Rules_Ref_Access is access Rules_Ref.Atomic_Ref;
+   package Atomic_Rules_Ref is new Rules_Ref.IR.Atomic;
+
+   type Rules_Ref_Access is access Atomic_Rules_Ref.Atomic_Ref;
 
    type Controller_Access_Array_Access is access all Controller_Access_Array;
 
