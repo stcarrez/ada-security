@@ -35,17 +35,11 @@ AM_GNAT_LIBRARY_PROJECT(security)
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
 AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
-##########################################
-# Ada Util library
-##########################################
-AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[utilada_sys],
-  [git@github.com:stcarrez/ada-util.git],
-  [Building Ada Security requires the Ada Utility Library.],
-  [
-    UTIL_DIR=${gnat_project_dir_utilada_sys}
-  ])
-AC_SUBST(UTIL_DIR)
+AM_GNAT_FIND_ADA_UTIL([Ada Security])
 
 AC_OUTPUT(
-Makefile.conf security.gpr security_tests.gpr samples.gpr
+Makefile.conf
+security.gpr
+security_tests.gpr
+samples.gpr
 )
