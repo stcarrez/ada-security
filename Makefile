@@ -15,7 +15,7 @@ build-test:: setup
 
 # Build and run the unit tests
 test:	build
-	bin/security_harness -xml security-aunit.xml
+	bin/security_harness -l $(NAME): -xml security-aunit.xml
 
 ifeq (${HAVE_PANDOC},yes)
 ifeq (${HAVE_DYNAMO},yes)
