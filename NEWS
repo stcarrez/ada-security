@@ -1,3 +1,6 @@
+Version 1.2.1   -
+  - Cleanup the build process
+
 Version 1.2.0   - Jul 2018
   - OAuth 2.0 server implementation (RFC 6749)
   - Improvement of the role based security policy
