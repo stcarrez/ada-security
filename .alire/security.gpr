@@ -1,5 +1,6 @@
 with "config";
 with "utilada_sys";
+with "utilada_xml";
 
 library project Security is
 
