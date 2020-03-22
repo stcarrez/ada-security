@@ -268,6 +268,12 @@ package Security.Auth is
    --  Default factory used by `Initialize`.  It supports OpenID, Google, Facebook.
    function Default_Factory (Provider : in String) return Manager_Access;
 
+   type Factory_Access is not
+     null access function (Provider : in String) return Manager_Access;
+
+   --  Set the default factory to use.
+   procedure Set_Default_Factory (Factory : in Factory_Access);
+
 private
 
    use Ada.Strings.Unbounded;
