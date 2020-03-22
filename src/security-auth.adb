@@ -15,7 +15,7 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-
+with Ada.Unchecked_Deallocation;
 with Util.Log.Loggers;
 
 with Security.Auth.OpenID;
@@ -277,5 +277,13 @@ package body Security.Auth is
         & "&assoc_handle=" & To_String (Assoc.Assoc_Handle)
         & "&mac_key=" & To_String (Assoc.Mac_Key);
    end To_String;
+
+   overriding
+   procedure Finalize (Realm : in out Manager) is
+      procedure Free is
+         new Ada.Unchecked_Deallocation (Manager'Class, Manager_Access);
+   begin
+      Free (Realm.Delegate);
+   end Finalize;
 
 end Security.Auth;
