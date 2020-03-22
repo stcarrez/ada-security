@@ -307,6 +307,9 @@ private
       Delegate  : Manager_Access;
    end record;
 
+   overriding
+   procedure Finalize (Realm : in out Manager);
+
    type Principal is new Security.Principal with record
       Auth : Authentication;
    end record;
