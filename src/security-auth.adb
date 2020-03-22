@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2013 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -144,24 +144,44 @@ package body Security.Auth is
    end Create_Principal;
 
    --  ------------------------------
+   --  Default factory used by `Initialize`.  It supports OpenID, Google, Facebook.
+   --  ------------------------------
+   function Default_Factory (Provider : in String) return Manager_Access is
+   begin
+      if Provider = PROVIDER_OPENID then
+         return new Security.Auth.OpenID.Manager;
+
+      elsif Provider = PROVIDER_FACEBOOK then
+         return new Security.Auth.OAuth.Facebook.Manager;
+
+      elsif Provider = PROVIDER_GOOGLE_PLUS then
+         return new Security.Auth.OAuth.Googleplus.Manager;
+
+      else
+         Log.Error ("Authentication provider {0} not recognized", Provider);
+         raise Service_Error with "Authentication provider not supported";
+      end if;
+   end Default_Factory;
+
+   --  ------------------------------
    --  Initialize the OpenID realm.
    --  ------------------------------
    procedure Initialize (Realm  : in out Manager;
                          Params : in Parameters'Class;
                          Name   : in String := PROVIDER_OPENID) is
-      Provider : constant String := Params.Get_Parameter ("auth.provider." & Name);
-      Impl     : Manager_Access;
    begin
-      if Provider = PROVIDER_OPENID then
-         Impl := new Security.Auth.OpenID.Manager;
+      Initialize (Realm, Params, Default_Factory'Access, Name);
+   end Initialize;
 
-      elsif Provider = PROVIDER_FACEBOOK then
-         Impl := new Security.Auth.OAuth.Facebook.Manager;
-
-      elsif Provider = PROVIDER_GOOGLE_PLUS then
-         Impl := new Security.Auth.OAuth.Googleplus.Manager;
-
-      else
+   procedure Initialize (Realm   : in out Manager;
+                         Params  : in Parameters'Class;
+                         Factory : not null
+                         access function (Name : in String) return Manager_Access;
+                         Name    : in String := PROVIDER_OPENID) is
+      Provider : constant String := Params.Get_Parameter ("auth.provider." & Name);
+      Impl     : constant Manager_Access := Factory (Provider);
+   begin
+      if Impl = null then
          Log.Error ("Authentication provider {0} not recognized", Provider);
          raise Service_Error with "Authentication provider not supported";
       end if;
