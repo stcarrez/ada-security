@@ -25,6 +25,8 @@ package body Security.Auth is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Auth");
 
+   Def_Factory : Factory_Access := Default_Factory'Access;
+
    --  ------------------------------
    --  Get the provider.
    --  ------------------------------
@@ -170,7 +172,7 @@ package body Security.Auth is
                          Params : in Parameters'Class;
                          Name   : in String := PROVIDER_OPENID) is
    begin
-      Initialize (Realm, Params, Default_Factory'Access, Name);
+      Initialize (Realm, Params, Def_Factory, Name);
    end Initialize;
 
    procedure Initialize (Realm   : in out Manager;
@@ -277,6 +279,14 @@ package body Security.Auth is
         & "&assoc_handle=" & To_String (Assoc.Assoc_Handle)
         & "&mac_key=" & To_String (Assoc.Mac_Key);
    end To_String;
+
+   --  ------------------------------
+   --  Set the default factory to use.
+   --  ------------------------------
+   procedure Set_Default_Factory (Factory : in Factory_Access) is
+   begin
+      Def_Factory := Factory;
+   end Set_Default_Factory;
 
    overriding
    procedure Finalize (Realm : in out Manager) is
