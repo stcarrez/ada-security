@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth -- Authentication Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2009 - 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,11 +225,17 @@ package Security.Auth is
    --  ------------------------------
    --  The <b>Manager</b> provides the core operations for the authentication process.
    type Manager is tagged limited private;
+   type Manager_Access is access all Manager'Class;
 
    --  Initialize the authentication realm.
    procedure Initialize (Realm  : in out Manager;
                          Params : in Parameters'Class;
                          Name   : in String := PROVIDER_OPENID);
+   procedure Initialize (Realm   : in out Manager;
+                         Params  : in Parameters'Class;
+                         Factory : not null
+                         access function (Name : in String) return Manager_Access;
+                         Name    : in String := PROVIDER_OPENID);
 
    --  Discover the authentication provider that must be used to authenticate the user.
    --  The <b>Name</b> can be an URL or an alias that identifies the provider.
@@ -258,6 +264,9 @@ package Security.Auth is
                      Assoc   : in Association;
                      Request : in Parameters'Class;
                      Result  : out Authentication);
+
+   --  Default factory used by `Initialize`.  It supports OpenID, Google, Facebook.
+   function Default_Factory (Provider : in String) return Manager_Access;
 
 private
 
@@ -292,8 +301,6 @@ private
       Alias      : Unbounded_String;
       Expired    : Ada.Calendar.Time;
    end record;
-
-   type Manager_Access is access all Manager'Class;
 
    type Manager is new Ada.Finalization.Limited_Controlled with record
       Provider  : Unbounded_String;
