@@ -33,7 +33,7 @@ to provide authentication and access control to users within the web application
 - Add support to extend the authenticate manager and allow to
   use custom authentication through the Set_Default_Factory operation.
 
-[Other versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
+[List all versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
 
 # Build
 
