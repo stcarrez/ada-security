@@ -4,9 +4,9 @@
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Security.svg)](https://jenkins.vacs.fr/job/Ada-Security/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-security/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-security)
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-1.2.1-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.2.1.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.3.0-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.3.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.2.1.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.3.0.svg)
 
 Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
@@ -33,7 +33,7 @@ to provide authentication and access control to users within the web application
 - Add support to extend the authenticate manager and allow to
   use custom authentication through the Set_Default_Factory operation.
 
-[Other versions](https://github.com/stcarrez/ada-security/NEWS)
+[Other versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
 
 # Build
 
