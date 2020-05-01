@@ -1,5 +1,5 @@
 dnl Autoconf configure script for Ada Security
-dnl Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019 Stephane Carrez
+dnl Copyright (C) 2012, 2013, 2015, 2016, 2018, 2019, 2020 Stephane Carrez
 dnl Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 dnl
 dnl  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@ AC_INIT(src/security.ads)
 
 # Current release settings
 SECURITY_MAJOR_VERSION=1
-SECURITY_MINOR_VERSION=2
-SECURITY_MICRO_VERSION=1
+SECURITY_MINOR_VERSION=3
+SECURITY_MICRO_VERSION=0
 SECURITY_VERSION=$SECURITY_MAJOR_VERSION.$SECURITY_MINOR_VERSION.$SECURITY_MICRO_VERSION
 
 # Set the version number of Ada Server Faces
