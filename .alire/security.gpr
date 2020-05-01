@@ -4,7 +4,7 @@ with "utilada_xml";
 
 library project Security is
 
-   Version := "1.2.1";
+   Version := "1.3.0";
    Library_Dir := "lib";
    Library_Type : Config.Library_Type_Type := external ("SECURITY_LIBRARY_TYPE", "static");
 
