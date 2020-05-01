@@ -24,6 +24,17 @@ The Ada05 library includes:
 
 ![Ada Security Overview](https://github.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
 
+The Ada Security library is used by the
+[Ada Web Application](https://github.com/stcarrez/ada-awa)
+to provide authentication and access control to users within the web applications.
+
+## Version 1.3.0 - May 2020
+
+- Add support to extend the authenticate manager and allow to
+  use custom authentication through the Set_Default_Factory operation.
+
+[Other versions](https://github.com/stcarrez/ada-security/NEWS)
+
 # Build
 
 To use Ada Security library, configure as follows:
@@ -40,7 +51,8 @@ For the installation, use the following command:
    make install
 ```
 The package provides a simple AWS server that illustrates the OpenID and OpenConnect
-authentication.  Build it as follows:
+authentication.  Because OAuth2 relies exclusively on HTTPS, you must use an AWS
+server that has the SSL support.  Build it as follows:
 ```
    gprbuild -Psamples
 ```
