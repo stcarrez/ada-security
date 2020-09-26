@@ -1,6 +1,7 @@
 with "@UTIL_DIR@config";
 with "@UTIL_DIR@utilada_sys";
 with "@UTIL_DIR@utilada_http";
+with "@UTIL_DIR@utilada_aws";
 with "security";
 with "aws";
 

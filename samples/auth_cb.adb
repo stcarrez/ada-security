@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  auth_cb -- Authentication callback examples
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,8 @@ package body Auth_CB is
 
    package User_Session is
      new AWS.Session.Generic_Data (Security.Auth.Authentication, Null_Auth);
+
+   function Get_Auth_Name (Request : in AWS.Status.Data) return String;
 
    overriding
    function Get_Parameter (Params : in Auth_Config;
@@ -174,7 +176,6 @@ package body Auth_CB is
    end Verify_Authorization;
 
    function User_Info (Request : in AWS.Status.Data) return AWS.Response.Data is
-      URI        : constant String := AWS.Status.URI (Request);
       SID        : constant AWS.Session.Id := AWS.Status.Session (Request);
       Credential : Security.Auth.Authentication;
       Set        : AWS.Templates.Translate_Set;

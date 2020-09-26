@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  auth_cb -- Authentication callback examples
---  Copyright (C) 2013 Stephane Carrez
+--  Copyright (C) 2013, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Util.Properties;
 with Util.Log.Loggers;
-with Util.Http.Clients.Web;
+with Util.Http.Clients.AWS;
 
 with AWS.Config;
 with AWS.Config.Set;
@@ -31,7 +31,7 @@ with Auth_CB;
 
 procedure Auth_Demo is
 
-   Log    : Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Auth_Demo");
+   Log    : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Auth_Demo");
 
    Dispatcher : AWS.Services.Dispatchers.URI.Handler;
    WS         : AWS.Server.HTTP;
@@ -50,7 +50,7 @@ begin
    Util.Log.Loggers.Initialize (Util.Properties.Manager (Auth_CB.Config));
 
    --  Setup the HTTP client implementation to use AWS.
-   Util.Http.Clients.Web.Register;
+   Util.Http.Clients.AWS.Register;
 
    --  Setup AWS dispatchers.
    AWS.Services.Dispatchers.URI.Register (Dispatcher, "/atlas/auth/auth",
