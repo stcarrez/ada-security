@@ -1,3 +1,6 @@
+Version 1.3.1   - Nov 2020
+  - Fix AWS example
+
 Version 1.3.0   - May 2020
   - Add support to extend the authenticate manager and allow to
     use custom authentication through the Set_Default_Factory operation.

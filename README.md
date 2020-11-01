@@ -28,10 +28,9 @@ The Ada Security library is used by the
 [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
-## Version 1.3.0 - May 2020
+## Version 1.3.1 - Nov 2020
 
-- Add support to extend the authenticate manager and allow to
-  use custom authentication through the Set_Default_Factory operation.
+- Fix AWS example
 
 [List all versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
 
