@@ -7,7 +7,7 @@ maintainers-logins = ["stcarrez"]
 authors = ["Stephane.Carrez@gmail.com"]
 project-files = [".alire/security.gpr"]
 tags = ["security", "oauth2", "authentication", "permissions", "jwt"]
-website = "https://gitlab.com/stcarrez/ada-el"
+website = "https://gitlab.com/stcarrez/ada-security"
 long-description = """
 
 [![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Security.svg)](https://jenkins.vacs.fr/job/Ada-Security/)
