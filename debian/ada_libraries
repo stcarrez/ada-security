@@ -1,0 +1,1 @@
+MODE=distrib SECURITY_LIBRARY_TYPE=relocatable security.gpr

@@ -1,10 +1,22 @@
-libada-security (1.1.1) testing; urgency=low
+libsecurity (1.3.1) unstable; urgency=medium
+
+  * Update for Ada security 1.3.1
+
+ -- Stephane Carrez <Stephane.Carrez@gmail.com>  Sun, 8 Nov 2020 16:43:21 +0100
+
+libsecurity (1.2.0) unstable; urgency=medium
+
+  * Update for Ada security 1.2.0
+
+ -- Stephane Carrez <Stephane.Carrez@gmail.com>  Sun, 24 Jun 2018 10:43:21 +0200
+
+libsecurity (1.1.1) testing; urgency=low
 
   * Fix build for XmlAda 2014
 
  -- Stephane Carrez <Stephane.Carrez@gmail.com>  Sat, 17 May 2014 17:37:17 +0200
 
-libada-security (1.1.0) unstable; urgency=low
+libsecurity (1.1.0) unstable; urgency=low
 
   * Initial release to setup a debian library and development package
 
