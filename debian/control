@@ -9,7 +9,9 @@ Build-Depends: debhelper (>= 10), autotools-dev,
  gprbuild (>= 2015-2),
 # 2015-2 is compatible with gnat-6
  libxmlada-sax7-dev,
- libutilada-xml1-dev
+ libutilada-xml1-dev,
+# pandoc requires texlive-fonts-extra for PDF
+ pandoc, texlive-fonts-extra
 Standards-Version: 4.1.4
 Homepage: https://github.com/stcarrez/ada-security/
 Vcs-Git: https://github.com/stcarrez/ada-security.git -b debian-gnat-7
@@ -29,6 +31,7 @@ Package: libsecurity1-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, ${ada:Depends}
+Suggests: libsecurity-doc (= ${source:Version})
 Description: OAuth and OpenID security frameworks for Ada (Development)
  The package contains the Ada development files to develop application
  using the libsecurity library.
@@ -37,3 +40,18 @@ Description: OAuth and OpenID security frameworks for Ada (Development)
  It includes the OpenID client authentication and the OAuth 2.0 client
  and server authentication.  The library also provides a security framework
  to protect resources in the application.
+
+Package: libsecurity-doc
+Section: libdevel
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Suggests: gnat
+Description: OAuth and OpenID security frameworks for Ada (documentation)
+ The library provides some security framework needed by some applications.
+ It includes the OpenID client authentication and the OAuth 2.0 client
+ and server authentication.  The library also provides a security framework
+ to protect resources in the application.
+ .
+ This package contains the documentation for the library
+ in HTML and PDF as well as several examples.
