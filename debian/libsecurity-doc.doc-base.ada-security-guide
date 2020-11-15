@@ -7,10 +7,10 @@ Abstract: This manual documents the Ada Security Library
  It includes the OpenID client authentication and the OAuth 2.0 client
  and server authentication.  The library also provides a security framework
  to protect resources in the application.
- 
- Format: HTML
- Index: /usr/share/doc/libsecurity-doc/security-book.html
- Files: /usr/share/doc/libsecurity-doc/security-book.html
- 
- Format: pdf
- Files: /usr/share/doc/libsecurity-doc/security-book.pdf.gz
+
+Format: HTML
+Index: /usr/share/doc/libsecurity-doc/security-book.html
+Files: /usr/share/doc/libsecurity-doc/security-book.html
+
+Format: pdf
+Files: /usr/share/doc/libsecurity-doc/security-book.pdf.gz
