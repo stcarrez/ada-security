@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-clients -- OAuth Client Security
---  Copyright (C) 2012, 2013, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017, 2018, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,10 @@
 with Ada.Exceptions;
 with Util.Log.Loggers;
 with Util.Strings;
+with Util.Beans.Objects;
 with Util.Http.Clients;
 with Util.Properties.JSON;
+with Util.Properties.Form;
 with Util.Encoders.HMAC.SHA1;
 with Security.Random;
 
@@ -32,6 +34,8 @@ package body Security.OAuth.Clients is
    procedure Do_Request_Token (URI  : in String;
                                Data : in Util.Http.Clients.Form_Data'Class;
                                Cred : in out Grant_Type'Class);
+
+   function Get_Expires (Props : in Util.Properties.Manager) return Natural;
 
    --  ------------------------------
    --  Access Token
@@ -144,6 +148,19 @@ package body Security.OAuth.Clients is
       return Hmac = State;
    end Is_Valid_State;
 
+   function Get_Expires (Props : in Util.Properties.Manager) return Natural is
+      Value : Util.Beans.Objects.Object;
+   begin
+      Value := Props.Get_Value ("expires_in");
+      if Util.Beans.Objects.Is_Null (Value) then
+         Value := Props.Get_Value ("refresh_token_expires_in");
+         if Util.Beans.Objects.Is_Null (Value) then
+            return 3600;
+         end if;
+      end if;
+      return Util.Beans.Objects.To_Integer (Value);
+   end Get_Expires;
+
    --  ------------------------------
    --  Exchange the OAuth code into an access token.
    --  ------------------------------
@@ -231,12 +248,25 @@ package body Security.OAuth.Clients is
                P : Util.Properties.Manager;
             begin
                Util.Properties.JSON.Parse_JSON (P, Content);
-               Expires := Natural'Value (P.Get ("expires_in"));
+               Expires := Get_Expires (P);
                return Application'Class (App).Create_Access_Token (P.Get ("access_token"),
                                                                    P.Get ("refresh_token", ""),
                                                                    P.Get ("id_token", ""),
                                                                    Expires);
             end;
+
+         elsif Content_Type (Content_Type'First .. Pos) = "application/x-www-form-urlencoded" then
+            declare
+               P : Util.Properties.Manager;
+            begin
+               Util.Properties.Form.Parse_Form (P, Content);
+               Expires := Get_Expires (P);
+               return Application'Class (App).Create_Access_Token (P.Get ("access_token"),
+                                                                   P.Get ("refresh_token", ""),
+                                                                   P.Get ("id_token", ""),
+                                                                   Expires);
+            end;
+
          else
             Log.Error ("Content type {0} not supported for access token response", Content_Type);
             Log.Error ("Response: {0}", Content);
