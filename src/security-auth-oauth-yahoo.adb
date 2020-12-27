@@ -70,7 +70,8 @@ package body Security.Auth.OAuth.Yahoo is
             return;
 
          end if;
-         Result.Identity := To_Unbounded_String ("https://api.login.yahoo.com/");
+         Result.Identity := Realm.Issuer;
+         Append (Result.Identity, "/");
          Append (Result.Identity, Security.OAuth.JWT.Get_Subject (Info));
          Result.Claimed_Id := Result.Identity;
          Result.First_Name := To_Unbounded_String (JWT.Get_Claim (Info, "name", ""));
