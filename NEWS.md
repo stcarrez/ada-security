@@ -1,3 +1,8 @@
+Version 1.4.0   - Dec 2020
+  - Add support to authenticate with Gitlab and GitHub
+  - Update Yahoo! authenticate to use OpenId connect
+  - Update the AWS demo to add Gitlab and Github
+
 Version 1.3.1   - Nov 2020
   - Fix AWS example
 
