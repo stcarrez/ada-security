@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-oauth -- OAuth based authentication
---  Copyright (C) 2013, 2017 Stephane Carrez
+--  Copyright (C) 2013, 2017, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,6 +71,7 @@ package body Security.Auth.OAuth is
       pragma Unreferenced (Realm, OP);
    begin
       Result.Assoc_Handle := To_Unbounded_String (Security.OAuth.Clients.Create_Nonce (128));
+      Result.Nonce := To_Unbounded_String (Security.OAuth.Clients.Create_Nonce (256));
    end Associate;
 
    --  ------------------------------
@@ -94,6 +95,10 @@ package body Security.Auth.OAuth is
       Append (Result, "&");
       Append (Result, Security.OAuth.RESPONSE_TYPE);
       Append (Result, "=code");
+      Append (Result, "&");
+      Append (Result, Security.OAuth.NONCE_TOKEN);
+      Append (Result, "=");
+      Append (Result, Assoc.Nonce);
 
       Log.Debug ("Params = {0}", Params);
       return To_String (Result);
