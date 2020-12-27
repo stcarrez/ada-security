@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2016, 2017, 2018, 2019, 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,8 @@ package Security.OAuth is
    USERNAME          : constant String := "username";
    PASSWORD          : constant String := "password";
    REFRESH_TOKEN     : constant String := "refresh_token";
+
+   NONCE_TOKEN       : constant String := "nonce";
 
    --  RFC 6749: 5.2.  Error Response
    INVALID_REQUEST        : aliased constant String := "invalid_request";
