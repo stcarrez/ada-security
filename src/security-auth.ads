@@ -137,6 +137,9 @@ package Security.Auth is
    --  Use the Yahoo! OpenID Connect Basic Client
    PROVIDER_YAHOO : constant String := "yahoo";
 
+   --  Use the GitHub OpenID Connect Basic Client
+   PROVIDER_GITHUB : constant String := "github";
+
    Invalid_End_Point : exception;
 
    Service_Error     : exception;
