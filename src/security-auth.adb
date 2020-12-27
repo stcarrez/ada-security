@@ -21,6 +21,8 @@ with Util.Log.Loggers;
 with Security.Auth.OpenID;
 with Security.Auth.OAuth.Facebook;
 with Security.Auth.OAuth.Googleplus;
+with Security.Auth.OAuth.Yahoo;
+with Security.Auth.OAuth.Github;
 package body Security.Auth is
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Auth");
@@ -158,6 +160,12 @@ package body Security.Auth is
 
       elsif Provider = PROVIDER_GOOGLE_PLUS then
          return new Security.Auth.OAuth.Googleplus.Manager;
+
+      elsif Provider = PROVIDER_YAHOO then
+         return new Security.Auth.OAuth.Yahoo.Manager;
+
+      elsif Provider = PROVIDER_GITHUB then
+         return new Security.Auth.OAuth.Github.Manager;
 
       else
          Log.Error ("Authentication provider {0} not recognized", Provider);
