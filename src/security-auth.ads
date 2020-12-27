@@ -134,6 +134,9 @@ package Security.Auth is
    --  Use the Google+ OpenID Connect Basic Client
    PROVIDER_GOOGLE_PLUS : constant String := "google-plus";
 
+   --  Use the Yahoo! OpenID Connect Basic Client
+   PROVIDER_YAHOO : constant String := "yahoo";
+
    Invalid_End_Point : exception;
 
    Service_Error     : exception;
@@ -285,6 +288,7 @@ private
       Assoc_Handle : Unbounded_String;
       Mac_Key      : Unbounded_String;
       Expired      : Ada.Calendar.Time;
+      Nonce        : Unbounded_String;
    end record;
 
    type Authentication is record
