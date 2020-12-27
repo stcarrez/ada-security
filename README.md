@@ -28,9 +28,11 @@ The Ada Security library is used by the
 [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
-## Version 1.3.1 - Nov 2020
+## Version 1.4.0 - Dec 2020
 
-- Fix AWS example
+- Add support to authenticate with Gitlab and GitHub
+- Update Yahoo! authenticate to use OpenId connect
+- Update the AWS demo to add Gitlab and Github
 
 [List all versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
 
