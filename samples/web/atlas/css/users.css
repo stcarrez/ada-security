@@ -99,6 +99,8 @@ a.openid-orange em,
 a.openid-yahoo em,
 a.openid-facebook em,
 a.openid-google-plus em,
+a.openid-gitlab em,
+a.openid-github em,
 a.openid-google em {
 	display: block;
 	float: left;
@@ -133,7 +135,33 @@ a.openid-google-plus em {
   width: 37px;
   border-right: 1px solid #bb3f30;
 }
+a.openid-github em {
+  margin-left: 3px;
+  margin-right: 10px;
+  background-position: 0 -68px;
+  height: 33px;
+  width: 120px;
+}
+a.openid-gitlab em {
+  margin-left: 3px;
+  margin-right: 10px;
+  background-position: 0 -348px;
+  height: 33px;
+  width: 120px;
+}
 a.openid-facebook {
+  font-weight: bold;
+  color: #424242;
+  text-decoration: none;
+  padding-right: 3px;
+}
+a.openid-gitlab {
+  font-weight: bold;
+  color: #424242;
+  text-decoration: none;
+  padding-right: 3px;
+}
+a.openid-github {
   font-weight: bold;
   color: #424242;
   text-decoration: none;
