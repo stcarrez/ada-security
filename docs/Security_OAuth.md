@@ -11,7 +11,9 @@ For an OAuth2 client application to authenticate, it must be registered on the s
 and the server provides the following information:
 
 * **client_id**: the client identifier is a unique string that identifies the application.
-* **client_secret** the client secret is a secret shared between the server and the client application.  The client secret is optional.
+
+* **client_secret** the client secret is a secret shared between the server and the
+ client application.  The client secret is optional.
 
 The `Security.OAuth.Clients.Application` tagged record is the primary type that
 allows to perform one of the OAuth 2.0 authorization flows.  It is necessary to
