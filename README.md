@@ -12,7 +12,7 @@ Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
 [OpenID Authentication 2.0](https://openid.net/specs/openid-authentication-2_0.html)
 as well as [OAuth 2.0](https://oauth.net/2/) protocol.
-It allows a web application to integrate easily with Yahoo!, Facebook and
+It allows a web application to integrate easily with Yahoo!, Gitlab, Github, Facebook and
 Google+ authentication systems.
 The Ada05 library includes:
 
