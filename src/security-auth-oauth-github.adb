@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth-oauth-github -- Github OAuth based authentication
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ package body Security.Auth.OAuth.Github is
                                   Request : in Parameters'Class;
                                   Token   : in Security.OAuth.Clients.Access_Token_Access;
                                   Result  : in out Authentication) is
-      pragma Unreferenced (Request);
+      pragma Unreferenced (Assoc, Request);
 
       URI      : constant String := "https://api.github.com/user";
       Http     : Util.Http.Clients.Client;
