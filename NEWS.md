@@ -1,3 +1,7 @@
+Version 1.4.1   - Under development
+  - Fix Alire GNAT project to build in debug mode
+  - Fix Security.Random that generates shorter random string
+
 Version 1.4.0   - Dec 2020
   - Add support to authenticate with Gitlab and GitHub
   - Update Yahoo! authenticate to use OpenId connect
