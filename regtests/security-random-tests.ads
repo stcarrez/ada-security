@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random-tests - Tests for random package
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,5 +24,7 @@ package Security.Random.Tests is
    type Test is new Util.Tests.Test with null record;
 
    procedure Test_Generate (T : in out Test);
+
+   procedure Test_Generate_String (T : in out Test);
 
 end Security.Random.Tests;
