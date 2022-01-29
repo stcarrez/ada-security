@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random -- Random numbers for nonce, secret keys, token generation
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,10 +66,15 @@ package body Security.Random is
       Encoder.Set_URL_Mode (True);
       Encoder.Transform (Data => Rand, Into => Buffer,
                          Last => Last, Encoded => Encoded);
+      Encoder.Finish (Into => Buffer (Last + 1 .. Buffer'Last),
+                      Last => Last);
+      while Character'Val (Buffer (Last)) = '=' loop
+         Last := Last - 1;
+      end loop;
       declare
-         Result : String (1 .. Natural (Encoded + 1));
+         Result : String (1 .. Natural (Last + 1));
       begin
-         for I in 0 .. Encoded loop
+         for I in 0 .. Last loop
             Result (Natural (I + 1)) := Character'Val (Buffer (I));
          end loop;
          return Result;
@@ -101,7 +106,12 @@ package body Security.Random is
       Encoder.Set_URL_Mode (True);
       Encoder.Transform (Data => Rand, Into => Buffer,
                          Last => Last, Encoded => Encoded);
-      for I in 0 .. Encoded loop
+      Encoder.Finish (Into => Buffer (Last + 1 .. Buffer'Last),
+                      Last => Last);
+      while Character'Val (Buffer (Last)) = '=' loop
+         Last := Last - 1;
+      end loop;
+      for I in 0 .. Last loop
          Ada.Strings.Unbounded.Append (Into, Character'Val (Buffer (I)));
       end loop;
    end Generate;
