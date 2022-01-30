@@ -26,7 +26,7 @@ with Util.Log.Loggers;
 --  checked by the access control manager.
 package body Security.Permissions is
 
-   function Occurence (List : in String; Of_Char : in Character) return Natural;
+   function Occurrence (List : in String; Of_Char : in Character) return Natural;
 
    --  The logger
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.Permissions");
@@ -122,7 +122,7 @@ package body Security.Permissions is
       return Permission_Indexes.Get_Permission_Index (Name);
    end Get_Permission_Index;
 
-   function Occurence (List : in String; Of_Char : in Character) return Natural is
+   function Occurrence (List : in String; Of_Char : in Character) return Natural is
       Count : Natural := 0;
    begin
       if List'Length > 0 then
@@ -134,7 +134,7 @@ package body Security.Permissions is
          end loop;
       end if;
       return Count;
-   end Occurence;
+   end Occurrence;
 
    --  ------------------------------
    --  Get the list of permissions whose name is given in the string with separated comma.
@@ -143,7 +143,7 @@ package body Security.Permissions is
       procedure Process (Name : in String;
                          Done : out Boolean);
 
-      Result : Permission_Index_Array (1 .. Occurence (List, ','));
+      Result : Permission_Index_Array (1 .. Occurrence (List, ','));
       Count  : Natural := 0;
 
       procedure Process (Name : in String;
