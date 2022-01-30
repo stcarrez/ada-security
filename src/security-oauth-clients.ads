@@ -56,7 +56,7 @@ with Ada.Strings.Unbounded;
 --  An access token has an expiration date and a new access token must be asked by using the
 --  refresh token.  When the access token has expired, the grant token object can be refreshed
 --  to retrieve a new access token by using the `Refresh_Token` procedure.  The scope of
---  permissions can also be passsed.
+--  permissions can also be passed.
 --
 --     App.Refresh_Token ("scope", Token);
 --
