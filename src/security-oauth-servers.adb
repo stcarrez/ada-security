@@ -384,7 +384,7 @@ package body Security.OAuth.Servers is
 
    --  ------------------------------
    --  Create a HMAC-SHA1 of the data with the private key.
-   --  This function can be overriden to use another signature algorithm.
+   --  This function can be overridden to use another signature algorithm.
    --  ------------------------------
    function Sign (Realm : in Auth_Manager;
                   Data  : in String) return String is
