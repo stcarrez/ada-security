@@ -246,7 +246,7 @@ package body Security.OAuth.File_Registry is
       Pos    : constant User_Maps.Cursor := Realm.Users.Find (Username);
    begin
       if not User_Maps.Has_Element (Pos) then
-         Log.Info ("Verify user {0} - unkown user", Username);
+         Log.Info ("Verify user {0} - unknown user", Username);
          Auth := null;
          return;
       end if;
