@@ -20,7 +20,7 @@
 --  The `Security` package provides a security framework that allows
 --  an application to use OpenID or OAuth security frameworks.  This security
 --  framework was first developed within the Ada Server Faces project.
---  It was moved to a separate project so that it can easyly be used with AWS.
+--  It was moved to a separate project so that it can easily be used with AWS.
 --  This package defines abstractions that are close or similar to Java
 --  security package.
 --

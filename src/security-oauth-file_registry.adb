@@ -69,7 +69,7 @@ package body Security.OAuth.File_Registry is
 
    --  ------------------------------
    --  Load from the properties the definition of applications.  The list of applications
-   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  is controlled by the property <prefix>.list which contains a comma separated list of
    --  application names or ids.  The application definition are represented by properties
    --  of the form:
    --    <prefix>.<app>.client_id
@@ -128,7 +128,7 @@ package body Security.OAuth.File_Registry is
 
    --  ------------------------------
    --  Load from the properties the definition of users.  The list of users
-   --  is controled by the property <prefix>.list which contains a comma separated list of
+   --  is controlled by the property <prefix>.list which contains a comma separated list of
    --  users names or ids.  The user definition are represented by properties
    --  of the form:
    --    <prefix>.<user>.username
