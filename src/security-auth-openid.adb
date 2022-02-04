@@ -164,7 +164,7 @@ package body Security.Auth.OpenID is
                    Data  => Params,
                    Reply => Reply);
       if Reply.Get_Status /= Util.Http.SC_OK then
-         Log.Error ("Received error {0} when creating assoication with {1}",
+         Log.Error ("Received error {0} when creating association with {1}",
                     Util.Strings.Image (Reply.Get_Status), URI);
          raise Service_Error with "Cannot create association with OpenID provider.";
       end if;

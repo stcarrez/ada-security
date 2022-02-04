@@ -144,7 +144,7 @@ package body Security.Auth.OAuth.Facebook is
          Set_Result (Result, INVALID_SIGNATURE, "the access token issued more than 1 hour ago");
 
       elsif Info.Expires + TIME_SHIFT < Now then
-         Set_Result (Result, INVALID_SIGNATURE, "the access token has expored");
+         Set_Result (Result, INVALID_SIGNATURE, "the access token has expired");
 
       elsif Length (Info.User_Id) = 0 then
          Set_Result (Result, INVALID_SIGNATURE, "the access token refers to an empty user_id");
