@@ -2,25 +2,25 @@
 The `Security` package provides a security framework that allows
 an application to use OpenID or OAuth security frameworks.  This security
 framework was first developed within the [Ada Server Faces](https://github.com/stcarrez/ada-asf) project.
-It was moved to a separate project so that it can easyly be used with [AWS](https://github.com/AdaCore/aws).
+It was moved to a separate project so that it can easily be used with [AWS](https://github.com/AdaCore/aws).
 This package defines abstractions that are close or similar to Java
 security package.
 
 The security framework uses the following abstractions:
 
 * **Policy and policy manager**:
- The `Policy` defines and implements the set of security rules that specify how to
- protect the system or resources.  The `Policy_Manager` maintains the security policies.
+  The `Policy` defines and implements the set of security rules that specify how to
+  protect the system or resources.  The `Policy_Manager` maintains the security policies.
 
 * **Principal**:
- The `Principal` is the entity that can be authenticated.  A principal is obtained
- after successful authentication of a user or of a system through an authorization process.
- The OpenID or OAuth authentication processes generate such security principal.
+  The `Principal` is the entity that can be authenticated.  A principal is obtained
+  after successful authentication of a user or of a system through an authorization process.
+  The OpenID or OAuth authentication processes generate such security principal.
 
 * **Permission**:
- The `Permission` represents an access to a system or application resource.
- A permission is checked by using the security policy manager.  The policy manager uses a
- security controller to enforce the permission.
+  The `Permission` represents an access to a system or application resource.
+  A permission is checked by using the security policy manager.  The policy manager uses a
+  security controller to enforce the permission.
 
 The `Security_Context` holds the contextual information that the security controller
 can use to verify the permission.  The security context is associated with a principal and
@@ -65,7 +65,6 @@ configuration files.  In Ada, the permission is used as follows:
  Perm_Create_Workspace.Permission
 ```
 
-
 ## Principal
 A principal is created by using either the [Security_Auth OpenID],
 the [Security_OAuth OAuth] or another authentication mechanism.  The authentication produces
@@ -89,20 +88,17 @@ verify that a permission is granted.
 This security context is used as follows:
 
   * An instance of the security context is declared within a function/procedure as
- a local variable.  This instance will be associated internally with the current thread
- through a task attribute.
-
+  a local variable.  This instance will be associated internally with the current thread
+  through a task attribute.
   * The security context is populated with information to identify the current user,
- his roles, permissions and other information that could be used by security controllers.
-
+  his roles, permissions and other information that could be used by security controllers.
   * To verify a permission, the current security context is retrieved and the
- <b>Has_Permission</b> operation is called.  This operation will use the security manager
- to find the security controller associated with the permission to verify.
-
+  <b>Has_Permission</b> operation is called.  This operation will use the security manager
+  to find the security controller associated with the permission to verify.
   * The security controller will be called with the security context to check the permission.
- The whole job of checking the permission is done by the security controller or its
- associated policy manager.  The security controller retrieves information from the
- security context to decide whether the permission is granted or not.
+  The whole job of checking the permission is done by the security controller or its
+  associated policy manager.  The security controller retrieves information from the
+  security context to decide whether the permission is granted or not.
 
 For example the security context is declared as follows:
 
@@ -126,6 +122,5 @@ else
   -- Denied
 end if;
 ```
-
 
 

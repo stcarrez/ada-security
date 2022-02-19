@@ -20,8 +20,7 @@ for all these frameworks.
 There are basically two steps that an application must implement:
 
   * `Discovery`: to resolve and use the OpenID provider and redirect the user to the
- provider authentication form.
-
+  provider authentication form.
   * `Verify`: to decode the authentication and check its result.
 
 ![](images/OpenID.png)
@@ -29,13 +28,10 @@ There are basically two steps that an application must implement:
 The authentication process is the following:
 
   * The application should redirect the user to the authentication URL.
-
   * The OpenID provider authenticate the user and redirects the user to the callback CB.
-
   * The association is decoded from the callback parameter.
-
   * The `Verify` procedure is called with the association to check the result and
- obtain the authentication results.
+  obtain the authentication results.
 
 ## Initialization
 The initialization process must be done before each two steps (discovery and verify).
@@ -71,7 +67,6 @@ The Google+ authentication is based on OAuth 2.0 and the OpenID Connect Basic Cl
 
 See https://developers.google.com/accounts/docs/OAuth2Login
 
-
 ## Discovery: creating the authentication URL
 The first step is to create an authentication URL to which the user must be redirected.
 In this step, we have to create an OpenID manager, discover the OpenID provider,
@@ -87,10 +82,9 @@ Assoc    : constant Security.Auth.Association_Access := new Security.Auth.Associ
 The following steps are performed:
 
   * The <b>Discover</b> procedure is called to retrieve from the OpenID provider the XRDS
- stream and identify the provider.  An <b>End_Point</b> is returned in <tt>OP</tt>.
-
+  stream and identify the provider.  An <b>End_Point</b> is returned in <tt>OP</tt>.
   * The <b>Associate</b> procedure is called to make the association with the <b>End_Point</b>.
- The <b>Association</b> record holds session, and authentication.
+  The <b>Association</b> record holds session, and authentication.
 
 ```Ada
 Mgr.Discover (Provider, OP);  --  Yadis discovery (get the XRDS file).

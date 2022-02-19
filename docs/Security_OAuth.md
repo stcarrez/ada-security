@@ -11,9 +11,8 @@ For an OAuth2 client application to authenticate, it must be registered on the s
 and the server provides the following information:
 
 * **client_id**: the client identifier is a unique string that identifies the application.
-
 * **client_secret** the client secret is a secret shared between the server and the
- client application.  The client secret is optional.
+  client application.  The client secret is optional.
 
 The `Security.OAuth.Clients.Application` tagged record is the primary type that
 allows to perform one of the OAuth 2.0 authorization flows.  It is necessary to
@@ -47,7 +46,7 @@ Token  : Security.OAuth.Clients.Grant_Type;
 An access token has an expiration date and a new access token must be asked by using the
 refresh token.  When the access token has expired, the grant token object can be refreshed
 to retrieve a new access token by using the `Refresh_Token` procedure.  The scope of
-permissions can also be passsed.
+permissions can also be passed.
 
 ```Ada
  App.Refresh_Token ("scope", Token);
@@ -123,6 +122,5 @@ that is doing the call.
 
 When a security principal is returned, the access token was validated and the
 request is granted for the application.
-
 
 

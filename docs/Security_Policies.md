@@ -165,4 +165,3 @@ Then, we can check the permission:
  Result : Boolean := Security.Contexts.Has_Permission (Perm);
 ```
 
-
