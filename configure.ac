@@ -16,7 +16,8 @@ dnl  limitations under the License.
 dnl 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/security.ads)
+AC_INIT
+AC_CONFIG_SRCDIR([src/security.ads])
 
 # Current release settings
 SECURITY_MAJOR_VERSION=1
@@ -37,9 +38,9 @@ AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
 
 AM_GNAT_FIND_ADA_UTIL([Ada Security])
 
-AC_OUTPUT(
-Makefile.conf
+AC_CONFIG_FILES([Makefile.conf
 security.gpr
 security_tests.gpr
 samples.gpr
-)
+])
+AC_OUTPUT
