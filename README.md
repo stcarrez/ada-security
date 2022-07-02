@@ -6,6 +6,7 @@
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
 [![Download](https://img.shields.io/badge/download-1.4.0-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.4.0.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+[![GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://gitlab.com/stcarrez/ada-security)
 ![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.4.0.svg)
 
 Ada Security provides a security framework which allows applications to define
