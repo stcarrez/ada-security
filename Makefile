@@ -17,6 +17,9 @@ build-test:: setup
 test:	build
 	bin/security_harness -l $(NAME): -xml security-aunit.xml
 
+samples:
+	$(GNATMAKE) $(GPRFLAGS) -p samples.gpr $(MAKE_ARGS)
+
 SECURITY_DOC= \
   title.md \
   pagebreak.tex \
@@ -37,3 +40,5 @@ HTML_OPTIONS=-f markdown --listings --number-sections --toc --css pandoc.css
 
 $(eval $(call ada_library,$(NAME)))
 $(eval $(call pandoc_build,security-book,$(SECURITY_DOC)))
+
+.PHONY: samples
