@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  auth_cb -- Authentication callback examples
---  Copyright (C) 2013, 2020 Stephane Carrez
+--  Copyright (C) 2013, 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +79,7 @@ package body Auth_CB is
       OP       : Security.Auth.End_Point;
       Assoc    : Security.Auth.Association;
    begin
-      if URL'Length = 0 or Name'Length = 0 then
+      if URL'Length = 0 or else Name'Length = 0 then
          return AWS.Response.URL (Location => "/login.html");
       end if;
 
