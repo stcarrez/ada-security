@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -424,7 +424,7 @@ package body Security.OAuth.Servers is
       Result : Token_Validity := (Status => Invalid_Grant, others => <>);
    begin
       --  Verify the access token validity.
-      if Pos1 = 0 or Pos2 = 0 or Pos1 = Pos2 then
+      if Pos1 = 0 or else Pos2 = 0 or else Pos1 = Pos2 then
          Log.Info ("Authenticate bad formed access token {0}", Token);
          return Result;
       end if;

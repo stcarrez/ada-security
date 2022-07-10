@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-roles -- Role based policies
---  Copyright (C) 2010, 2011, 2012, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -306,6 +306,7 @@ package body Security.Policies.Roles is
    --  ------------------------------
    --  Setup the XML parser to read the <b>role-permission</b> description.
    --  ------------------------------
+   overriding
    procedure Prepare_Config (Policy : in out Role_Policy;
                              Mapper : in out Util.Serialize.Mappers.Processing) is
    begin

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-auth -- Authentication Support
---  Copyright (C) 2009 - 2020 Stephane Carrez
+--  Copyright (C) 2009 - 2020, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -215,6 +215,7 @@ package Security.Auth is
    type Principal_Access is access all Principal'Class;
 
    --  Get the principal name.
+   overriding
    function Get_Name (From : in Principal) return String;
 
    --  Get the user email address.

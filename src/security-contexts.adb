@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-contexts -- Context to provide security information and verify permissions
---  Copyright (C) 2011, 2012, 2016 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2016, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -212,7 +212,7 @@ package body Security.Contexts is
       if Principal /= null then
          Context.Principal := Principal;
       end if;
-      if Manager = null and Principal = null then
+      if Manager = null and then Principal = null then
          raise Invalid_Context with "There is no policy manager and no user principal";
       end if;
    end Set_Context;

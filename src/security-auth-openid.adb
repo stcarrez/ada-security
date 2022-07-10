@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-openid -- OpenID 2.0 Support
---  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2009, 2010, 2011, 2012, 2017, 2018, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -274,7 +274,7 @@ package body Security.Auth.OpenID is
       --  If the fullname is not specified, try to build one from the first_name and last_name.
       if Length (Result.Full_Name) = 0 then
          Append (Result.Full_Name, Result.First_Name);
-         if Length (Result.First_Name) > 0 and Length (Result.Last_Name) > 0 then
+         if Length (Result.First_Name) > 0 and then Length (Result.Last_Name) > 0 then
             Append (Result.Full_Name, " ");
             Append (Result.Full_Name, Result.Last_Name);
          end if;

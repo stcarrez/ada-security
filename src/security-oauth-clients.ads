@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013, 2016, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2017, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,6 +75,7 @@ package Security.OAuth.Clients is
    type Access_Token_Access is access all Access_Token'Class;
 
    --  Get the principal name.  This is the OAuth access token.
+   overriding
    function Get_Name (From : in Access_Token) return String;
 
    type OpenID_Token (Len, Id_Len, Refresh_Len : Natural) is new Access_Token with private;
@@ -91,6 +92,7 @@ package Security.OAuth.Clients is
    type Grant_Type is new Security.Principal with private;
 
    --  Get the principal name.  This is the OAuth access token.
+   overriding
    function Get_Name (From : in Grant_Type) return String;
 
    --  Get the Authorization header to be used for accessing a protected resource.
@@ -133,7 +135,6 @@ package Security.OAuth.Clients is
    function Is_Valid_State (App   : in Application;
                             Nonce : in String;
                             State : in String) return Boolean;
-
 
    --  OAuth 2.0 Section 4.1.3.  Access Token Request
    --            Section 4.1.4.  Access Token Response

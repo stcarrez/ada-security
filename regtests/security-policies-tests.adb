@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013, 2017, 2019 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,6 +76,7 @@ package body Security.Policies.Tests is
    --  ------------------------------
    --  Get the roles assigned to the user.
    --  ------------------------------
+   overriding
    function Get_Roles (User : in Test_Principal) return Roles.Role_Map is
    begin
       return User.Roles;
@@ -84,6 +85,7 @@ package body Security.Policies.Tests is
    --  ------------------------------
    --  Get the principal name.
    --  ------------------------------
+   overriding
    function Get_Name (From : in Test_Principal) return String is
    begin
       return Util.Strings.To_String (From.Name);
