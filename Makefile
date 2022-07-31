@@ -40,5 +40,6 @@ HTML_OPTIONS=-f markdown --listings --number-sections --toc --css pandoc.css
 
 $(eval $(call ada_library,$(NAME)))
 $(eval $(call pandoc_build,security-book,$(SECURITY_DOC)))
+$(eval $(call alire_publish,alire.toml,se/security,security-$(VERSION).toml))
 
 .PHONY: samples
