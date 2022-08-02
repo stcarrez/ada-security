@@ -4,10 +4,10 @@
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Security.svg)](https://jenkins.vacs.fr/job/Ada-Security/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-security/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-security)
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
-[![Download](https://img.shields.io/badge/download-1.4.0-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.4.0.tar.gz)
+[![Download](https://img.shields.io/badge/download-1.4.1-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.4.1.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
 [![GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://gitlab.com/stcarrez/ada-security)
-![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.4.0.svg)
+![Commits](https://img.shields.io/github/commits-since/stcarrez/ada-security/1.4.1.svg)
 
 Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
@@ -29,15 +29,9 @@ The Ada Security library is used by the
 [Ada Web Application](https://github.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
-## Version 1.4.1   - Under development
+## Version 1.4.1   - Aug 2022
 - Fix Alire GNAT project to build in debug mode
 - Fix Security.Random that generates shorter random string
-
-## Version 1.4.0 - Dec 2020
-
-- Add support to authenticate with Gitlab and GitHub
-- Update Yahoo! authenticate to use OpenId connect
-- Update the AWS demo to add Gitlab and Github
 
 [List all versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
 
