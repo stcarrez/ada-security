@@ -4,18 +4,18 @@ Section: libdevel
 Maintainer: Stephane Carrez <Stephane.Carrez@gmail.com>
 Build-Depends: debhelper (>= 10), autotools-dev,
  dh-ada-library,
- gnat, gnat-9,
+ gnat, gnat-10,
 # This line is parsed by debian/rules.
  gprbuild (>= 2015-2),
 # 2015-2 is compatible with gnat-6
- libxmlada-sax9-dev,
- libutilada-xml3-dev,
+ libxmlada-sax10-dev,
+ libutilada-xml4-dev,
 # pandoc requires texlive-fonts-extra for PDF
  pandoc, texlive-fonts-extra
 Standards-Version: 4.1.4
 Homepage: https://github.com/stcarrez/ada-security/
-Vcs-Git: https://github.com/stcarrez/ada-security.git -b debian-gnat-9
-Vcs-Browser: https://github.com/stcarrez/ada-security/tree/debian-gnat-9
+Vcs-Git: https://github.com/stcarrez/ada-security.git -b debian-gnat-10
+Vcs-Browser: https://github.com/stcarrez/ada-security/tree/debian-gnat-10
 
 Package: libsecurity1.4.1
 Section: libs
@@ -27,7 +27,7 @@ Description: OAuth and OpenID security frameworks for Ada (runtime)
  and server authentication.  The library also provides a security framework
  to protect resources in the application.
 
-Package: libsecurity3-dev
+Package: libsecurity4-dev
 Section: libdevel
 Architecture: any
 Depends: ${misc:Depends}, ${ada:Depends}
