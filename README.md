@@ -1,6 +1,6 @@
 # Ada Security Library
 
-[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Ada-Security.svg)](https://jenkins.vacs.fr/job/Ada-Security/)
+[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Bionic-Ada-Security.svg)](https://jenkins.vacs.fr/job/Bionic-Ada-Security/)
 [![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Ada-Security.svg)](https://jenkins.vacs.fr/job/Ada-Security/)
 [![codecov](https://codecov.io/gh/stcarrez/ada-security/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-security)
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
