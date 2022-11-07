@@ -20,6 +20,8 @@ with Util.Log.Loggers;
 with Util.Strings;
 with Util.Beans.Objects;
 with Util.Http.Clients;
+with Util.Http.Headers;
+with Util.Http.Mimes;
 with Util.Properties.JSON;
 with Util.Properties.Form;
 with Util.Encoders.HMAC.SHA1;
@@ -173,7 +175,7 @@ package body Security.OAuth.Clients is
 
       Data : constant String
         := Security.OAuth.GRANT_TYPE & "=authorization_code"
-          & "&"
+        & "&"
         & Security.OAuth.CODE & "=" & Code
         & "&"
         & Security.OAuth.REDIRECT_URI & "=" & Ada.Strings.Unbounded.To_String (App.Callback)
@@ -184,7 +186,9 @@ package body Security.OAuth.Clients is
       URI : constant String := Ada.Strings.Unbounded.To_String (App.Request_URI);
    begin
       Log.Info ("Getting access token from {0}", URI);
+      Log.Info ("Post {0}", Data);
       begin
+         Client.Set_Header (Util.Http.Headers.Content_Type, Util.Http.Mimes.Form);
          Client.Post (URL   => URI,
                       Data  => Data,
                       Reply => Response);
