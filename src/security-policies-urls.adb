@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2016, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,8 @@ with Util.Serialize.Mappers.Record_Mapper;
 with Security.Controllers.URLs;
 
 package body Security.Policies.URLs is
+
+   function Is_Append_Mode (Value : in Util.Beans.Objects.Object) return Boolean;
 
    --  ------------------------------
    --  Get the policy name.
@@ -146,13 +148,23 @@ package body Security.Policies.URLs is
       Free (Manager.Cache);
    end Finalize;
 
-   type Policy_Fields is (FIELD_ID, FIELD_PERMISSION, FIELD_URL_PATTERN, FIELD_POLICY);
+   type Policy_Fields is (FIELD_ID,
+                          FIELD_PERMISSION,
+                          FIELD_URL_PATTERN,
+                          FIELD_ORDER,
+                          FIELD_POLICY);
 
    procedure Set_Member (P     : in out URL_Policy'Class;
                          Field : in Policy_Fields;
                          Value : in Util.Beans.Objects.Object);
 
    procedure Process (Policy : in out URL_Policy'Class);
+
+   function Is_Append_Mode (Value : in Util.Beans.Objects.Object) return Boolean is
+      S : constant String := Util.Beans.Objects.To_String (Value);
+   begin
+      return S /= "first";
+   end Is_Append_Mode;
 
    procedure Set_Member (P     : in out URL_Policy'Class;
                          Field : in Policy_Fields;
@@ -167,6 +179,9 @@ package body Security.Policies.URLs is
 
          when FIELD_URL_PATTERN =>
             P.Patterns.Append (Value);
+
+         when FIELD_ORDER =>
+            P.Append_Mode := Is_Append_Mode (Value);
 
          when FIELD_POLICY =>
             Process (P);
@@ -211,10 +226,15 @@ package body Security.Policies.URLs is
          begin
             Pol.Id   := Policy.Id;
             Pol.Pattern := GNAT.Regexp.Compile (Util.Beans.Objects.To_String (Pattern));
-            Policy.Policies.Append (Pol);
+            if Policy.Append_Mode then
+               Policy.Policies.Append (Pol);
+            else
+               Policy.Policies.Insert (1, Pol);
+            end if;
          end;
          Util.Beans.Objects.Vectors.Next (Iter);
       end loop;
+      Policy.Append_Mode := True;
    end Process;
 
    package Policy_Mapper is
@@ -262,6 +282,7 @@ package body Security.Policies.URLs is
 begin
    Policy_Mapping.Add_Mapping ("url-policy", FIELD_POLICY);
    Policy_Mapping.Add_Mapping ("url-policy/@id", FIELD_ID);
+   Policy_Mapping.Add_Mapping ("url-policy/@order", FIELD_ORDER);
    Policy_Mapping.Add_Mapping ("url-policy/permission", FIELD_PERMISSION);
    Policy_Mapping.Add_Mapping ("url-policy/url-pattern", FIELD_URL_PATTERN);
 end Security.Policies.URLs;

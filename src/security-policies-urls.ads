@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-urls -- URL security policy
---  Copyright (C) 2010, 2011, 2012, 2017, 2018, 2019 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2018, 2019, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,7 @@ with Security.Contexts;
 --  XML configuration:
 --
 --    <policy-rules>
---      <url-policy id='1'>
+--      <url-policy id='1' order='first'>
 --        <permission>create-workspace</permission>
 --        <permission>admin</permission>
 --        <url-pattern>/workspace/create</url-pattern>
@@ -62,9 +62,12 @@ with Security.Contexts;
 --  This policy gives access to the URL that match one of the URL pattern if the
 --  security context has the permission `create-workspace` or `admin`.
 --  These two permissions are checked according to another security policy.
---  The XML configuration can define several `url-policy`.  They are checked in
---  the order defined in the XML.  In other words, the first `url-policy` that matches
---  the URL is used to verify the permission.
+--  The XML configuration can define several `url-policy`.  When the `order`
+--  attribute is not defined, they are checked in the order defined in
+--  the XML.  In other words, the first `url-policy` that matches the URL is used
+--  to verify the permission.  When the `order` attribute is set to `first`,
+--  the rule is added at begining of the list.  This special case is intended to
+--  allow overriding a previous definition in some configuration file.
 --
 --  The `url-policy` definition can contain several `permission`.
 --  The first permission that is granted gives access to the URL.
@@ -194,6 +197,7 @@ private
       Cache        : Rules_Ref_Access;
       Policies     : Policy_Vector.Vector;
       Id           : Natural := 0;
+      Append_Mode  : Boolean := True;
       Permissions  : Util.Beans.Objects.Vectors.Vector;
       Patterns     : Util.Beans.Objects.Vectors.Vector;
    end record;
