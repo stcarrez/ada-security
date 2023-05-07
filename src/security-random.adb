@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random -- Random numbers for nonce, secret keys, token generation
---  Copyright (C) 2017, 2022 Stephane Carrez
+--  Copyright (C) 2017, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,14 @@ package body Security.Random is
                        Into : out Ada.Streams.Stream_Element_Array) is
    begin
       Gen.Rand.Generate (Into);
+   end Generate;
+
+   procedure Generate (Gen  : in out Generator;
+                       Into : out String) is
+      Buf : Ada.Streams.Stream_Element_Array (1 .. Into'Length);
+      for Buf'Address use Into'Address;
+   begin
+      Gen.Rand.Generate (Buf);
    end Generate;
 
    --  ------------------------------

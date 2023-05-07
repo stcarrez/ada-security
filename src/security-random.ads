@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random -- Random numbers for nonce, secret keys, token generation
---  Copyright (C) 2017 Stephane Carrez
+--  Copyright (C) 2017, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,8 @@ package Security.Random is
    --  Fill the array with pseudo-random numbers.
    procedure Generate (Gen  : in out Generator;
                        Into : out Ada.Streams.Stream_Element_Array);
+   procedure Generate (Gen  : in out Generator;
+                       Into : out String);
 
    --  Generate a random sequence of bits and convert the result
    --  into a string in base64url.
