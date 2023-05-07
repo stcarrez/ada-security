@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-random-tests - Tests for random package
---  Copyright (C) 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2017, 2018, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,6 +74,16 @@ package body Security.Random.Tests is
                                    "Generated string 2 is too small");
          T.Assert (S1 /= S2, "Generated string are equal");
       end;
+      for I in 1 .. 100 loop
+         declare
+            S1 : String (1 .. I) := (others => ' ');
+            S2 : String (1 .. I) := (others => ' ');
+         begin
+            G.Generate (S1);
+            G.Generate (S2);
+            T.Assert (S1 /= S2, "Generated string are equal");
+         end;
+      end loop;
    end Test_Generate_String;
 
 end Security.Random.Tests;
