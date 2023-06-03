@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
---  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013, 2017, 2019, 2022 Stephane Carrez
+--  security-policies-tests - Unit tests for Security.Permissions
+--  Copyright (C) 2011, 2012, 2013, 2017, 2019, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -155,10 +155,10 @@ package body Security.Policies.Tests is
 
       M       : Security.Policies.Roles.Role_Policy;
       Map     : Role_Map := (others => False);
-      pragma Unreferenced (Map);
    begin
       M.Set_Roles ("manager,admin", Map);
       T.Assert (False, "No exception was raised");
+      T.Assert (for all I in Map'Range => Map (I));
 
    exception
       when Security.Policies.Roles.Invalid_Name =>
