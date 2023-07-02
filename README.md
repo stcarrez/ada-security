@@ -1,8 +1,8 @@
 # Ada Security Library
 
-[![Build Status](https://img.shields.io/jenkins/s/http/jenkins.vacs.fr/Bionic-Ada-Security.svg)](https://jenkins.vacs.fr/job/Bionic-Ada-Security/)
-[![Test Status](https://img.shields.io/jenkins/t/http/jenkins.vacs.fr/Bionic-Ada-Security.svg)](https://jenkins.vacs.fr/job/Bionic-Ada-Security/)
-[![codecov](https://codecov.io/gh/stcarrez/ada-security/branch/master/graph/badge.svg)](https://codecov.io/gh/stcarrez/ada-security)
+[![Build Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/build.json)](https://porion.vacs.fr/porion/projects/view/ada-security/summary)
+[![Test Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/tests.json)](https://porion.vacs.fr/porion/projects/view/ada-securit/xunits)
+[![Coverage](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/coverage.json)](https://porion.vacs.fr/porion/projects/view/ada-security/summary)
 [![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
 [![Download](https://img.shields.io/badge/download-1.4.1-brightgreen.svg)](http://download.vacs.fr/ada-security/ada-security-1.4.1.tar.gz)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
