@@ -23,19 +23,25 @@ The Ada05 library includes:
 * An OAuth 2.0 server authentication framework,
 * A policy based security framework to protect the resources
 
-![Ada Security Overview](https://github.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
+![Ada Security Overview](https://gitlab.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
 
 The Ada Security library is used by the
-[Ada Web Application](https://github.com/stcarrez/ada-awa)
+[Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
 ## Version 1.4.1   - Aug 2022
 - Fix Alire GNAT project to build in debug mode
 - Fix Security.Random that generates shorter random string
 
-[List all versions](https://github.com/stcarrez/ada-security/blob/master/NEWS.md)
+[List all versions](https://gitlab.com/stcarrez/ada-security/blob/master/NEWS.md)
 
-# Build
+## Build with Alire
+
+```
+alr with security
+```
+
+## Build with configure
 
 To use Ada Security library, configure as follows:
 ```
@@ -73,8 +79,8 @@ and redirect your browser to:
 The Ada Security sources as well as a wiki documentation is provided on:
 
 - [Ada Security Programmer's Guide](https://ada-security.readthedocs.io/en/latest/)
-- [Overview](https://github.com/stcarrez/ada-security/wiki)
-- [Security Overview](https://github.com/stcarrez/ada-security/wiki/Security)
+- [Overview](https://gitlab.com/stcarrez/ada-security/wiki)
+- [Security Overview](https://gitlab.com/stcarrez/ada-security/wiki/Security)
 
 
 # Other Documentation
