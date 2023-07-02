@@ -13,6 +13,7 @@ long-description = """
 [![Build Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/build.json)](https://porion.vacs.fr/porion/projects/view/ada-security/summary)
 [![Test Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/tests.json)](https://porion.vacs.fr/porion/projects/view/ada-securit/xunits)
 [![Coverage](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-security/badges/coverage.json)](https://porion.vacs.fr/porion/projects/view/ada-security/summary)
+[![Documentation Status](https://readthedocs.org/projects/ada-security/badge/?version=latest)](https://ada-security.readthedocs.io/en/latest/?badge=latest)
 
 Ada Security provides a security framework which allows applications to define
 and enforce security policies. This framework allows users to authenticate by using
@@ -28,12 +29,13 @@ The Ada05 library includes:
 * An OAuth 2.0 server authentication framework,
 * A policy based security framework to protect the resources
 
-
-![Ada Security Overview](https://gitlab.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
-
 The Ada Security library is used by the
 [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
+
+## Documentation
+
+* [Ada Security Programmer's Guide](https://ada-security.readthedocs.io/en/latest/)
 
 """
 
@@ -42,7 +44,7 @@ utilada = "^2.5.0"
 utilada_xml = "^2.5.0"
 
 [gpr-externals]
-BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
+SECURITY_BUILD = ["distrib", "debug", "optimize", "profile", "coverage"]
 SECURITY_LIBRARY_TYPE = ["relocatable", "static", "static-pic"]
 
 [configuration]
