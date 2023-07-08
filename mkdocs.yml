@@ -1,6 +1,6 @@
 site_name: Ada Security Library
 docs_dir: docs
-pages:
+nav:
   - Introduction: index.md
   - Installation: Installation.md
   - Overview: Security.md
