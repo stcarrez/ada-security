@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth -- OAuth Security
---  Copyright (C) 2012, 2013, 2016, 2017, 2018, 2019, 2022 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2016, 2017, 2018, 2019, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,6 +98,9 @@ package Security.OAuth.Clients is
    --  Get the Authorization header to be used for accessing a protected resource.
    --  (See RFC 6749 7.  Accessing Protected Resources)
    function Get_Authorization (From : in Grant_Type) return String;
+
+   --  Create the grant object by using a bearer token (ie, API key).
+   function Create (Bearer : in String) return Grant_Type;
 
    --  ------------------------------
    --  Application

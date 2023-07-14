@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-clients -- OAuth Client Security
---  Copyright (C) 2012, 2013, 2017, 2018, 2020, 2022 Stephane Carrez
+--  Copyright (C) 2012, 2013, 2017, 2018, 2020, 2022, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,6 +90,16 @@ package body Security.OAuth.Clients is
    begin
       return "Bearer " & To_String (From.Access_Token);
    end Get_Authorization;
+
+   --  ------------------------------
+   --  Create the grant object by using a bearer token (ie, API key).
+   --  ------------------------------
+   function Create (Bearer : in String) return Grant_Type is
+   begin
+      return Result : Grant_Type do
+         Result.Access_Token := To_Unbounded_String (Bearer);
+      end return;
+   end Create;
 
    --  ------------------------------
    --  Set the OAuth authorization server URI that the application must use
