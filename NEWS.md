@@ -1,3 +1,6 @@
+Version 1.5.0   - Jul 2023
+  - Add Create function for API key grant types
+
 Version 1.4.1   - Aug 2022
   - Fix Alire GNAT project to build in debug mode
   - Fix Security.Random that generates shorter random string
