@@ -1,0 +1,23 @@
+description = "Examples for Ada Security Library"
+name = "security_samples"
+version = "1.5.1"
+licenses = "Apache-2.0"
+maintainers = ["Stephane.Carrez@gmail.com"]
+maintainers-logins = ["stcarrez"]
+authors = ["Stephane.Carrez@gmail.com"]
+project-files = ["samples.gpr"]
+tags = ["security", "oauth2", "authentication", "permissions", "jwt"]
+website = "https://gitlab.com/stcarrez/ada-security"
+long-description = """
+
+Examples for Ada Security
+
+"""
+
+[[depends-on]]
+security = "*"
+utilada = "*"
+aws = "^23.0"
+
+[[pins]]
+security = { path = '..' }
