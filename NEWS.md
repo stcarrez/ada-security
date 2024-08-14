@@ -1,3 +1,6 @@
+Version 1.5.1  - Under development
+  - Cleanup build environment to drop configure
+
 Version 1.5.0   - Jul 2023
   - Add Create function for API key grant types
 

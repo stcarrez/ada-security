@@ -30,6 +30,9 @@ The Ada Security library is used by the
 [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
+## Version 1.5.1  - Under development
+  - Cleanup build environment to drop configure
+
 ## Version 1.5.0   - Jul 2023
   - Add Create function for API key grant types
 
