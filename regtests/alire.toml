@@ -1,0 +1,23 @@
+description = "Uni tests for Ada Security Library"
+name = "security_tests"
+version = "1.5.1"
+licenses = "Apache-2.0"
+maintainers = ["Stephane.Carrez@gmail.com"]
+maintainers-logins = ["stcarrez"]
+authors = ["Stephane.Carrez@gmail.com"]
+project-files = ["../security_tests.gpr"]
+tags = ["security", "oauth2", "authentication", "permissions", "jwt"]
+website = "https://gitlab.com/stcarrez/ada-security"
+long-description = """
+
+Unit tests for Ada Security
+
+"""
+
+[[depends-on]]
+security = "*"
+utilada = "*"
+utilada_unit = "*"
+
+[[pins]]
+security = { path = '..' }

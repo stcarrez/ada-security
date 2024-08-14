@@ -1,7 +1,6 @@
 *~
 *.log
 Makefile.conf
-config.status
 CHANGES
 *.cproject
 *.gb_project
@@ -9,19 +8,13 @@ CHANGES
 *.log
 ChangeLog
 .settings
-configure.lineno
-security.gpr
-samples.gpr
 t.gpr
-security_tests.gpr
 tests.xml
 security-tests.xml
-autom4te.cache
 bin/
 obj/
 lib/
 security-aunit.xml
-distrib/security.gpr
 docs/security-book.html
 docs/security-book.pdf
 regtests/results

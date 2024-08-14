@@ -1,5 +1,9 @@
 NAME=security
 
+MAKE_ARGS += -XSECURITY_BUILD=$(BUILD)
+PANDOC := $(shell which pandoc)
+DYNAMO := $(shell which dynamo)
+
 -include Makefile.conf
 
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=static
@@ -11,14 +15,14 @@ SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 include Makefile.defaults
 
 build-test:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -Psecurity_tests $(MAKE_ARGS) 
+	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS) 
 
 # Build and run the unit tests
 test:	build
 	bin/security_harness -l $(NAME): -xml security-aunit.xml
 
 samples:
-	$(GNATMAKE) $(GPRFLAGS) -p samples.gpr $(MAKE_ARGS)
+	cd samples && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
 SECURITY_DOC= \
   title.md \
