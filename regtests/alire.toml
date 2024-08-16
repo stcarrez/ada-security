@@ -19,5 +19,8 @@ security = "*"
 utilada = "*"
 utilada_unit = "*"
 
+[configuration]
+disabled = true
+
 [[pins]]
 security = { path = '..' }
