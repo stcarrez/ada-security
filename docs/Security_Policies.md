@@ -130,7 +130,7 @@ XML configuration:
 
 ```Ada
 <policy-rules>
-  <url-policy id='1'>
+  <url-policy id='1' order='first'>
     <permission>create-workspace</permission>
     <permission>admin</permission>
     <url-pattern>/workspace/create</url-pattern>
@@ -143,9 +143,12 @@ XML configuration:
 This policy gives access to the URL that match one of the URL pattern if the
 security context has the permission `create-workspace` or `admin`.
 These two permissions are checked according to another security policy.
-The XML configuration can define several `url-policy`.  They are checked in
-the order defined in the XML.  In other words, the first `url-policy` that matches
-the URL is used to verify the permission.
+The XML configuration can define several `url-policy`.  When the `order`
+attribute is not defined, they are checked in the order defined in
+the XML.  In other words, the first `url-policy` that matches the URL is used
+to verify the permission.  When the `order` attribute is set to `first`,
+the rule is added at begining of the list.  This special case is intended to
+allow overriding a previous definition in some configuration file.
 
 The `url-policy` definition can contain several `permission`.
 The first permission that is granted gives access to the URL.
