@@ -18,7 +18,7 @@ SHARED_MAKE_ARGS += -XLIBRARY_TYPE=relocatable
 
 include Makefile.defaults
 
-build-test:: setup
+build-test:: lib-setup
 	cd regtests && $(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS) 
 
 # Build and run the unit tests
