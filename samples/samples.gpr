@@ -1,6 +1,5 @@
 with "security_config";
 with "utilada_sys";
-with "utilada_http";
 with "utilada_aws";
 with "security";
 with "aws";

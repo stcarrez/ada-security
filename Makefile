@@ -1,4 +1,8 @@
 NAME=security
+VERSION=1.5.1
+
+DIST_DIR=ada-security-$(VERSION)
+DIST_FILE=ada-security-$(VERSION).tar.gz
 
 MAKE_ARGS += -XSECURITY_BUILD=$(BUILD)
 PANDOC := $(shell which pandoc)
