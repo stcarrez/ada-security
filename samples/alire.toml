@@ -19,5 +19,8 @@ security = "*"
 utilada = "*"
 aws = "^23.0"
 
+[configuration]
+disabled = true
+
 [[pins]]
 security = { path = '..' }
