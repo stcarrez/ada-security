@@ -99,3 +99,11 @@ documentation.
 - [RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage](https://tools.ietf.org/html/rfc6750)
 - [RFC 6819: OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819)
 - [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
+
+# Sites Using Ada Security
+
+* [Java 2 Ada](https://blog.vacs.fr/)
+* [Ada France](https://www.ada-france.org/adafr/index.html)
+* [Atlas](https://demo.vacs.fr/atlas/index.html)
+* [Jason Project Manager](https://vdo.vacs.fr/vdo/index.html)
+* [Porion Build Manager](https://porion.vacs.fr/porion/index.html)
