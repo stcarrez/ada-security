@@ -30,41 +30,38 @@ The Ada Security library is used by the
 [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
 to provide authentication and access control to users within the web applications.
 
-## Version 1.5.1  - Under development
+## Version 1.5.1  - Aug 2024
   - Cleanup build environment to drop configure
-
-## Version 1.5.0   - Jul 2023
-  - Add Create function for API key grant types
 
 [List all versions](https://gitlab.com/stcarrez/ada-security/blob/master/NEWS.md)
 
 ## Build with Alire
 
+To use Ada Security in your project, run the following command to add the dependency
+to use the `security` [Alire](https://github.com/alire-project/alire) crate:
+
 ```
 alr with security
 ```
 
-## Build with configure
+## Running the tests
 
-To use Ada Security library, configure as follows:
-```
-   ./configure
-   make
-```
 The unit tests are built and executed with:
 ```
    make test
 ```
-For the installation, use the following command:
-```
-   make install
-```
+
+## Samples
+
 The package provides a simple AWS server that illustrates the OpenID and OpenConnect
 authentication.  Because OAuth2 relies exclusively on HTTPS, you must use an AWS
 server that has the SSL support.  Build it as follows:
+
 ```
-   gprbuild -Psamples
+cd samples
+alr build
 ```
+
 Before launching the demo server, you must update the 'samples.properties' file
 and change the lines that contain PUT-HERE-YOUR-FACEBOOK-xxx with your client ID
 and client secrets.  This change

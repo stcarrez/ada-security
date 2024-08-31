@@ -1,4 +1,4 @@
-Version 1.5.1  - Under development
+Version 1.5.1  - Aug 2024
   - Cleanup build environment to drop configure
 
 Version 1.5.0   - Jul 2023
