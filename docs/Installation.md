@@ -2,38 +2,20 @@
 
 This chapter explains how to build and install the library.
 
-## Before Building
+## Alire setup
 
-Before building the library, you will need:
+To use `security` in your project, run the following command to add the dependency
+to `security`:
 
-* [Ada Utility Library](https://github.com/stcarrez/ada-util) available at https://github.com/stcarrez/ada-util.
-
-First get, build and install the [Ada Utility Library](https://github.com/stcarrez/ada-util).
-
-## Configuration
-
-The library uses the `configure` script to detect the build environment,
-check for [Ada Utility Library](https://github.com/stcarrez/ada-util) library.
-The `configure` script provides several standard options
-and you may use:
-
-  * `--prefix=DIR` to control the installation directory,
-  * `--enable-shared` to enable the build of shared libraries,
-  * `--disable-static` to disable the build of static libraries,
-  * `--enable-distrib` to build for a distribution and strip symbols,
-  * `--disable-distrib` to build with debugging support,
-  * `--enable-coverage` to build with code coverage support (`-fprofile-arcs -ftest-coverage`),
-  * `--with-ada-util=PATH` to control the installation path of [Ada Utility Library](https://github.com/stcarrez/ada-util),
-  * `--help` to get a detailed list of supported options.
-
-In most cases you will configure with the following command:
 ```
-./configure
+alr with security
 ```
 
-## Build
+## Build for Ada Security development
 
-After configuration is successful, you can build the library by running:
+You can also build and install the `security` library and install it as follows
+(but the Alire setup is prefered):
+
 ```
 make
 ```
