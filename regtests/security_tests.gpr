@@ -12,7 +12,7 @@ project Security_Tests is
 
    for Main use Mains;
 
-   for Object_Dir use "../" & Security_Config'Object_Dir & "/obj";
+   for Object_Dir use "../" & Security_Config'Object_Dir & "/obj/regtests";
    for Exec_Dir use "../bin";
 
    package Binder   renames Security_Config.Binder;
