@@ -5,8 +5,6 @@ DIST_DIR=ada-security-$(VERSION)
 DIST_FILE=ada-security-$(VERSION).tar.gz
 
 MAKE_ARGS += -XSECURITY_BUILD=$(BUILD)
-PANDOC := $(shell which pandoc)
-DYNAMO := $(shell which dynamo)
 
 -include Makefile.conf
 
