@@ -28,6 +28,7 @@ The Ada05 library includes:
 
 The Ada Security library is used by the
 [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
+and the [OpenAPI Ada library](https://github.com/stcarrez/swagger-ada)
 to provide authentication and access control to users within the web applications.
 
 ## Version 1.5.1  - Aug 2024
@@ -59,6 +60,12 @@ The `HAVE_ALIRE` configuration allows you to build with [Alire](https://alire.ad
 make setup BUILD=debug PREFIX=/build/install \
   HAVE_ALIRE=no
 ```
+
+Since this build method does not verify that all dependencies are met, make sure that you
+have already built and install the following components and they are available to `gprbuild`
+through `ADA_PROJECT_PATH` if needed:
+
+* [Ada Utility Library](https://gitlab.com/stcarrez/ada-util/))
 
 Then build, run the unit tests and install by using:
 
