@@ -57,8 +57,7 @@ Otherwise, you can easily configure and build the library with the steps describ
 The `HAVE_ALIRE` configuration allows you to disable the build with [Alire](https://alire.ada.dev/):
 
 ```
-make setup BUILD=debug PREFIX=/build/install \
-  HAVE_ALIRE=no
+make setup BUILD=debug PREFIX=/build/install HAVE_ALIRE=no
 ```
 
 Since this build method does not verify that all dependencies are met, make sure that you
