@@ -54,7 +54,7 @@ For a detailed description on how you can configure, build and install the libra
 refer to the [Installation](https://ada-security.readthedocs.io/en/latest/Installation/) guide.
 Otherwise, you can easily configure and build the library with the steps described below.
 
-The `HAVE_ALIRE` configuration allows you to build with [Alire](https://alire.ada.dev/) or not.
+The `HAVE_ALIRE` configuration allows you to disable the build with [Alire](https://alire.ada.dev/):
 
 ```
 make setup BUILD=debug PREFIX=/build/install \
@@ -65,7 +65,7 @@ Since this build method does not verify that all dependencies are met, make sure
 have already built and install the following components and they are available to `gprbuild`
 through `ADA_PROJECT_PATH` if needed:
 
-* [Ada Utility Library](https://gitlab.com/stcarrez/ada-util/))
+* [Ada Utility Library](https://gitlab.com/stcarrez/ada-util/)
 
 Then build, run the unit tests and install by using:
 
