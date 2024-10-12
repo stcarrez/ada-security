@@ -24,7 +24,7 @@ The Ada05 library includes:
 * An OAuth 2.0 server authentication framework,
 * A policy based security framework to protect the resources
 
-![Ada Security Overview](https://gitlab.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
+![Ada Security Overview](https://github.com/stcarrez/ada-security/wiki/images/AdaSecurity.jpg)
 
 The Ada Security library is used by the
 [Ada Web Application](https://gitlab.com/stcarrez/ada-awa)
@@ -35,20 +35,50 @@ to provide authentication and access control to users within the web application
 
 [List all versions](https://gitlab.com/stcarrez/ada-security/blob/master/NEWS.md)
 
-## Build with Alire
+## Using with Alire
 
-To use Ada Security in your project, run the following command to add the dependency
-to use the `security` [Alire](https://github.com/alire-project/alire) crate:
+If you are using [Alire](https://alire.ada.dev/) in your project, run the following command
+within your [Alire](https://alire.ada.dev/) project to use the library:
 
 ```
 alr with security
 ```
 
+## Using without Alire
+
+If you don't have [Alire](https://alire.ada.dev/) or want to build and install the library
+on a specific place, run a `setup` command to configure the build as well as installation
+directory.
+For a detailed description on how you can configure, build and install the library
+refer to the [Installation](https://ada-security.readthedocs.io/en/latest/Installation/) guide.
+Otherwise, you can easily configure and build the library with the steps described below.
+
+The `HAVE_ALIRE` configuration allows you to build with [Alire](https://alire.ada.dev/) or not.
+
+```
+make setup BUILD=debug PREFIX=/build/install \
+  HAVE_ALIRE=no
+```
+
+Then build, run the unit tests and install by using:
+
+```
+make
+make test
+make install
+```
+
+To use the installed libraries, make sure your `ADA_PROJECT_PATH` contains the directory
+where you installed the libraries (configured by the `PREFIX=<path>` option in the setup phase).
+The installed GNAT projects are the same as those used when using [Alire](https://alire.ada.dev/).
+
+
 ## Running the tests
 
 The unit tests are built and executed with:
+
 ```
-   make test
+make test
 ```
 
 ## Samples
