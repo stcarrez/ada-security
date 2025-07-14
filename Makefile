@@ -1,5 +1,5 @@
 NAME=security
-VERSION=1.5.1
+VERSION=1.5.2
 
 DIST_DIR=ada-security-$(VERSION)
 DIST_FILE=ada-security-$(VERSION).tar.gz
