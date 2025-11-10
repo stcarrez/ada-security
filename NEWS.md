@@ -1,3 +1,6 @@
+Version 1.5.2  - Under development
+  - Fix #11: Ada.Calendar.Conversions.To_Struct_Timespec is deprecated
+
 Version 1.5.1  - Aug 2024
   - Cleanup build environment to drop configure
 

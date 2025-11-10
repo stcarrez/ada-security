@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016, 2017, 2018, 2022 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2022, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -203,9 +203,12 @@ package body Security.OAuth.Servers is
    --  date and encoded in LEB128 + base64url.
    --  ------------------------------
    function Format_Expire (Expire : in Ada.Calendar.Time) return String is
-      T : constant Interfaces.C.long := Ada.Calendar.Conversions.To_Unix_Time (Expire);
+      use Interfaces;
+
+      T : constant Unsigned_64
+        := Unsigned_64 (Ada.Calendar.Conversions.To_Unix_Nano_Time (Expire));
    begin
-      return Util.Encoders.Base64.Encode (Interfaces.Unsigned_64 (T));
+      return Util.Encoders.Base64.Encode (T / 1_000_000_000);
    end Format_Expire;
 
    --  ------------------------------
