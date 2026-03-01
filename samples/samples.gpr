@@ -6,7 +6,7 @@ with "aws";
 
 project Samples is
 
-   Mains := ("auth_demo.adb");
+   Mains := ("auth_demo.adb", "jwt.adb");
 
    for Main use Mains;
 
