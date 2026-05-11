@@ -50,6 +50,9 @@ package Security.OAuth.JWT is
    --  Get the audience claim from the token (the "aud" claim).
    function Get_Audience (From : in Token) return String;
 
+   --  Returns true if the given audience is defined in the audience claim.
+   function Has_Audience (From : in Token; Audience : in String) return Boolean;
+
    --  Get the expiration claim from the token (the "exp" claim).
    function Get_Expiration (From : in Token) return Ada.Calendar.Time;
 

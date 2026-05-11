@@ -17,6 +17,7 @@ with Util.Beans.Objects;
 package body Security.OAuth.JWT is
 
    use Interfaces;
+   package UBO renames Util.Beans.Objects;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.JWT");
 
@@ -66,6 +67,24 @@ package body Security.OAuth.JWT is
    begin
       return From.Claims.Get ("aud");
    end Get_Audience;
+
+   --  ------------------------------
+   --  Returns true if the given audience is defined in the audience claim.
+   --  ------------------------------
+   function Has_Audience (From : in Token; Audience : in String) return Boolean is
+      Val : Util.Properties.Value := From.Claims.Get_Value ("aud");
+   begin
+      if UBO.Is_Array (Val) then
+         for I in 1 .. UBO.Get_Count (Val) loop
+            if UBO.To_String (UBO.Get_Value (Val, I)) = Audience then
+               return True;
+            end if;
+         end loop;
+         return False;
+      else
+         return Audience = UBO.To_String (Val);
+      end if;
+   end Has_Audience;
 
    --  ------------------------------
    --  Get the expiration claim from the token (the "exp" claim).

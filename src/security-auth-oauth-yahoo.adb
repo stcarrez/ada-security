@@ -41,7 +41,7 @@ package body Security.Auth.OAuth.Yahoo is
          Info : constant Security.OAuth.JWT.Token := Security.OAuth.JWT.Decode (T.Get_Id_Token);
       begin
          --  Verify that the JWT token concerns our application.
-         if Security.OAuth.JWT.Get_Audience (Info) /= Realm.App.Get_Application_Identifier then
+         if Security.OAuth.JWT.Has_Audience (Info, Realm.App.Get_Application_Identifier) then
             Set_Result (Result, INVALID_SIGNATURE,
                         "the access token was granted for another application");
             return;
