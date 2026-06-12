@@ -13,7 +13,12 @@ with Util.Serialize.IO.JSON;
 
 package body Security.OAuth.JWT.HS256 is
 
+   function To_JSON (Prop : in Util.Properties.Manager) return String;
+
    function To_JSON (Prop : in Util.Properties.Manager) return String is
+      procedure To_JSON (Name : in String;
+                         Item : in Util.Properties.Value);
+
       Buffer : aliased Util.Streams.Texts.Print_Stream;
       Output : Util.Serialize.IO.JSON.Output_Stream;
       procedure To_JSON (Name : in String;
@@ -37,6 +42,8 @@ package body Security.OAuth.JWT.HS256 is
    --  The JWT type is set to `JWT` and the algorithm set to `HS256`.
    --  ------------------------------
    function Sign (From : in out Token; Secret : in String) return String is
+      function To_Base64 (Part : in String) return String;
+
       E : constant Util.Encoders.Encoder := Util.Encoders.Create ("base64url");
       function To_Base64 (Part : in String) return String is
          B : constant String := E.Encode (Part);

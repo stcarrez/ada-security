@@ -1,20 +1,21 @@
 -----------------------------------------------------------------------
 --  security-oauth-servers -- OAuth Server Authentication Support
---  Copyright (C) 2016, 2017, 2018, 2022, 2025 Stephane Carrez
+--  Copyright (C) 2016, 2017, 2018, 2022, 2025, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
-with Ada.Calendar.Conversions;
-with Interfaces.C;
+with Interfaces;
 
 with Util.Log.Loggers;
 with Util.Encoders.Base64;
 with Util.Encoders.SHA256;
 with Util.Encoders.HMAC.SHA256;
+with Util.Dates;
 
 package body Security.OAuth.Servers is
 
    use type Ada.Calendar.Time;
+   use type Util.Dates.Nanosecond_Type;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.Servers");
 
@@ -203,12 +204,9 @@ package body Security.OAuth.Servers is
    --  date and encoded in LEB128 + base64url.
    --  ------------------------------
    function Format_Expire (Expire : in Ada.Calendar.Time) return String is
-      use Interfaces;
-
-      T : constant Unsigned_64
-        := Unsigned_64 (Ada.Calendar.Conversions.To_Unix_Nano_Time (Expire));
+      T : constant Util.Dates.Nanosecond_Type := Util.Dates.To_Nanoseconds (Expire);
    begin
-      return Util.Encoders.Base64.Encode (T / 1_000_000_000);
+      return Util.Encoders.Base64.Encode (Interfaces.Unsigned_64 (T / 1_000_000_000));
    end Format_Expire;
 
    --  ------------------------------
@@ -217,7 +215,7 @@ package body Security.OAuth.Servers is
    function Parse_Expire (Expire : in String) return Ada.Calendar.Time is
       V : constant Interfaces.Unsigned_64 := Util.Encoders.Base64.Decode (Expire);
    begin
-      return Ada.Calendar.Conversions.To_Ada_Time (Interfaces.C.long (V));
+      return Util.Dates.To_Ada_Time (Util.Dates.Nanosecond_Type (V) * 1_000_000_000);
    end Parse_Expire;
 
    --  Implement the RFC 6749: 4.1.1.  Authorization Request for the authorization code grant.

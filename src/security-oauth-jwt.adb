@@ -5,28 +5,27 @@
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
 
-with Ada.Calendar.Conversions;
-with Interfaces.C;
-
 with Util.Encoders;
 with Util.Strings;
+with Util.Dates;
 with Util.Serialize.IO;
 with Util.Properties.JSON;
 with Util.Log.Loggers;
 with Util.Beans.Objects;
 package body Security.OAuth.JWT is
 
-   use Interfaces;
+   use type Util.Dates.Nanosecond_Type;
    package UBO renames Util.Beans.Objects;
 
    Log : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Security.OAuth.JWT");
 
    function Get_Time (From : in Util.Properties.Manager;
                       Name : in String) return Ada.Calendar.Time;
+   function To_Value (Date : in Ada.Calendar.Time) return Util.Properties.Value;
 
    function To_Value (Date : in Ada.Calendar.Time) return Util.Properties.Value is
-      Nsec : constant Unsigned_64
-        := Unsigned_64 (Ada.Calendar.Conversions.To_Unix_Nano_Time (Date));
+      Nsec : constant Util.Dates.Nanosecond_Type
+        := Util.Dates.To_Nanoseconds (Date);
       Time : constant Long_Long_Integer := Long_Long_Integer (Nsec / 1_000_000);
    begin
       return Util.Beans.Objects.To_Object (Time);
@@ -40,8 +39,10 @@ package body Security.OAuth.JWT is
    function Get_Time (From : in Util.Properties.Manager;
                       Name : in String) return Ada.Calendar.Time is
       Value : constant String := From.Get (Name);
+      Nsec  : constant Util.Dates.Nanosecond_Type
+        := Util.Dates.Nanosecond_Type'Value (Value) * 1_000_000_000;
    begin
-      return Ada.Calendar.Conversions.To_Ada_Time (Interfaces.C.long'Value (Value));
+      return Util.Dates.To_Ada_Time (Nsec);
    end Get_Time;
 
    --  ------------------------------
@@ -72,7 +73,7 @@ package body Security.OAuth.JWT is
    --  Returns true if the given audience is defined in the audience claim.
    --  ------------------------------
    function Has_Audience (From : in Token; Audience : in String) return Boolean is
-      Val : Util.Properties.Value := From.Claims.Get_Value ("aud");
+      Val : constant Util.Properties.Value := From.Claims.Get_Value ("aud");
    begin
       if UBO.Is_Array (Val) then
          for I in 1 .. UBO.Get_Count (Val) loop
