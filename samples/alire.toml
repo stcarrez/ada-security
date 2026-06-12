@@ -1,6 +1,6 @@
 description = "Examples for Ada Security Library"
 name = "security_samples"
-version = "1.5.2"
+version = "1.6.0"
 licenses = "Apache-2.0"
 maintainers = ["Stephane.Carrez@gmail.com"]
 maintainers-logins = ["stcarrez"]
@@ -18,7 +18,7 @@ Examples for Ada Security
 security = "*"
 utilada = "*"
 utilada_aws = "*"
-aws = "^24.0"
+aws = "^24.0|^25.0"
 
 [configuration]
 disabled = true

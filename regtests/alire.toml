@@ -1,6 +1,6 @@
 description = "Uni tests for Ada Security Library"
 name = "security_tests"
-version = "1.5.1"
+version = "1.6.0"
 licenses = "Apache-2.0"
 maintainers = ["Stephane.Carrez@gmail.com"]
 maintainers-logins = ["stcarrez"]

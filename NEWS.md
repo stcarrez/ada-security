@@ -1,5 +1,6 @@
-Version 1.5.2  - Under development
+Version 1.6.0  - Under development
   - Fix #11: Ada.Calendar.Conversions.To_Struct_Timespec is deprecated
+  - Add JWT HS256 support.
 
 Version 1.5.1  - Aug 2024
   - Cleanup build environment to drop configure
