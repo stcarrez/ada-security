@@ -32,7 +32,7 @@ The Ada Security library is used by the
 and the [OpenAPI Ada library](https://github.com/stcarrez/swagger-ada)
 to provide authentication and access control to users within the web applications.
 
-## Version 1.6.0  - Under development
+## Version 1.6.0  - Jun 2026
   - Fix #11: Ada.Calendar.Conversions.To_Struct_Timespec is deprecated
   - Add JWT HS256 support.
 
