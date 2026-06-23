@@ -16,8 +16,8 @@ Examples for Ada Security
 
 [[depends-on]]
 security = "*"
-utilada = "*"
-utilada_aws = "*"
+utilada = "^2.9.0"
+utilada_aws = "^2.9.0"
 aws = "^24.0|^25.0"
 
 [configuration]

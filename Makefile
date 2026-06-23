@@ -8,6 +8,17 @@ MAKE_ARGS += -XSECURITY_BUILD=$(BUILD)
 
 -include Makefile.conf
 
+UTIL_OS?=
+UTIL_TIME_64?=yes
+
+ifneq ($(UTIL_OS),)
+MAKE_ARGS += -XUTIL_OS=$(UTIL_OS)
+endif
+
+ifneq ($(UTIL_TIME_64),yes)
+MAKE_ARGS += -XUTIL_TIME_64=$(UTIL_TIME_64)
+endif
+
 STATIC_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=static
 SHARED_MAKE_ARGS = $(MAKE_ARGS) -XSECURITY_LIBRARY_TYPE=relocatable
 SHARED_MAKE_ARGS += -XUTILADA_BASE_BUILD=relocatable -XUTIL_LIBRARY_TYPE=relocatable
@@ -49,3 +60,7 @@ $(eval $(call pandoc_build,security-book,$(SECURITY_DOC)))
 $(eval $(call alire_publish,.,se/security,security-$(VERSION).toml))
 
 .PHONY: samples
+
+setup::
+	echo "UTIL_OS=$(UTIL_OS)" >> Makefile.conf
+	echo "UTIL_TIME_64=$(UTIL_TIME_64)" >> Makefile.conf
