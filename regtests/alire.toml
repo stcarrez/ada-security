@@ -16,8 +16,8 @@ Unit tests for Ada Security
 
 [[depends-on]]
 security = "*"
-utilada = "*"
-utilada_unit = "*"
+utilada = "^2.9.0"
+utilada_unit = "^2.9.0"
 
 [configuration]
 disabled = true
