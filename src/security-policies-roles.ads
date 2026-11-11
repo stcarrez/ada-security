@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-roles -- Role based policies
---  Copyright (C) 2010, 2011, 2012, 2017, 2018 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2018, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -183,17 +183,17 @@ private
    type Role_Map_Name_Array is array (Role_Type'Range) of Ada.Strings.Unbounded.String_Access;
 
    type Role_Policy is new Policy with record
-      Names     : Role_Map_Name_Array := (others => null);
+      Names     : Role_Map_Name_Array := [others => null];
       Next_Role : Role_Type := Role_Type'First;
       Name      : Util.Beans.Objects.Object;
-      Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last)) := (others => 0);
+      Roles     : Role_Type_Array (1 .. Integer (Role_Type'Last)) := [others => 0];
       Count     : Natural := 0;
 
       --  The Grants array indicates for each permission the list of roles
       --  that are granted the permission.  This array allows a O(1) lookup.
       --  The implementation is limited to 256 permissions and 64 roles so this array uses 2K.
       --  The default is that no role is assigned to the permission.
-      Grants    : Permission_Role_Array := (others => (others => False));
+      Grants    : Permission_Role_Array := [others => [others => False]];
    end record;
 
 end Security.Policies.Roles;

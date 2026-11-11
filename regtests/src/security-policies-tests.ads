@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013, 2017, 2022 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -57,7 +57,7 @@ package Security.Policies.Tests is
 
    type Test_Principal is new Principal and Roles.Role_Principal_Context with record
       Name  : Util.Strings.String_Ref;
-      Roles : Security.Policies.Roles.Role_Map := (others => False);
+      Roles : Security.Policies.Roles.Role_Map := [others => False];
    end record;
 
    --  Get the roles assigned to the user.

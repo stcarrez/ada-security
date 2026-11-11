@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-tests - Unit tests for Security.Permissions
---  Copyright (C) 2011, 2012, 2013, 2017, 2019, 2022, 2023 Stephane Carrez
+--  Copyright (C) 2011, 2012, 2013, 2017, 2019, 2022, 2023, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -117,7 +117,7 @@ package body Security.Policies.Tests is
       M       : Security.Policies.Roles.Role_Policy;
       Admin   : Role_Type;
       Manager : Role_Type;
-      Map     : Role_Map := (others => False);
+      Map     : Role_Map := [others => False];
    begin
       M.Create_Role (Name => "manager",
                      Role => Manager);
@@ -143,7 +143,7 @@ package body Security.Policies.Tests is
       use Security.Policies.Roles;
 
       M       : Security.Policies.Roles.Role_Policy;
-      Map     : Role_Map := (others => False);
+      Map     : Role_Map := [others => False];
    begin
       M.Set_Roles ("manager,admin", Map);
       T.Assert (False, "No exception was raised");
@@ -437,7 +437,7 @@ package body Security.Policies.Tests is
       --  Check that the 'create-ticket' permission is granted to 'developer' and 'manager'
       Permission := Security.Permissions.Get_Permission_Index ("create-ticket");
       Roles := R.Get_Grants (Permission);
-      Expect := (others => False);
+      Expect := [others => False];
       Expect (Developer) := True;
       Expect (Manager) := True;
       if Roles /= Expect then
@@ -469,7 +469,7 @@ package body Security.Policies.Tests is
       --  Check that the 'add-user' permission is granted to 'admin' and 'manager'
       Permission := Security.Permissions.Get_Permission_Index ("add-user");
       Roles := R.Get_Grants (Permission);
-      Expect := (others => False);
+      Expect := [others => False];
       Expect (Admin) := True;
       Expect (Manager) := True;
       if Roles /= Expect then

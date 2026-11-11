@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-permissions -- Definition of permissions
---  Copyright (C) 2010, 2011, 2012, 2016, 2017 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2016, 2017, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -78,6 +78,6 @@ private
 
    type Permission_Index_Set is array (0 .. INDEX_SET_SIZE - 1) of Interfaces.Unsigned_8;
 
-   EMPTY_SET : constant Permission_Index_Set := (others => 0);
+   EMPTY_SET : constant Permission_Index_Set := [others => 0];
 
 end Security.Permissions;

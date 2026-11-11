@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  security-policies-roles -- Role based policies
---  Copyright (C) 2010, 2011, 2012, 2017, 2022 Stephane Carrez
+--  Copyright (C) 2010, 2011, 2012, 2017, 2022, 2026 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --  SPDX-License-Identifier: Apache-2.0
 -----------------------------------------------------------------------
@@ -214,7 +214,7 @@ package body Security.Policies.Roles is
       end Process;
 
    begin
-      Into := (others => False);
+      Into := [others => False];
       Util.Strings.Tokenizers.Iterate_Tokens (Content => Roles,
                                               Pattern => ",",
                                               Process => Process'Access,
